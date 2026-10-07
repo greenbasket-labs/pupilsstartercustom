@@ -20,11 +20,11 @@ The system is designed around the real supply workflow: schools/customers can di
 
 The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
 
-Catalogue editing has now been validated locally with the latest Phase 1 code, including reachable Edit and Cancel controls.
+Catalogue editing has now been validated locally with the latest Phase 1 code, including reachable Edit and Cancel controls and safe editing of products linked to inactive classes.
 
 Current stable checkpoint:
 
-`7c3ac668 — fix: expose catalogue editing controls`
+`b6ef077 — fix: preserve class access while editing products`
 
 Validation at this checkpoint:
 - Lint: PASS
