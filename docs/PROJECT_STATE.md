@@ -45,12 +45,12 @@ Implemented:
 - Production persistence remains planned for Supabase/PostgreSQL.
 
 ## Catalogue Editing Checkpoint
-The current Phase 1 code now includes admin-side editing for saved classes and assessment books. The last formally validated stable commit remains `2fe2dfd`; the new catalogue-editing change is awaiting local lint/build validation before it becomes the next stable checkpoint.
+The current Phase 1 code now includes admin-side editing for saved classes and assessment books. The catalogue-editing change has now passed local lint and build validation and is recorded as the current stable Phase 1 checkpoint.
 
 ## Stable Validation Checkpoint
 Current stable commit:
 
-`2fe2dfd — fix: replace effect-driven local storage state`
+`fdd39e64 — docs: record stable Phase 1 catalogue editing checkpoint`
 
 Validation:
 - Lint: **PASS**
@@ -60,7 +60,7 @@ Validation:
 - Remote: `origin/main`
 - Local branch is synchronized with `origin/main`
 
-The `2fe2dfd` checkpoint replaced the effect-driven localStorage state initialization/persistence with a subscription-based approach using React's `useSyncExternalStore`, resolving the ESLint `react-hooks/set-state-in-effect` error while preserving the current Phase 1 browser-storage development bridge.
+The current checkpoint records the validated Phase 1 catalogue-editing state. Local validation was completed after pulling `main`: lint passed, build passed, and the working tree was clean. The existing browser-storage development bridge remains unchanged.
 
 ## Protected Rules
 - Preserve completed Phase 0 documentation unless an explicit change request reopens it.
@@ -69,10 +69,10 @@ The `2fe2dfd` checkpoint replaced the effect-driven localStorage state initializ
 - Do not hard-code business classes or products into application pages.
 
 ## Next Task
-Continue Phase 1 with the required catalogue-management refinements and validation before moving to the next roadmap phase.
+Continue Phase 1 with the remaining required catalogue-management acceptance criteria and validation before moving to the next roadmap phase.
 
 ## Last Known Stable State
-`2fe2dfd — fix: replace effect-driven local storage state`
+`fdd39e64 — docs: record stable Phase 1 catalogue editing checkpoint`
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
