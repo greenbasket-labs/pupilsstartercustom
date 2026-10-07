@@ -50,7 +50,7 @@
 - Phase 3 is frozen at the accepted boundary.
 
 ## Phase 4 — Payment Integration
-**Status: CURRENT**
+**Status: CURRENT — IN PROGRESS**
 - Payment provider integration.
 - Payment verification.
 - Webhook handling.
@@ -58,6 +58,10 @@
 - Automatic payment status.
 - Payment records.
 - Verified-payment stock reduction linked to the corresponding order/payment history.
+- Server/database payment foundation schema implemented.
+- Financial amounts represented in NGN kobo (minor units).
+- Payment webhook event idempotency foundation implemented.
+- Paystack runtime integration and production acceptance remain pending.
 
 ## Phase 5 — Supply Persons & Delivery
 **Status: NOT STARTED**
