@@ -46,6 +46,9 @@ The first Phase 2 slice introduces a development inventory ledger tied to saved 
 - Stock adjustments are validated so available stock cannot fall below zero.
 - Projected stock is calculated from available plus incoming quantities.
 - Assessment books with stock history cannot be removed, preserving inventory history.
+- Verified customer purchases will later reduce available stock automatically through the order/payment flow and remain linked to payment/order history.
+- Checkout or unverified payment must not reduce stock; admin manual reductions are reserved for non-sale reasons and require a recorded reason/note.
+- Repeated payment-provider events must not reduce the same order's stock more than once.
 - The current browser storage remains a development bridge; Supabase/PostgreSQL will become the production source of truth.
 
 Phase 2 remains in progress until manual acceptance, lint/build validation, and a stable Git checkpoint are complete.
