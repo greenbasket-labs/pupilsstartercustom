@@ -331,6 +331,11 @@ export default function Home() {
   }
 
   function removeProduct(id: string) {
+    if (stockMovements.some((movement) => movement.productId === id)) {
+      setMessage("This assessment book has stock history and cannot be removed.");
+      return;
+    }
+
     setProducts((current) => current.filter((item) => item.id !== id));
     setMessage("Assessment book removed.");
   }
