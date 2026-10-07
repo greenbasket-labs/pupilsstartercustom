@@ -1,69 +1,339 @@
-import Image from "next/image";
+"use client";
+
+import { FormEvent, useEffect, useMemo, useState } from "react";
+
+type ClassItem = {
+  id: string;
+  name: string;
+  active: boolean;
+};
+
+type Product = {
+  id: string;
+  name: string;
+  classId: string;
+  price: number;
+  active: boolean;
+};
+
+const CLASSES_KEY = "pupils-start:classes";
+const PRODUCTS_KEY = "pupils-start:products";
+
+function makeId(prefix: string) {
+  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function formatNaira(value: number) {
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
 
 export default function Home() {
+  const [classes, setClasses] = useState<ClassItem[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [className, setClassName] = useState("");
+  const [productName, setProductName] = useState("");
+  const [productClassId, setProductClassId] = useState("");
+  const [price, setPrice] = useState("");
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    try {
+      const savedClasses = window.localStorage.getItem(CLASSES_KEY);
+      const savedProducts = window.localStorage.getItem(PRODUCTS_KEY);
+      if (savedClasses) setClasses(JSON.parse(savedClasses));
+      if (savedProducts) setProducts(JSON.parse(savedProducts));
+    } catch {
+      setMessage("Saved browser data could not be loaded.");
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem(CLASSES_KEY, JSON.stringify(classes));
+  }, [classes]);
+
+  useEffect(() => {
+    window.localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+  }, [products]);
+
+  const activeClasses = useMemo(
+    () => classes.filter((item) => item.active),
+    [classes],
+  );
+
+  function addClass(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const name = className.trim();
+
+    if (!name) {
+      setMessage("Enter a class name.");
+      return;
+    }
+
+    if (
+      classes.some((item) => item.name.toLowerCase() === name.toLowerCase())
+    ) {
+      setMessage("That class already exists.");
+      return;
+    }
+
+    setClasses((current) => [
+      ...current,
+      { id: makeId("class"), name, active: true },
+    ]);
+    setClassName("");
+    setMessage(`Class “${name}” saved.`);
+  }
+
+  function toggleClass(id: string) {
+    setClasses((current) =>
+      current.map((item) =>
+        item.id === id ? { ...item, active: !item.active } : item,
+      ),
+    );
+    setMessage("Class status saved.");
+  }
+
+  function removeClass(id: string) {
+    if (products.some((product) => product.classId === id)) {
+      setMessage("Remove or reassign the products under this class first.");
+      return;
+    }
+
+    setClasses((current) => current.filter((item) => item.id !== id));
+    setMessage("Class removed.");
+  }
+
+  function addProduct(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const name = productName.trim();
+    const amount = Number(price);
+
+    if (!name || !productClassId || !Number.isFinite(amount) || amount < 0) {
+      setMessage("Enter the book name, class and a valid price.");
+      return;
+    }
+
+    setProducts((current) => [
+      ...current,
+      {
+        id: makeId("product"),
+        name,
+        classId: productClassId,
+        price: amount,
+        active: true,
+      },
+    ]);
+    setProductName("");
+    setPrice("");
+    setMessage(`Assessment book “${name}” saved.`);
+  }
+
+  function toggleProduct(id: string) {
+    setProducts((current) =>
+      current.map((item) =>
+        item.id === id ? { ...item, active: !item.active } : item,
+      ),
+    );
+    setMessage("Assessment book status saved.");
+  }
+
+  function removeProduct(id: string) {
+    setProducts((current) => current.filter((item) => item.id !== id));
+    setMessage("Assessment book removed.");
+  }
+
+  function classLabel(id: string) {
+    return classes.find((item) => item.id === id)?.name ?? "Unknown class";
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="min-h-screen bg-slate-50 text-slate-950">
+      <div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
+        <header className="mb-8 flex flex-col gap-3 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+              PUPILS START
+            </p>
+            <h1 className="mt-1 text-3xl font-semibold tracking-tight">
+              Classes & Assessment Books
+            </h1>
+            <p className="mt-2 max-w-2xl text-sm text-slate-600">
+              Add the business classes and assessment books here. Nothing is
+              fixed in the code.
+            </p>
+          </div>
+          {message ? (
+            <div className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm">
+              {message}
+            </div>
+          ) : null}
+        </header>
+
+        <section className="grid gap-6 lg:grid-cols-2">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="mb-5">
+              <h2 className="text-lg font-semibold">Classes</h2>
+              <p className="text-sm text-slate-500">
+                The admin can add, activate and remove classes as the business
+                changes.
+              </p>
+            </div>
+
+            <form onSubmit={addClass} className="flex gap-3">
+              <input
+                value={className}
+                onChange={(event) => setClassName(event.target.value)}
+                placeholder="e.g. Primary 1"
+                className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
+              />
+              <button
+                type="submit"
+                className="rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Add & Save
+              </button>
+            </form>
+
+            <div className="mt-6 overflow-hidden rounded-xl border border-slate-200">
+              {classes.length === 0 ? (
+                <p className="px-4 py-8 text-center text-sm text-slate-500">
+                  No classes yet. Add the first class above.
+                </p>
+              ) : (
+                <div className="divide-y divide-slate-200">
+                  {classes.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between gap-4 px-4 py-3"
+                    >
+                      <div>
+                        <p className="font-medium">{item.name}</p>
+                        <p className="text-xs text-slate-500">
+                          {item.active ? "Active" : "Inactive"}
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleClass(item.id)}
+                          className="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium hover:bg-slate-50"
+                        >
+                          {item.active ? "Deactivate" : "Activate"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => removeClass(item.id)}
+                          className="rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="mb-5">
+              <h2 className="text-lg font-semibold">Assessment Books</h2>
+              <p className="text-sm text-slate-500">
+                Create products against the classes already saved above and
+                set their selling price.
+              </p>
+            </div>
+
+            <form onSubmit={addProduct} className="space-y-3">
+              <input
+                value={productName}
+                onChange={(event) => setProductName(event.target.value)}
+                placeholder="Assessment book name"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
+              />
+              <div className="grid gap-3 sm:grid-cols-2">
+                <select
+                  value={productClassId}
+                  onChange={(event) => setProductClassId(event.target.value)}
+                  className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
+                >
+                  <option value="">Select class</option>
+                  {activeClasses.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  value={price}
+                  onChange={(event) => setPrice(event.target.value)}
+                  type="number"
+                  min="0"
+                  step="1"
+                  placeholder="Price (₦)"
+                  className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+              >
+                Add Book & Save
+              </button>
+            </form>
+
+            <div className="mt-6 overflow-hidden rounded-xl border border-slate-200">
+              {products.length === 0 ? (
+                <p className="px-4 py-8 text-center text-sm text-slate-500">
+                  No assessment books yet. Add one above.
+                </p>
+              ) : (
+                <div className="divide-y divide-slate-200">
+                  {products.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between gap-4 px-4 py-3"
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate font-medium">{item.name}</p>
+                        <p className="text-xs text-slate-500">
+                          {classLabel(item.classId)} · {formatNaira(item.price)}
+                        </p>
+                      </div>
+                      <div className="flex shrink-0 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => toggleProduct(item.id)}
+                          className="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium hover:bg-slate-50"
+                        >
+                          {item.active ? "Deactivate" : "Activate"}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => removeProduct(item.id)}
+                          className="rounded-md border border-red-200 px-3 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <p className="mt-6 text-xs text-slate-500">
+          This Phase 1 screen persists entries in the current browser while the
+          Supabase data layer is being introduced. Business truth will move to
+          the database before production use.
+        </p>
+      </div>
+    </main>
   );
 }
