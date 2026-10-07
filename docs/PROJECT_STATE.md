@@ -25,7 +25,7 @@ Completed:
 - Source-code ownership rule established.
 
 ## Current Phase Goal
-Build the application foundation and the first business capability: product/class/pricing management.
+Complete the controlled inventory foundation: available stock, incoming stock, traceable movements, safe calculations, and the business rules that will later connect verified purchases to automatic stock reduction.
 
 ## Phase 1 Implementation Started
 The web application now has a development administration screen for catalogue management.
@@ -74,6 +74,10 @@ Implemented as the first controlled Phase 2 slice:
 - Incoming stock can be moved into available stock only up to the recorded incoming quantity.
 - Stock adjustments cannot reduce available stock below zero.
 - Product removal is blocked once stock history exists, preserving inventory history.
+- Verified customer purchases will later reduce available stock automatically through the order/payment flow, with the inventory movement linked to the payment/order history.
+- Checkout or unverified payment must not reduce stock.
+- Admin may manually reduce stock for non-sale reasons, with a required reason/note recorded in inventory history.
+- Repeated payment-provider events must not reduce the same order's stock more than once.
 - The current development implementation uses browser storage as a temporary bridge; production inventory truth will move to Supabase/PostgreSQL.
 - No payment, ordering, supply, or later-phase workflow has been introduced.
 
