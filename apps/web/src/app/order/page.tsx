@@ -107,20 +107,33 @@ function stockTotals(productId: string, movements: StockMovement[]) {
 }
 
 export default function CustomerOrderPage() {
-  const classes = useSyncExternalStore(
+  const classesJson = useSyncExternalStore(
     subscribeToStorage,
-    () => readStorage<ClassItem[]>(CLASSES_KEY, []),
-    () => [],
+    () => window.localStorage.getItem(CLASSES_KEY) ?? "[]",
+    () => "[]",
   );
-  const products = useSyncExternalStore(
+  const productsJson = useSyncExternalStore(
     subscribeToStorage,
-    () => readStorage<Product[]>(PRODUCTS_KEY, []),
-    () => [],
+    () => window.localStorage.getItem(PRODUCTS_KEY) ?? "[]",
+    () => "[]",
   );
-  const stockMovements = useSyncExternalStore(
+  const stockMovementsJson = useSyncExternalStore(
     subscribeToStorage,
-    () => readStorage<StockMovement[]>(STOCK_MOVEMENTS_KEY, []),
-    () => [],
+    () => window.localStorage.getItem(STOCK_MOVEMENTS_KEY) ?? "[]",
+    () => "[]",
+  );
+
+  const classes = useMemo(
+    () => JSON.parse(classesJson) as ClassItem[],
+    [classesJson],
+  );
+  const products = useMemo(
+    () => JSON.parse(productsJson) as Product[],
+    [productsJson],
+  );
+  const stockMovements = useMemo(
+    () => JSON.parse(stockMovementsJson) as StockMovement[],
+    [stockMovementsJson],
   );
 
   const [selectedProductId, setSelectedProductId] = useState("");
