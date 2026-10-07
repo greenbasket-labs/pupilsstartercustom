@@ -16,7 +16,7 @@ The system is designed around the real supply workflow: schools/customers can di
 
 ## Current Status
 
-**Phase 2 — Inventory & Incoming Stock — IN PROGRESS**
+**Phase 2 — Inventory & Incoming Stock — COMPLETE**
 
 The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
 
@@ -26,7 +26,7 @@ Stable Phase 1 acceptance checkpoint:
 
 `b6ef077 — fix: preserve class access while editing products`
 
-Phase 1 catalogue acceptance is complete. Phase 2 inventory work has now started.
+Phase 1 catalogue acceptance is complete. Phase 2 inventory work has now been manually accepted and closed.
 
 Validation at this checkpoint:
 - Lint: PASS
@@ -51,7 +51,23 @@ The first Phase 2 slice introduces a development inventory ledger tied to saved 
 - Repeated payment-provider events must not reduce the same order's stock more than once.
 - The current browser storage remains a development bridge; Supabase/PostgreSQL will become the production source of truth.
 
-Phase 2 remains in progress until manual acceptance, lint/build validation, and a stable Git checkpoint are complete.
+Phase 2 is now closed at its stable acceptance checkpoint.
+
+## Phase 2 Acceptance
+
+Phase 2 inventory was manually acceptance-tested in the development browser and passed:
+
+- Stock received and incoming stock recording.
+- Receiving incoming stock into available stock.
+- Available, incoming, and projected stock calculations.
+- Prevention of receiving more incoming stock than recorded.
+- Prevention of negative available stock through stock adjustment validation.
+- Preservation of inventory history by blocking product removal after stock history exists.
+- Lint and production build validation.
+
+The negative-stock safety test was confirmed by attempting a reduction that would have taken available stock below zero; the application refused to save the movement.
+
+Phase 2 is frozen. The next controlled implementation phase is customer ordering. Automatic stock reduction from verified purchases remains a later order/payment-flow implementation and is not part of this completed browser-only inventory checkpoint.
 
 ## Ownership
 
