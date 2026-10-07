@@ -34,7 +34,7 @@
 - Verified-purchase stock rules documented for the later order/payment flow.
 
 ## Phase 3 — Customer Ordering
-**Status: NOT STARTED**
+**Status: CURRENT**
 - Public customer catalogue.
 - Product selection.
 - Quantity selection.
@@ -42,6 +42,8 @@
 - Order creation.
 - Order reference.
 - Customer order confirmation.
+- Initial browser-based customer ordering slice implemented.
+- Payment deliberately excluded from this phase.
 
 ## Phase 4 — Payment Integration
 **Status: NOT STARTED**
