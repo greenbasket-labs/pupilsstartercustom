@@ -16,7 +16,7 @@ The system is designed around the real supply workflow: schools/customers can di
 
 ## Current Status
 
-**Phase 3 — Customer Ordering — IN PROGRESS**
+**Phase 3 — Customer Ordering — COMPLETE**
 
 The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
 
@@ -26,7 +26,7 @@ Stable Phase 1 acceptance checkpoint:
 
 `b6ef077 — fix: preserve class access while editing products`
 
-Phase 1 catalogue acceptance is complete. Phase 2 inventory work has now been manually accepted, closed, and frozen. Phase 3 customer ordering has started.
+Phase 1 catalogue acceptance is complete. Phase 2 inventory work has been manually accepted, closed, and frozen. Phase 3 customer ordering has now been manually accepted, closed, and frozen.
 
 Validation at this checkpoint:
 - Lint: PASS
@@ -69,7 +69,7 @@ The first Phase 3 slice introduces a public customer ordering page at `/order`:
 - Payment is not processed in Phase 3.
 - Creating an order does not reduce stock. Automatic stock reduction remains tied to verified payment in the later payment flow.
 
-Phase 3 remains in progress until browser acceptance, lint/build validation, documentation, and a stable Git checkpoint are complete.
+Phase 3 browser acceptance, lint/build validation, and documentation are complete. The phase is now frozen at its accepted boundary.
 
 ## Phase 2 Acceptance
 
@@ -248,7 +248,7 @@ The Phase 1 catalogue workflow was manually tested in the development browser an
 - Confirm business classes and products are data-driven rather than hard-coded.
 - Confirm browser persistence for the current development bridge.
 
-Phase 1 is now closed. Phase 2 will introduce inventory according to the roadmap.
+Phase 1 is now closed. Phase 2 is now closed. Phase 3 is now closed. The next controlled implementation phase is Phase 4 — Payment Integration.
 
 ## Project Documentation
 
