@@ -24,7 +24,7 @@ Catalogue editing has now been validated locally with the latest Phase 1 code.
 
 Current stable checkpoint:
 
-`351de50 — docs: mark catalogue editing validation pending`
+`d72ee854 — docs: confirm stable Phase 1 catalogue checkpoint`
 
 Validation at this checkpoint:
 - Lint: PASS
