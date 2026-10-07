@@ -32,6 +32,7 @@ The web application now has a development administration screen for catalogue ma
 
 Implemented:
 - Admin can add classes.
+- Admin can edit saved class names.
 - Class names are stored as data rather than hard-coded into the UI.
 - Admin can activate/deactivate classes.
 - Admin can remove classes that have no dependent products.
