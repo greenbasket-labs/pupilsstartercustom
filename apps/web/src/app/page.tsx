@@ -455,7 +455,7 @@ export default function Home() {
                 >
                   <option value="">Select class</option>
 
-                  {activeClasses.map((item) => (
+                  {(editingProductId ? classes : activeClasses).map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.name}
                     </option>
