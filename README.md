@@ -16,13 +16,15 @@ The system is designed around the real supply workflow: schools/customers can di
 
 ## Current Status
 
-**Phase 1 — Web Application Foundation and Catalogue Design**
+**Phase 1 — Product, Classes & Pricing — IN PROGRESS**
 
-The project foundation and engineering rules are complete. The Next.js web application foundation has been created under `apps/web`, dependencies installed, lint/build checks passed, and the foundation was committed as:
+The Next.js web application foundation is in place. The first Phase 1 administration screen now supports adding and saving classes and assessment books with prices without hard-coding the business catalogue into the application.
 
-`1d67263 — chore: initialize Next.js web application`
+Current implementation commit:
 
-The working application is intentionally still at the framework foundation stage. Business features are being added in controlled Phase 1 steps.
+`b95779e — feat: add dynamic class and product administration`
+
+The current browser-based persistence is a Phase 1 development bridge. The Supabase database will become the production source of truth before real business use.
 
 ## Ownership
 
@@ -107,9 +109,27 @@ Where school records are shown in a table:
 
 This keeps the school identity aligned with its row while allowing the business to work with many classes or product columns.
 
+## Catalogue Management Rule
+
+Classes and assessment books are **business data, not application constants**.
+
+The admin must be able to:
+
+- Add a new class.
+- Activate or deactivate a class.
+- Remove a class when it has no dependent products.
+- Add an assessment book.
+- Associate the book with a saved class.
+- Set the selling price.
+- Activate or deactivate a product.
+
+The application must not require a developer to edit source code whenever the business adds or changes a class or assessment book.
+
+The current Phase 1 development screen persists these entries in the browser. Production persistence will use Supabase/PostgreSQL as defined by the architecture.
+
 ## Initial Class Structure
 
-The initial class catalogue is based on the business's supplied class list:
+The initial class catalogue is based on the business's supplied class list. These are starting business requirements, not hard-coded UI values:
 
 - KG 1
 - KG 2
@@ -124,7 +144,7 @@ The initial class catalogue is based on the business's supplied class list:
 - Primary 5
 - Primary 6
 
-Classes should be managed as data rather than hard-coded into individual pages.
+The admin remains able to add additional classes without a code change.
 
 ## Authentication Direction
 
