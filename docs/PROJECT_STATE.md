@@ -50,7 +50,7 @@ The current Phase 1 code now includes admin-side editing for saved classes and a
 ## Stable Validation Checkpoint
 Current stable commit:
 
-`fdd39e64 — docs: record stable Phase 1 catalogue editing checkpoint`
+`7c3ac668 — fix: expose catalogue editing controls`
 
 Validation:
 - Lint: **PASS**
@@ -60,7 +60,7 @@ Validation:
 - Remote: `origin/main`
 - Local branch is synchronized with `origin/main`
 
-The current checkpoint records the validated Phase 1 catalogue-editing state. Local validation was completed after pulling `main`: lint passed, build passed, and the working tree was clean. The existing browser-storage development bridge remains unchanged.
+The current checkpoint records the validated Phase 1 catalogue-editing state, including reachable Edit controls for classes and assessment books. Local validation was completed after pulling `main`: lint passed, build passed, and the working tree was clean. The existing browser-storage development bridge remains unchanged.
 
 ## Protected Rules
 - Preserve completed Phase 0 documentation unless an explicit change request reopens it.
@@ -72,7 +72,7 @@ The current checkpoint records the validated Phase 1 catalogue-editing state. Lo
 Continue Phase 1 with the remaining required catalogue-management acceptance criteria and validation before moving to the next roadmap phase.
 
 ## Last Known Stable State
-`fdd39e64 — docs: record stable Phase 1 catalogue editing checkpoint`
+`7c3ac668 — fix: expose catalogue editing controls`
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
