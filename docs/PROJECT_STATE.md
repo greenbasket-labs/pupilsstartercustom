@@ -1,33 +1,42 @@
 # Project State
 
 ## Current Phase
-**Phase 0 — Foundation & Engineering Rules**
+**Phase 1 — Product, Classes & Pricing**
 
 ## Status
-IN PROGRESS
+READY TO START
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
 - Default branch: `main`
 - Technology/development partner: Green Basket Global Ltd.
 
-## Completed
+## Phase 0 Result
+Phase 0 — Foundation & Engineering Rules is **COMPLETE**.
+
+Completed:
 - Repository established.
-- Initial README established.
-- Source-code ownership rule approved.
-- Initial product direction documented.
+- Project README established.
+- Engineering rules established.
+- Business rules established.
+- Roadmap established.
+- Architecture boundaries established.
+- Safe-change and handover rules established.
+- Source-code ownership rule established.
 
-## Current Work
-Establish the engineering constitution, business rules, roadmap, and architecture before application implementation.
+## Current Phase Goal
+Build the application foundation and the first business capability: product/class/pricing management.
 
-## Protected Principle
-Do not begin application feature development until Phase 0 is complete.
+## Protected Rules
+- Preserve completed Phase 0 documentation unless an explicit change request reopens it.
+- Do not build inventory, customer ordering, payment, or supply workflows ahead of the roadmap.
+- Do not add unrelated features during Phase 1.
 
-## Next Step
-Complete and review the engineering rules, business rules, roadmap, and architecture, then create the application foundation.
+## Current Task
+Create the web application foundation, then implement product/class/pricing administration in small tested increments.
 
 ## Last Known Good State
-Initial foundation commit containing the project README.
+Phase 0 foundation commit: `8830b652938f2ba5079db87c7487039ceacfb045`
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
