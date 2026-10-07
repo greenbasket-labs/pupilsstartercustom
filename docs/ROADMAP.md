@@ -21,13 +21,17 @@
 - Manual acceptance completed.
 
 ## Phase 2 — Inventory & Incoming Stock
-**Status: CURRENT**
+**Status: COMPLETE**
 - Available stock.
 - Incoming stock.
 - Stock movements/ledger.
 - Stock history.
 - Safe stock calculations.
-- Initial inventory ledger foundation implemented in the development browser.
+- Inventory ledger foundation implemented in the development browser.
+- Manual acceptance completed.
+- Negative-stock protection verified.
+- Inventory history preservation verified.
+- Verified-purchase stock rules documented for the later order/payment flow.
 
 ## Phase 3 — Customer Ordering
 **Status: NOT STARTED**
