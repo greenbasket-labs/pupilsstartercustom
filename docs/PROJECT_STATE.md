@@ -1,10 +1,10 @@
 # Project State
 
 ## Current Phase
-**Phase 1 — Product, Classes & Pricing**
+**Phase 2 — Inventory & Incoming Stock**
 
 ## Status
-**COMPLETE**
+**IN PROGRESS**
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
@@ -62,6 +62,25 @@ Validation:
 
 The current checkpoint records the validated Phase 1 catalogue-editing state, including reachable Edit controls for classes and assessment books, with existing saved classes remaining selectable while editing a product even when those classes are inactive. Local validation was completed after pulling `main`: lint passed, build passed, and the working tree was clean. The existing browser-storage development bridge remains unchanged.
 
+## Phase 2 Inventory Foundation
+
+Implemented as the first controlled Phase 2 slice:
+
+- Inventory is tied to saved assessment books/products.
+- Stock movements are stored as a ledger rather than overwriting a stock number.
+- Available stock is calculated from stock received, incoming stock received, and adjustments.
+- Incoming stock is tracked separately from available stock.
+- Projected stock is calculated as available plus incoming.
+- Incoming stock can be moved into available stock only up to the recorded incoming quantity.
+- Stock adjustments cannot reduce available stock below zero.
+- Product removal is blocked once stock history exists, preserving inventory history.
+- The current development implementation uses browser storage as a temporary bridge; production inventory truth will move to Supabase/PostgreSQL.
+- No payment, ordering, supply, or later-phase workflow has been introduced.
+
+## Current Phase Acceptance Boundary
+
+Phase 2 has started, but the inventory foundation is **not yet accepted as complete**. Local lint/build validation and manual inventory acceptance are still required before this slice becomes a stable checkpoint.
+
 ## Protected Rules
 - Preserve completed Phase 0 documentation unless an explicit change request reopens it.
 - Do not build inventory, customer ordering, payment, or supply workflows ahead of the roadmap.
@@ -69,10 +88,12 @@ The current checkpoint records the validated Phase 1 catalogue-editing state, in
 - Do not hard-code business classes or products into application pages.
 
 ## Next Task
-Phase 1 is complete. The next roadmap task is Phase 2 — Inventory. Do not begin Phase 3 customer ordering, Phase 4 payment, or later workflows ahead of the roadmap.
+Continue Phase 2 inventory acceptance and validation. Do not begin Phase 3 customer ordering, Phase 4 payment, or later workflows ahead of the roadmap.
 
 ## Last Known Stable State
-`b6ef077 — fix: preserve class access while editing products`
+Phase 1 stable checkpoint: `b6ef077 — fix: preserve class access while editing products`
+
+Current Phase 2 work is not yet a stable checkpoint.
 
 ## Phase 1 Manual Acceptance Result
 Manual acceptance testing completed successfully in the development browser:
