@@ -16,15 +16,17 @@ The system is designed around the real supply workflow: schools/customers can di
 
 ## Current Status
 
-**Phase 1 — Product, Classes & Pricing — IN PROGRESS**
+**Phase 1 — Product, Classes & Pricing — COMPLETE**
 
 The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
 
-Catalogue editing has now been validated locally with the latest Phase 1 code, including reachable Edit and Cancel controls and safe editing of products linked to inactive classes.
+Catalogue editing has now been manually acceptance-tested locally with the latest Phase 1 code, including reachable Edit and Cancel controls, safe editing of products linked to inactive classes, activation/deactivation, removal rules, and price persistence.
 
-Current stable checkpoint:
+Stable Phase 1 acceptance checkpoint:
 
 `b6ef077 — fix: preserve class access while editing products`
+
+Phase 1 catalogue acceptance is complete. The next roadmap phase is Phase 2 — Inventory.
 
 Validation at this checkpoint:
 - Lint: PASS
@@ -181,6 +183,21 @@ Customers/schools will not be forced to create accounts in the initial version.
 Build small, build correctly, keep business rules explicit, protect existing functionality, preserve history, test critical workflows, and keep a clean path for future products.
 
 AI-assisted development must follow the project's controlled-change rules: inspect before editing, modify only the approved scope, test the result, update documentation, and create a Git checkpoint after stable work.
+
+## Phase 1 Acceptance
+
+The Phase 1 catalogue workflow was manually tested in the development browser and passed the required acceptance checks:
+
+- Add, edit, activate/deactivate, and remove classes.
+- Add assessment books linked to saved classes.
+- Edit assessment-book name, class association, and selling price.
+- Preserve an existing inactive class association while editing a product.
+- Activate/deactivate and remove assessment books.
+- Remove a class after its dependent product has been removed.
+- Confirm business classes and products are data-driven rather than hard-coded.
+- Confirm browser persistence for the current development bridge.
+
+Phase 1 is now closed. Phase 2 will introduce inventory according to the roadmap.
 
 ## Project Documentation
 
