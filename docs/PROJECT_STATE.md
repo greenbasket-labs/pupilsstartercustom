@@ -1,10 +1,10 @@
 # Project State
 
 ## Current Phase
-**Phase 2 — Inventory & Incoming Stock**
+**Phase 2 — Inventory & Incoming Stock — COMPLETE**
 
 ## Status
-**IN PROGRESS**
+**COMPLETE**
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
@@ -24,8 +24,10 @@ Completed:
 - Safe-change and handover rules established.
 - Source-code ownership rule established.
 
-## Current Phase Goal
-Complete the controlled inventory foundation: available stock, incoming stock, traceable movements, safe calculations, and the business rules that will later connect verified purchases to automatic stock reduction.
+## Phase 2 Result
+Phase 2 — Inventory & Incoming Stock is **COMPLETE**.
+
+The controlled inventory foundation has been implemented and manually accepted in the development browser. The production database and customer purchase flow remain later-phase work.
 
 ## Phase 1 Implementation Started
 The web application now has a development administration screen for catalogue management.
@@ -81,23 +83,37 @@ Implemented as the first controlled Phase 2 slice:
 - The current development implementation uses browser storage as a temporary bridge; production inventory truth will move to Supabase/PostgreSQL.
 - No payment, ordering, supply, or later-phase workflow has been introduced.
 
-## Current Phase Acceptance Boundary
+## Phase 2 Acceptance Result
+Manual acceptance completed successfully in the development browser:
 
-Phase 2 has started, but the inventory foundation is **not yet accepted as complete**. Local lint/build validation and manual inventory acceptance are still required before this slice becomes a stable checkpoint.
+- Stock received: PASS
+- Incoming stock: PASS
+- Receive incoming limited by recorded incoming quantity: PASS
+- Available/incoming/projected calculations: PASS
+- Stock adjustment cannot reduce available stock below zero: PASS
+- Product removal blocked when stock history exists: PASS
+- Inventory history remains traceable: PASS
+- Purchase-linked stock rules documented for the later order/payment flow: PASS
+
+Local validation completed after pulling `main`:
+- Lint: PASS
+- Build: PASS
+- TypeScript/build generation: PASS
+
+Phase 2 is frozen at this acceptance boundary. Future work must proceed from the next roadmap phase rather than reopening Phase 2 without an explicit change request.
 
 ## Protected Rules
 - Preserve completed Phase 0 documentation unless an explicit change request reopens it.
-- Do not build inventory, customer ordering, payment, or supply workflows ahead of the roadmap.
-- Do not add unrelated features during Phase 1.
+- Preserve completed Phase 1 catalogue functionality unless an explicit change request reopens it.
+- Preserve completed Phase 2 inventory functionality unless an explicit change request reopens it.
+- Do not build payment, supply, or later workflows ahead of the roadmap.
 - Do not hard-code business classes or products into application pages.
 
 ## Next Task
-Continue Phase 2 inventory acceptance and validation. Do not begin Phase 3 customer ordering, Phase 4 payment, or later workflows ahead of the roadmap.
+Begin Phase 3 customer ordering only through a controlled, documented change. Do not begin payment, supply, or later workflows ahead of the roadmap.
 
 ## Last Known Stable State
-Phase 1 stable checkpoint: `b6ef077 — fix: preserve class access while editing products`
-
-Current Phase 2 work is not yet a stable checkpoint.
+Phase 2 stable checkpoint: to be recorded by the final documentation checkpoint commit.
 
 ## Phase 1 Manual Acceptance Result
 Manual acceptance testing completed successfully in the development browser:
