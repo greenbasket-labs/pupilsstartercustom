@@ -36,6 +36,26 @@ Keep these concepts separate:
 - Delivery records
 - Audit logs
 
+## Inventory Model
+
+Inventory is represented through traceable stock movements rather than an overwrite-only stock quantity.
+
+The development Phase 2 foundation distinguishes:
+
+- Available stock.
+- Incoming stock.
+- Projected stock (available + incoming).
+- Stock movement history.
+
+Movement types currently supported by the development bridge:
+
+- Stock Received: increases available stock.
+- Incoming Stock: increases incoming stock.
+- Receive Incoming: moves recorded incoming stock into available stock.
+- Stock Adjustment: applies a signed adjustment to available stock.
+
+Inventory validation must prevent available or incoming stock from becoming negative through an invalid movement. Product removal is blocked once inventory history exists so stock history is preserved.
+
 ## State Separation
 Payment state and supply state are independent.
 
