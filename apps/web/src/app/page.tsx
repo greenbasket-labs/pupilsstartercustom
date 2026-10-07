@@ -128,6 +128,12 @@ export default function Home() {
   const [productClassId, setProductClassId] = useState("");
   const [price, setPrice] = useState("");
   const [message, setMessage] = useState("");
+  const [editingClassId, setEditingClassId] = useState<string | null>(null);
+  const [editClassName, setEditClassName] = useState("");
+  const [editingProductId, setEditingProductId] = useState<string | null>(null);
+  const [editProductName, setEditProductName] = useState("");
+  const [editProductClassId, setEditProductClassId] = useState("");
+  const [editPrice, setEditPrice] = useState("");
 
   const activeClasses = useMemo(
     () => classes.filter((item) => item.active),
@@ -157,6 +163,43 @@ export default function Home() {
 
     setClassName("");
     setMessage(`Class “${name}” saved.`);
+  }
+
+  function startClassEdit(item: ClassItem) {
+    setEditingClassId(item.id);
+    setEditClassName(item.name);
+    setMessage("");
+  }
+
+  function cancelClassEdit() {
+    setEditingClassId(null);
+    setEditClassName("");
+  }
+
+  function saveClassEdit(id: string) {
+    const name = editClassName.trim();
+
+    if (!name) {
+      setMessage("Enter a class name.");
+      return;
+    }
+
+    if (
+      classes.some(
+        (item) =>
+          item.id !== id && item.name.toLowerCase() === name.toLowerCase(),
+      )
+    ) {
+      setMessage("That class already exists.");
+      return;
+    }
+
+    setClasses((current) =>
+      current.map((item) => (item.id === id ? { ...item, name } : item)),
+    );
+
+    cancelClassEdit();
+    setMessage(`Class “${name}” updated.`);
   }
 
   function toggleClass(id: string) {
@@ -204,6 +247,52 @@ export default function Home() {
     setProductName("");
     setPrice("");
     setMessage(`Assessment book “${name}” saved.`);
+  }
+
+  function startProductEdit(item: Product) {
+    setEditingProductId(item.id);
+    setEditProductName(item.name);
+    setEditProductClassId(item.classId);
+    setEditPrice(String(item.price));
+    setMessage("");
+  }
+
+  function cancelProductEdit() {
+    setEditingProductId(null);
+    setEditProductName("");
+    setEditProductClassId("");
+    setEditPrice("");
+  }
+
+  function saveProductEdit(id: string) {
+    const name = editProductName.trim();
+    const amount = Number(editPrice);
+
+    if (
+      !name ||
+      !editProductClassId ||
+      !Number.isFinite(amount) ||
+      amount < 0
+    ) {
+      setMessage("Enter the book name, class and a valid price.");
+      return;
+    }
+
+    if (!classes.some((item) => item.id === editProductClassId)) {
+      setMessage("Select a saved class.");
+      return;
+    }
+
+    setProducts((current) =>
+      current.map((item) =>
+        item.id === id
+          ? { ...item, name, classId: editProductClassId, price: amount }
+          : item,
+      ),
+    );
+
+    cancelProductEdit();
+    setMessage(`Assessment book “${name}” updated.`);
   }
 
   function toggleProduct(id: string) {
