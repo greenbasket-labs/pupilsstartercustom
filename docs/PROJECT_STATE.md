@@ -4,7 +4,7 @@
 **Phase 1 — Product, Classes & Pricing**
 
 ## Status
-READY TO START
+**IN PROGRESS**
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
@@ -27,16 +27,38 @@ Completed:
 ## Current Phase Goal
 Build the application foundation and the first business capability: product/class/pricing management.
 
+## Phase 1 Implementation Started
+The web application now has a development administration screen for catalogue management.
+
+Implemented:
+- Admin can add classes.
+- Class names are stored as data rather than hard-coded into the UI.
+- Admin can activate/deactivate classes.
+- Admin can remove classes that have no dependent products.
+- Admin can add assessment books.
+- Each assessment book is linked to a saved class.
+- Admin can set the selling price.
+- Admin can activate/deactivate products.
+- Current development persistence uses browser storage as a temporary bridge.
+- Production persistence remains planned for Supabase/PostgreSQL.
+
+Implementation commit:
+`b95779e41ea7df17997e2ca6d834fbc8d123909e`
+
+## Validation Status
+The implementation has been committed to GitHub, but local lint/build validation should be run before treating this increment as a final stable checkpoint.
+
 ## Protected Rules
 - Preserve completed Phase 0 documentation unless an explicit change request reopens it.
 - Do not build inventory, customer ordering, payment, or supply workflows ahead of the roadmap.
 - Do not add unrelated features during Phase 1.
+- Do not hard-code business classes or products into application pages.
 
-## Current Task
-Create the web application foundation, then implement product/class/pricing administration in small tested increments.
+## Next Task
+Run the local validation checks, then continue Phase 1 with any required catalogue-management refinements before moving to the next roadmap phase.
 
-## Last Known Good State
-Phase 0 foundation commit: `8830b652938f2ba5079db87c7487039ceacfb045`
+## Last Known Stable State
+Next.js application foundation commit: `1d67263 — chore: initialize Next.js web application`
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
