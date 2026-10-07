@@ -1,10 +1,10 @@
 # Project State
 
 ## Current Phase
-**Phase 3 — Customer Ordering**
+**Phase 4 — Payment Integration**
 
 ## Status
-**COMPLETE**
+**IN PROGRESS**
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
@@ -118,3 +118,26 @@ Phase 3 customer ordering acceptance checkpoint is the latest stable state.
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
+
+
+## Phase 4 Payment Integration Foundation
+Phase 4 has started with the server/database payment foundation.
+
+Implemented:
+- Production-oriented order, order-item, payment, and payment-webhook-event schema migration under `supabase/migrations/`.
+- Financial amounts are stored in NGN kobo (minor units).
+- Payment records are separate from orders and supply status.
+- Paystack provider references are unique.
+- Webhook events have an idempotency constraint for provider transaction/event combinations.
+- Payment and order statuses are constrained to the documented business states.
+
+Not yet implemented:
+- Supabase project connection/runtime configuration.
+- Server-side order creation from the public ordering flow.
+- Paystack transaction initialization.
+- Paystack transaction verification.
+- Paystack webhook endpoint and signature validation.
+- Verified-payment inventory reduction.
+- Production payment acceptance testing.
+
+The browser-local order implementation remains the Phase 3 development bridge and must not be treated as the production financial source of truth.
