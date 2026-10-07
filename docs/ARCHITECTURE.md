@@ -1,24 +1,24 @@
 # Architecture
 
-## Initial Direction
-A modern web platform with clear separation between:
-- Customer experience
+## Confirmed Initial Stack
+
+- Web application: **Next.js + TypeScript**
+- Database/authentication: **Supabase/PostgreSQL**
+- Payments: **Paystack**
+- Hosting: **Vercel**
+- Transactional email: **Resend**
+- Source control: **GitHub**
+
+The stack is intentionally simple for Version 1. It can scale without introducing unnecessary infrastructure.
+
+## Application Shape
+Prefer a modular monolith with clear domain boundaries.
+
+Initial application areas:
+- Public customer experience
 - Admin workspace
 - Supply-person workspace
-- Application/business logic
-- Database
-- Payment provider
-- Notifications
-- Audit/history
-
-## Initial Technology Direction
-Recommended, pending implementation confirmation:
-- Web application: Next.js + TypeScript
-- Database/authentication: Supabase/PostgreSQL
-- Payments: Paystack
-- Hosting: Vercel
-- Transactional email: Resend
-- Source control: GitHub
+- Shared business/domain logic
 
 ## Core Domains
 Keep these concepts separate:
@@ -52,6 +52,7 @@ The database is the source of truth for prices, stock, orders, payment state, su
 Payment confirmation, order creation, and inventory changes must be designed so partial failures do not leave inconsistent business state.
 
 ## Roles
+
 ### Admin
 Full operational control.
 
@@ -65,4 +66,4 @@ Restricted access to assigned orders and delivery confirmation.
 Keep the interface clean and modern. Admin functionality should use grouped/dropdown navigation rather than scattering every function across the main dashboard.
 
 ## Architecture Rule
-Do not introduce microservices or unnecessary infrastructure for Version 1. Prefer a modular monolith with clear domain boundaries unless scale or a concrete requirement justifies a different architecture.
+Do not introduce microservices or unnecessary infrastructure for Version 1. New infrastructure requires a concrete business or technical reason and explicit approval.
