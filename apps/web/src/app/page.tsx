@@ -806,9 +806,9 @@ export default function Home() {
         </section>
 
         <p className="mt-6 text-xs text-slate-500">
-          This Phase 1 screen persists entries in the current browser while the
-          Supabase data layer is being introduced. Business truth will move to
-          the database before production use.
+          This Phase 2 development screen persists inventory entries in the current
+          browser while the Supabase data layer is being introduced. Business
+          truth will move to the database before production use.
         </p>
       </div>
     </main>
