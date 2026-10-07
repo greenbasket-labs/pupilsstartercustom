@@ -4,7 +4,7 @@
 **Phase 1 — Product, Classes & Pricing**
 
 ## Status
-**IN PROGRESS**
+**COMPLETE**
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
@@ -44,8 +44,8 @@ Implemented:
 - Current development persistence uses browser storage as a temporary bridge.
 - Production persistence remains planned for Supabase/PostgreSQL.
 
-## Catalogue Editing Checkpoint
-The current Phase 1 code now includes admin-side editing for saved classes and assessment books. The catalogue-editing change has now passed local lint and build validation and is recorded as the current stable Phase 1 checkpoint.
+## Phase 1 Acceptance Checkpoint
+The Phase 1 catalogue workflow has now passed manual acceptance testing in the development browser. The acceptance covered class and assessment-book creation, editing, activation/deactivation, safe editing against inactive saved classes, removal rules, pricing persistence, and confirmation that catalogue data is not hard-coded.
 
 ## Stable Validation Checkpoint
 Current stable commit:
@@ -69,10 +69,23 @@ The current checkpoint records the validated Phase 1 catalogue-editing state, in
 - Do not hard-code business classes or products into application pages.
 
 ## Next Task
-Continue Phase 1 with the remaining required catalogue-management acceptance criteria and validation before moving to the next roadmap phase.
+Phase 1 is complete. The next roadmap task is Phase 2 — Inventory. Do not begin Phase 3 customer ordering, Phase 4 payment, or later workflows ahead of the roadmap.
 
 ## Last Known Stable State
 `b6ef077 — fix: preserve class access while editing products`
+
+## Phase 1 Manual Acceptance Result
+Manual acceptance testing completed successfully in the development browser:
+
+- Class add/edit/activate/deactivate/remove: PASS
+- Assessment-book add/edit/activate/deactivate/remove: PASS
+- Product class association and price editing: PASS
+- Existing inactive class remains selectable while editing a linked product: PASS
+- Dependent-class removal protection: PASS
+- Catalogue is data-driven rather than hard-coded: PASS
+- Browser persistence development bridge: PASS
+
+Phase 1 is frozen at this acceptance boundary. Future work should proceed from the next roadmap phase rather than reopening completed catalogue work without an explicit change request.
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
