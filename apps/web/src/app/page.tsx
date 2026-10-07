@@ -16,8 +16,24 @@ type Product = {
   active: boolean;
 };
 
+type StockMovementKind =
+  | "received"
+  | "incoming"
+  | "incoming_received"
+  | "adjustment";
+
+type StockMovement = {
+  id: string;
+  productId: string;
+  kind: StockMovementKind;
+  quantity: number;
+  note: string;
+  createdAt: string;
+};
+
 const CLASSES_KEY = "pupils-start:classes";
 const PRODUCTS_KEY = "pupils-start:products";
+const STOCK_MOVEMENTS_KEY = "pupils-start:stock-movements";
 
 type StateUpdater<T> = T | ((current: T) => T);
 
@@ -122,6 +138,15 @@ export default function Home() {
     PRODUCTS_KEY,
     [],
   );
+
+  const [stockMovements, setStockMovements] =
+    useLocalStorageState<StockMovement[]>(STOCK_MOVEMENTS_KEY, []);
+
+  const [stockProductId, setStockProductId] = useState("");
+  const [stockKind, setStockKind] =
+    useState<StockMovementKind>("received");
+  const [stockQuantity, setStockQuantity] = useState("");
+  const [stockNote, setStockNote] = useState("");
 
   const [className, setClassName] = useState("");
   const [productName, setProductName] = useState("");
@@ -312,6 +337,83 @@ export default function Home() {
 
   function classLabel(id: string) {
     return classes.find((item) => item.id === id)?.name ?? "Unknown class";
+  }
+
+  function stockTotals(productId: string) {
+    return stockMovements.reduce(
+      (totals, movement) => {
+        if (movement.productId !== productId) return totals;
+
+        if (movement.kind === "received") {
+          totals.available += movement.quantity;
+        } else if (movement.kind === "incoming") {
+          totals.incoming += movement.quantity;
+        } else if (movement.kind === "incoming_received") {
+          totals.incoming -= movement.quantity;
+          totals.available += movement.quantity;
+        } else {
+          totals.available += movement.quantity;
+        }
+
+        return totals;
+      },
+      { available: 0, incoming: 0 },
+    );
+  }
+
+  function addStockMovement(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const quantity = Number(stockQuantity);
+    const note = stockNote.trim();
+
+    if (!stockProductId || !Number.isFinite(quantity) || quantity === 0) {
+      setMessage("Select a product and enter a valid non-zero quantity.");
+      return;
+    }
+
+    if (stockKind !== "adjustment" && quantity < 0) {
+      setMessage("Stock quantities must be positive for this movement.");
+      return;
+    }
+
+    const current = stockTotals(stockProductId);
+
+    if (stockKind === "adjustment" && current.available + quantity < 0) {
+      setMessage("This adjustment cannot reduce available stock below zero.");
+      return;
+    }
+
+    if (
+      stockKind === "incoming_received" &&
+      current.incoming - quantity < 0
+    ) {
+      setMessage("You cannot receive more incoming stock than is recorded.");
+      return;
+    }
+
+    setStockMovements((currentMovements) => [
+      ...currentMovements,
+      {
+        id: makeId("movement"),
+        productId: stockProductId,
+        kind: stockKind,
+        quantity,
+        note,
+        createdAt: new Date().toISOString(),
+      },
+    ]);
+
+    setStockQuantity("");
+    setStockNote("");
+    setMessage("Stock movement saved.");
+  }
+
+  function stockMovementLabel(kind: StockMovementKind) {
+    if (kind === "received") return "Stock Received";
+    if (kind === "incoming") return "Incoming Stock";
+    if (kind === "incoming_received") return "Receive Incoming";
+    return "Stock Adjustment";
   }
 
   return (
@@ -544,6 +646,158 @@ export default function Home() {
               )}
             </div>
           </div>
+        </section>
+
+        <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="mb-5">
+            <h2 className="text-lg font-semibold">Inventory</h2>
+            <p className="text-sm text-slate-500">
+              Record stock movements against saved assessment books. Available
+              and incoming stock are calculated from the movement ledger.
+            </p>
+          </div>
+
+          {products.length === 0 ? (
+            <p className="rounded-xl border border-dashed border-slate-300 px-4 py-8 text-center text-sm text-slate-500">
+              Add an assessment book before recording inventory.
+            </p>
+          ) : (
+            <>
+              <form onSubmit={addStockMovement} className="grid gap-3 lg:grid-cols-5">
+                <select
+                  value={stockProductId}
+                  onChange={(event) => setStockProductId(event.target.value)}
+                  className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500 lg:col-span-2"
+                >
+                  <option value="">Select assessment book</option>
+                  {products.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name} · {classLabel(item.classId)}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  value={stockKind}
+                  onChange={(event) =>
+                    setStockKind(event.target.value as StockMovementKind)
+                  }
+                  className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
+                >
+                  <option value="received">Stock Received</option>
+                  <option value="incoming">Incoming Stock</option>
+                  <option value="incoming_received">Receive Incoming</option>
+                  <option value="adjustment">Stock Adjustment</option>
+                </select>
+
+                <input
+                  value={stockQuantity}
+                  onChange={(event) => setStockQuantity(event.target.value)}
+                  type="number"
+                  step="1"
+                  placeholder={stockKind === "adjustment" ? "Qty (+/-)" : "Quantity"}
+                  className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
+                />
+
+                <button
+                  type="submit"
+                  className="rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+                >
+                  Save Movement
+                </button>
+
+                <input
+                  value={stockNote}
+                  onChange={(event) => setStockNote(event.target.value)}
+                  placeholder="Note (optional)"
+                  className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500 lg:col-span-4"
+                />
+              </form>
+
+              <div className="mt-6 overflow-x-auto rounded-xl border border-slate-200">
+                <table className="w-full min-w-[720px] text-left text-sm">
+                  <thead className="border-b border-slate-200 bg-slate-50">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Assessment Book</th>
+                      <th className="px-4 py-3 font-semibold">Available</th>
+                      <th className="px-4 py-3 font-semibold">Incoming</th>
+                      <th className="px-4 py-3 font-semibold">Projected</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {products.map((item) => {
+                      const totals = stockTotals(item.id);
+                      return (
+                        <tr key={item.id}>
+                          <td className="px-4 py-3">
+                            <p className="font-medium">{item.name}</p>
+                            <p className="text-xs text-slate-500">{classLabel(item.classId)}</p>
+                          </td>
+                          <td className="px-4 py-3">{totals.available}</td>
+                          <td className="px-4 py-3">{totals.incoming}</td>
+                          <td className="px-4 py-3">{totals.available + totals.incoming}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-6 overflow-x-auto rounded-xl border border-slate-200">
+                <table className="w-full min-w-[900px] text-left text-sm">
+                  <thead className="border-b border-slate-200 bg-slate-50">
+                    <tr>
+                      <th className="px-4 py-3 font-semibold">Date</th>
+                      <th className="px-4 py-3 font-semibold">Assessment Book</th>
+                      <th className="px-4 py-3 font-semibold">Movement</th>
+                      <th className="px-4 py-3 font-semibold">Quantity</th>
+                      <th className="px-4 py-3 font-semibold">Note</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    {stockMovements.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="px-4 py-8 text-center text-slate-500">
+                          No stock movements yet.
+                        </td>
+                      </tr>
+                    ) : (
+                      [...stockMovements].reverse().map((movement) => {
+                        const product = products.find(
+                          (item) => item.id === movement.productId,
+                        );
+                        return (
+                          <tr key={movement.id}>
+                            <td className="px-4 py-3">
+                              {new Date(movement.createdAt).toLocaleString("en-NG")}
+                            </td>
+                            <td className="px-4 py-3 font-medium">
+                              {product?.name ?? "Unknown product"}
+                            </td>
+                            <td className="px-4 py-3">
+                              {stockMovementLabel(movement.kind)}
+                            </td>
+                            <td className="px-4 py-3">
+                              {movement.kind === "adjustment"
+                                ? movement.quantity > 0
+                                  ? "+" + movement.quantity
+                                  : movement.quantity
+                                : movement.kind === "incoming_received"
+                                  ? "-" + movement.quantity + " incoming / +" + movement.quantity + " available"
+                                  : "+" + movement.quantity}
+                            </td>
+                            <td className="px-4 py-3 text-slate-600">
+                              {movement.note || "—"}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
         </section>
 
         <p className="mt-6 text-xs text-slate-500">
