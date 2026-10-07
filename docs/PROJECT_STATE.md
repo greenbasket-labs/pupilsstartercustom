@@ -33,6 +33,7 @@ The web application now has a development administration screen for catalogue ma
 Implemented:
 - Admin can add classes.
 - Admin can edit saved class names.
+- Admin can edit saved assessment-book names, class associations, and selling prices.
 - Class names are stored as data rather than hard-coded into the UI.
 - Admin can activate/deactivate classes.
 - Admin can remove classes that have no dependent products.
@@ -42,6 +43,9 @@ Implemented:
 - Admin can activate/deactivate products.
 - Current development persistence uses browser storage as a temporary bridge.
 - Production persistence remains planned for Supabase/PostgreSQL.
+
+## Catalogue Editing Checkpoint
+The current Phase 1 code now includes admin-side editing for saved classes and assessment books. The last formally validated stable commit remains `2fe2dfd`; the new catalogue-editing change is awaiting local lint/build validation before it becomes the next stable checkpoint.
 
 ## Stable Validation Checkpoint
 Current stable commit:
