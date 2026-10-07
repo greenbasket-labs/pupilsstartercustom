@@ -189,6 +189,18 @@ export default function Home() {
     setMessage(`Class “${name}” saved.`);
   }
 
+  function editClass(item: ClassItem) {
+    setEditingClassId(item.id);
+    setClassName(item.name);
+    setMessage("Editing class.");
+  }
+
+  function cancelClassEdit() {
+    setEditingClassId(null);
+    setClassName("");
+    setMessage("Class editing cancelled.");
+  }
+
   function toggleClass(id: string) {
     setClasses((current) =>
       current.map((item) =>
@@ -267,6 +279,22 @@ export default function Home() {
     setMessage(`Assessment book “${name}” saved.`);
   }
 
+  function editProduct(item: Product) {
+    setEditingProductId(item.id);
+    setProductName(item.name);
+    setProductClassId(item.classId);
+    setPrice(String(item.price));
+    setMessage("Editing assessment book.");
+  }
+
+  function cancelProductEdit() {
+    setEditingProductId(null);
+    setProductName("");
+    setProductClassId("");
+    setPrice("");
+    setMessage("Assessment-book editing cancelled.");
+  }
+
   function toggleProduct(id: string) {
     setProducts((current) =>
       current.map((item) =>
@@ -337,6 +365,16 @@ export default function Home() {
               >
                 {editingClassId ? "Update & Save" : "Add & Save"}
               </button>
+
+              {editingClassId ? (
+                <button
+                  type="button"
+                  onClick={cancelClassEdit}
+                  className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                >
+                  Cancel
+                </button>
+              ) : null}
             </form>
 
             <div className="mt-6 overflow-hidden rounded-xl border border-slate-200">
@@ -360,6 +398,14 @@ export default function Home() {
                       </div>
 
                       <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => editClass(item)}
+                          className="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium hover:bg-slate-50"
+                        >
+                          Edit
+                        </button>
+
                         <button
                           type="button"
                           onClick={() => toggleClass(item.id)}
@@ -427,12 +473,24 @@ export default function Home() {
                 />
               </div>
 
-              <button
-                type="submit"
-                className="w-full rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
-              >
-                {editingProductId ? "Update & Save" : "Add Book & Save"}
-              </button>
+              <div className="flex gap-3">
+                <button
+                  type="submit"
+                  className="flex-1 rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+                >
+                  {editingProductId ? "Update & Save" : "Add Book & Save"}
+                </button>
+
+                {editingProductId ? (
+                  <button
+                    type="button"
+                    onClick={cancelProductEdit}
+                    className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                  >
+                    Cancel
+                  </button>
+                ) : null}
+              </div>
             </form>
 
             <div className="mt-6 overflow-hidden rounded-xl border border-slate-200">
@@ -456,6 +514,14 @@ export default function Home() {
                       </div>
 
                       <div className="flex shrink-0 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => editProduct(item)}
+                          className="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium hover:bg-slate-50"
+                        >
+                          Edit
+                        </button>
+
                         <button
                           type="button"
                           onClick={() => toggleProduct(item.id)}
