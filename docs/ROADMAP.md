@@ -1,21 +1,23 @@
 # Roadmap
 
 ## Phase 0 — Foundation & Engineering Rules
-**Status: IN PROGRESS**
-- Establish project documentation.
-- Establish engineering constitution.
-- Establish business rules.
-- Establish architecture boundaries.
-- Establish safe-change workflow.
-- Create a clean Git checkpoint.
+**Status: COMPLETE**
+- Project documentation established.
+- Engineering constitution established.
+- Business rules established.
+- Architecture boundaries established.
+- Safe-change workflow established.
+- Git checkpoint established.
 
 ## Phase 1 — Product, Classes & Pricing
-**Status: NOT STARTED**
+**Status: CURRENT**
+- Web application foundation.
 - Product catalogue.
 - Class/category structure.
 - Product pricing.
 - Product availability states.
 - Admin product management.
+- Tests and documentation.
 
 ## Phase 2 — Inventory & Incoming Stock
 **Status: NOT STARTED**
