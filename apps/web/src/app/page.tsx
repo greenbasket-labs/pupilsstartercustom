@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useMemo, useState, useSyncExternalStore } from "react";
 
 type ClassItem = {
   id: string;
@@ -19,6 +19,87 @@ type Product = {
 const CLASSES_KEY = "pupils-start:classes";
 const PRODUCTS_KEY = "pupils-start:products";
 
+type StateUpdater<T> = T | ((current: T) => T);
+
+function subscribeToLocalStorage(key: string, callback: () => void) {
+  const handleStorage = (event: StorageEvent) => {
+    if (event.key === key) callback();
+  };
+
+  const handleLocalChange = (event: Event) => {
+    if ((event as CustomEvent<string>).detail === key) callback();
+  };
+
+  window.addEventListener("storage", handleStorage);
+  window.addEventListener("pupils-start:local-storage", handleLocalChange);
+
+  return () => {
+    window.removeEventListener("storage", handleStorage);
+    window.removeEventListener("pupils-start:local-storage", handleLocalChange);
+  };
+}
+
+function useLocalStorageState<T>(key: string, initialValue: T) {
+  const subscribe = useCallback(
+    (callback: () => void) => subscribeToLocalStorage(key, callback),
+    [key],
+  );
+
+  const getSnapshot = useCallback(
+    () => window.localStorage.getItem(key),
+    [key],
+  );
+
+  const getServerSnapshot = useCallback(() => null, []);
+
+  const rawValue = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
+
+  const value = useMemo(() => {
+    if (!rawValue) return initialValue;
+
+    try {
+      return JSON.parse(rawValue) as T;
+    } catch {
+      return initialValue;
+    }
+  }, [initialValue, rawValue]);
+
+  const setValue = useCallback(
+    (nextValue: StateUpdater<T>) => {
+      let currentValue = initialValue;
+      const savedValue = window.localStorage.getItem(key);
+
+      if (savedValue) {
+        try {
+          currentValue = JSON.parse(savedValue) as T;
+        } catch {
+          currentValue = initialValue;
+        }
+      }
+
+      const valueToSave =
+        typeof nextValue === "function"
+          ? (nextValue as (current: T) => T)(currentValue)
+          : nextValue;
+
+      window.localStorage.setItem(key, JSON.stringify(valueToSave));
+
+      window.dispatchEvent(
+        new CustomEvent("pupils-start:local-storage", {
+          detail: key,
+        }),
+      );
+    },
+    [initialValue, key],
+  );
+
+  return [value, setValue] as const;
+}
+
 function makeId(prefix: string) {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 }
@@ -32,32 +113,21 @@ function formatNaira(value: number) {
 }
 
 export default function Home() {
-  const [classes, setClasses] = useState<ClassItem[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
+  const [classes, setClasses] = useLocalStorageState<ClassItem[]>(
+    CLASSES_KEY,
+    [],
+  );
+
+  const [products, setProducts] = useLocalStorageState<Product[]>(
+    PRODUCTS_KEY,
+    [],
+  );
+
   const [className, setClassName] = useState("");
   const [productName, setProductName] = useState("");
   const [productClassId, setProductClassId] = useState("");
   const [price, setPrice] = useState("");
   const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    try {
-      const savedClasses = window.localStorage.getItem(CLASSES_KEY);
-      const savedProducts = window.localStorage.getItem(PRODUCTS_KEY);
-      if (savedClasses) setClasses(JSON.parse(savedClasses));
-      if (savedProducts) setProducts(JSON.parse(savedProducts));
-    } catch {
-      setMessage("Saved browser data could not be loaded.");
-    }
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem(CLASSES_KEY, JSON.stringify(classes));
-  }, [classes]);
-
-  useEffect(() => {
-    window.localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
-  }, [products]);
 
   const activeClasses = useMemo(
     () => classes.filter((item) => item.active),
@@ -84,6 +154,7 @@ export default function Home() {
       ...current,
       { id: makeId("class"), name, active: true },
     ]);
+
     setClassName("");
     setMessage(`Class “${name}” saved.`);
   }
@@ -94,6 +165,7 @@ export default function Home() {
         item.id === id ? { ...item, active: !item.active } : item,
       ),
     );
+
     setMessage("Class status saved.");
   }
 
@@ -109,6 +181,7 @@ export default function Home() {
 
   function addProduct(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
     const name = productName.trim();
     const amount = Number(price);
 
@@ -127,6 +200,7 @@ export default function Home() {
         active: true,
       },
     ]);
+
     setProductName("");
     setPrice("");
     setMessage(`Assessment book “${name}” saved.`);
@@ -138,6 +212,7 @@ export default function Home() {
         item.id === id ? { ...item, active: !item.active } : item,
       ),
     );
+
     setMessage("Assessment book status saved.");
   }
 
@@ -158,14 +233,17 @@ export default function Home() {
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
               PUPILS START
             </p>
+
             <h1 className="mt-1 text-3xl font-semibold tracking-tight">
               Classes & Assessment Books
             </h1>
+
             <p className="mt-2 max-w-2xl text-sm text-slate-600">
               Add the business classes and assessment books here. Nothing is
               fixed in the code.
             </p>
           </div>
+
           {message ? (
             <div className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm">
               {message}
@@ -177,6 +255,7 @@ export default function Home() {
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="mb-5">
               <h2 className="text-lg font-semibold">Classes</h2>
+
               <p className="text-sm text-slate-500">
                 The admin can add, activate and remove classes as the business
                 changes.
@@ -190,6 +269,7 @@ export default function Home() {
                 placeholder="e.g. Primary 1"
                 className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
               />
+
               <button
                 type="submit"
                 className="rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
@@ -212,10 +292,12 @@ export default function Home() {
                     >
                       <div>
                         <p className="font-medium">{item.name}</p>
+
                         <p className="text-xs text-slate-500">
                           {item.active ? "Active" : "Inactive"}
                         </p>
                       </div>
+
                       <div className="flex gap-2">
                         <button
                           type="button"
@@ -224,6 +306,7 @@ export default function Home() {
                         >
                           {item.active ? "Deactivate" : "Activate"}
                         </button>
+
                         <button
                           type="button"
                           onClick={() => removeClass(item.id)}
@@ -242,6 +325,7 @@ export default function Home() {
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="mb-5">
               <h2 className="text-lg font-semibold">Assessment Books</h2>
+
               <p className="text-sm text-slate-500">
                 Create products against the classes already saved above and
                 set their selling price.
@@ -255,6 +339,7 @@ export default function Home() {
                 placeholder="Assessment book name"
                 className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
               />
+
               <div className="grid gap-3 sm:grid-cols-2">
                 <select
                   value={productClassId}
@@ -262,12 +347,14 @@ export default function Home() {
                   className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
                 >
                   <option value="">Select class</option>
+
                   {activeClasses.map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.name}
                     </option>
                   ))}
                 </select>
+
                 <input
                   value={price}
                   onChange={(event) => setPrice(event.target.value)}
@@ -278,6 +365,7 @@ export default function Home() {
                   className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
                 />
               </div>
+
               <button
                 type="submit"
                 className="w-full rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
@@ -300,10 +388,12 @@ export default function Home() {
                     >
                       <div className="min-w-0">
                         <p className="truncate font-medium">{item.name}</p>
+
                         <p className="text-xs text-slate-500">
                           {classLabel(item.classId)} · {formatNaira(item.price)}
                         </p>
                       </div>
+
                       <div className="flex shrink-0 gap-2">
                         <button
                           type="button"
@@ -312,6 +402,7 @@ export default function Home() {
                         >
                           {item.active ? "Deactivate" : "Activate"}
                         </button>
+
                         <button
                           type="button"
                           onClick={() => removeProduct(item.id)}
