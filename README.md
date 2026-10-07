@@ -18,7 +18,7 @@ The system is designed around the real supply workflow: schools/customers can di
 
 **Phase 1 — Product, Classes & Pricing — IN PROGRESS**
 
-The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding and saving classes and assessment books with prices without hard-coding the business catalogue into the application.
+The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
 
 Current stable checkpoint:
 
