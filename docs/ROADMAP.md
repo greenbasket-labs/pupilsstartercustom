@@ -10,7 +10,7 @@
 - Git checkpoint established.
 
 ## Phase 1 — Product, Classes & Pricing
-**Status: CURRENT**
+**Status: COMPLETE**
 - Web application foundation.
 - Product catalogue.
 - Class/category structure.
@@ -18,14 +18,16 @@
 - Product availability states.
 - Admin product management.
 - Tests and documentation.
+- Manual acceptance completed.
 
 ## Phase 2 — Inventory & Incoming Stock
-**Status: NOT STARTED**
+**Status: CURRENT**
 - Available stock.
 - Incoming stock.
 - Stock movements/ledger.
 - Stock history.
 - Safe stock calculations.
+- Initial inventory ledger foundation implemented in the development browser.
 
 ## Phase 3 — Customer Ordering
 **Status: NOT STARTED**
