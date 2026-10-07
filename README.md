@@ -20,14 +20,17 @@ The system is designed around the real supply workflow: schools/customers can di
 
 The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
 
+Catalogue editing has now been validated locally with the latest Phase 1 code.
+
 Current stable checkpoint:
 
-`2fe2dfd — fix: replace effect-driven local storage state`
+`351de50 — docs: mark catalogue editing validation pending`
 
 Validation at this checkpoint:
 - Lint: PASS
 - Build: PASS
 - Working tree: clean
+- Local validation completed after pulling the latest `main`
 
 The current browser-based persistence is a Phase 1 development bridge. The Supabase database will become the production source of truth before real business use.
 
