@@ -16,7 +16,7 @@ The system is designed around the real supply workflow: schools/customers can di
 
 ## Current Status
 
-**Phase 2 — Inventory & Incoming Stock — COMPLETE**
+**Phase 3 — Customer Ordering — IN PROGRESS**
 
 The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
 
@@ -26,7 +26,7 @@ Stable Phase 1 acceptance checkpoint:
 
 `b6ef077 — fix: preserve class access while editing products`
 
-Phase 1 catalogue acceptance is complete. Phase 2 inventory work has now been manually accepted and closed.
+Phase 1 catalogue acceptance is complete. Phase 2 inventory work has now been manually accepted, closed, and frozen. Phase 3 customer ordering has started.
 
 Validation at this checkpoint:
 - Lint: PASS
@@ -52,6 +52,24 @@ The first Phase 2 slice introduces a development inventory ledger tied to saved 
 - The current browser storage remains a development bridge; Supabase/PostgreSQL will become the production source of truth.
 
 Phase 2 is now closed at its stable acceptance checkpoint.
+
+## Phase 3 Customer Ordering Foundation
+
+The first Phase 3 slice introduces a public customer ordering page at `/order`:
+
+- Active assessment books are available for customer selection.
+- Available stock is displayed from the existing inventory ledger.
+- Customers can select quantities and build a multi-item order.
+- School name, contact name, phone number, and optional email are collected.
+- Orders receive a customer-facing reference.
+- Product/class, price, quantity, and totals are captured on the order record.
+- New orders start with Payment: Pending and Supply: Pending Supply.
+- A confirmation screen shows the order reference and total.
+- Orders persist in the current browser as a temporary development bridge.
+- Payment is not processed in Phase 3.
+- Creating an order does not reduce stock. Automatic stock reduction remains tied to verified payment in the later payment flow.
+
+Phase 3 remains in progress until browser acceptance, lint/build validation, documentation, and a stable Git checkpoint are complete.
 
 ## Phase 2 Acceptance
 
