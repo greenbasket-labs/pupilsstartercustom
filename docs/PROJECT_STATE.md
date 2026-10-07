@@ -1,10 +1,10 @@
 # Project State
 
 ## Current Phase
-**Phase 2 — Inventory & Incoming Stock — COMPLETE**
+**Phase 3 — Customer Ordering**
 
 ## Status
-**COMPLETE**
+**IN PROGRESS**
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
@@ -27,7 +27,7 @@ Completed:
 ## Phase 2 Result
 Phase 2 — Inventory & Incoming Stock is **COMPLETE**.
 
-The controlled inventory foundation has been implemented and manually accepted in the development browser. The production database and customer purchase flow remain later-phase work.
+The controlled inventory foundation was implemented and manually accepted in the development browser. It remains frozen unless an explicit change request reopens it.
 
 ## Phase 1 Implementation Started
 The web application now has a development administration screen for catalogue management.
@@ -102,6 +102,25 @@ Local validation completed after pulling `main`:
 
 Phase 2 is frozen at this acceptance boundary. Future work must proceed from the next roadmap phase rather than reopening Phase 2 without an explicit change request.
 
+## Phase 3 Customer Ordering Foundation
+Implemented as the first controlled Phase 3 slice:
+
+- Public customer ordering page at `/order`.
+- Customer can browse active classes/products and configured available stock.
+- Customer can select assessment books and quantities.
+- Customer can build a multi-item order.
+- Customer enters school name, contact name, phone number, and optional email.
+- Order is assigned a customer-facing reference.
+- Order records preserve product name, class, unit price, quantity, line total, and order total at creation time.
+- Initial order state is Payment: Pending and Supply: Pending Supply.
+- Customer receives an order confirmation screen with the reference and total.
+- The current development implementation stores orders in browser storage as a temporary bridge.
+- Creating an order does **not** reduce inventory and does not process payment.
+- Verified-payment stock reduction remains a later order/payment workflow requirement.
+
+## Phase 3 Acceptance Boundary
+Phase 3 is **IN PROGRESS**. The initial customer-ordering foundation is implemented but not yet manually accepted. Local lint/build validation and browser acceptance are required before Phase 3 can become a stable checkpoint.
+
 ## Protected Rules
 - Preserve completed Phase 0 documentation unless an explicit change request reopens it.
 - Preserve completed Phase 1 catalogue functionality unless an explicit change request reopens it.
@@ -110,10 +129,10 @@ Phase 2 is frozen at this acceptance boundary. Future work must proceed from the
 - Do not hard-code business classes or products into application pages.
 
 ## Next Task
-Begin Phase 3 customer ordering only through a controlled, documented change. Do not begin payment, supply, or later workflows ahead of the roadmap.
+Manually test the Phase 3 customer ordering foundation, then run lint/build and record a stable checkpoint if all acceptance criteria pass. Do not begin Phase 4 payment ahead of Phase 3 acceptance.
 
 ## Last Known Stable State
-Phase 2 stable checkpoint: to be recorded by the final documentation checkpoint commit.
+Phase 2 stable checkpoint: `95bd61349c03bbdcc8e5e2e6cd327ef0f9394ba4 — docs: record stable Phase 2 checkpoint`
 
 ## Phase 1 Manual Acceptance Result
 Manual acceptance testing completed successfully in the development browser:
