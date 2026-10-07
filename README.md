@@ -16,7 +16,7 @@ The system is designed around the real supply workflow: schools/customers can di
 
 ## Current Status
 
-**Phase 1 — Product, Classes & Pricing — COMPLETE**
+**Phase 2 — Inventory & Incoming Stock — IN PROGRESS**
 
 The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
 
@@ -26,7 +26,7 @@ Stable Phase 1 acceptance checkpoint:
 
 `b6ef077 — fix: preserve class access while editing products`
 
-Phase 1 catalogue acceptance is complete. The next roadmap phase is Phase 2 — Inventory.
+Phase 1 catalogue acceptance is complete. Phase 2 inventory work has now started.
 
 Validation at this checkpoint:
 - Lint: PASS
@@ -35,6 +35,20 @@ Validation at this checkpoint:
 - Local validation completed after pulling the latest `main`
 
 The current browser-based persistence is a Phase 1 development bridge. The Supabase database will become the production source of truth before real business use.
+
+## Phase 2 Inventory Foundation
+
+The first Phase 2 slice introduces a development inventory ledger tied to saved assessment books:
+
+- Available stock is calculated from traceable stock movements.
+- Incoming stock is tracked separately.
+- Incoming stock can be received into available stock.
+- Stock adjustments are validated so available stock cannot fall below zero.
+- Projected stock is calculated from available plus incoming quantities.
+- Assessment books with stock history cannot be removed, preserving inventory history.
+- The current browser storage remains a development bridge; Supabase/PostgreSQL will become the production source of truth.
+
+Phase 2 remains in progress until manual acceptance, lint/build validation, and a stable Git checkpoint are complete.
 
 ## Ownership
 
