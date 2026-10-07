@@ -1,3 +1,5 @@
+"use client";
+
 import { FormEvent, useMemo, useState, useSyncExternalStore } from "react";
 
 type ClassItem = {
