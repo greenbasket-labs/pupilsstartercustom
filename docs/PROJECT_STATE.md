@@ -42,11 +42,20 @@ Implemented:
 - Current development persistence uses browser storage as a temporary bridge.
 - Production persistence remains planned for Supabase/PostgreSQL.
 
-Implementation commit:
-`b95779e41ea7df17997e2ca6d834fbc8d123909e`
+## Stable Validation Checkpoint
+Current stable commit:
 
-## Validation Status
-The implementation has been committed to GitHub, but local lint/build validation should be run before treating this increment as a final stable checkpoint.
+`2fe2dfd — fix: replace effect-driven local storage state`
+
+Validation:
+- Lint: **PASS**
+- Build: **PASS**
+- Working tree: **clean**
+- Branch: `main`
+- Remote: `origin/main`
+- Local branch is synchronized with `origin/main`
+
+The `2fe2dfd` checkpoint replaced the effect-driven localStorage state initialization/persistence with a subscription-based approach using React's `useSyncExternalStore`, resolving the ESLint `react-hooks/set-state-in-effect` error while preserving the current Phase 1 browser-storage development bridge.
 
 ## Protected Rules
 - Preserve completed Phase 0 documentation unless an explicit change request reopens it.
@@ -55,10 +64,10 @@ The implementation has been committed to GitHub, but local lint/build validation
 - Do not hard-code business classes or products into application pages.
 
 ## Next Task
-Run the local validation checks, then continue Phase 1 with any required catalogue-management refinements before moving to the next roadmap phase.
+Continue Phase 1 with the required catalogue-management refinements and validation before moving to the next roadmap phase.
 
 ## Last Known Stable State
-Next.js application foundation commit: `1d67263 — chore: initialize Next.js web application`
+`2fe2dfd — fix: replace effect-driven local storage state`
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
