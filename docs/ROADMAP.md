@@ -34,7 +34,7 @@
 - Verified-purchase stock rules documented for the later order/payment flow.
 
 ## Phase 3 — Customer Ordering
-**Status: CURRENT**
+**Status: COMPLETE**
 - Public customer catalogue.
 - Product selection.
 - Quantity selection.
@@ -43,16 +43,21 @@
 - Order reference.
 - Customer order confirmation.
 - Initial browser-based customer ordering slice implemented.
+- Manual browser acceptance completed.
+- Lint and production build validation completed.
 - Payment deliberately excluded from this phase.
+- Creating an order does not reduce inventory.
+- Phase 3 is frozen at the accepted boundary.
 
 ## Phase 4 — Payment Integration
-**Status: NOT STARTED**
+**Status: CURRENT**
 - Payment provider integration.
 - Payment verification.
 - Webhook handling.
 - Idempotency.
 - Automatic payment status.
 - Payment records.
+- Verified-payment stock reduction linked to the corresponding order/payment history.
 
 ## Phase 5 — Supply Persons & Delivery
 **Status: NOT STARTED**
