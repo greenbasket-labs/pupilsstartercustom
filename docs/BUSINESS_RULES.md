@@ -45,3 +45,14 @@ Customer business data belongs to the client/business according to the applicabl
 
 ## Scope Rule
 This product is an independent assessment-book supply application. Other businesses or the client's own school will be separate products unless a future written decision explicitly changes this boundary.
+## Inventory and Verified Purchases
+Stock is controlled through a traceable movement ledger.
+
+- Admin may add available stock through stock-received movements.
+- Admin may record incoming stock and receive it into available stock.
+- A verified customer purchase will automatically reduce available stock as part of the order/payment flow.
+- An unverified payment or checkout attempt must not reduce stock.
+- The automatic purchase reduction must be linked to the corresponding order/payment history.
+- Repeated payment-provider events must not reduce the same order's stock more than once.
+- Admin may manually reduce stock for non-sale reasons such as damage, loss, internal use, or physical-count correction.
+- Manual stock reductions require a reason/note and remain part of the inventory history.
