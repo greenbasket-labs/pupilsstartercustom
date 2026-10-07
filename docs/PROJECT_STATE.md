@@ -90,7 +90,7 @@ The order reference above is a development-browser acceptance example, not produ
 ## Stable Phase 3 Checkpoint
 Phase 3 acceptance is complete and the phase is now frozen.
 
-The stable implementation checkpoint is the Git commit recorded after this acceptance documentation update.
+The stable implementation checkpoint is the Git commit recorded by this final Phase 3 documentation checkpoint.
 
 ## Protected Rules
 - Preserve completed Phase 0 documentation unless an explicit change request reopens it.
