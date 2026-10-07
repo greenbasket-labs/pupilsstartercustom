@@ -18,11 +18,16 @@ The system is designed around the real supply workflow: schools/customers can di
 
 **Phase 1 — Product, Classes & Pricing — IN PROGRESS**
 
-The Next.js web application foundation is in place. The first Phase 1 administration screen now supports adding and saving classes and assessment books with prices without hard-coding the business catalogue into the application.
+The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding and saving classes and assessment books with prices without hard-coding the business catalogue into the application.
 
-Current implementation commit:
+Current stable checkpoint:
 
-`b95779e — feat: add dynamic class and product administration`
+`2fe2dfd — fix: replace effect-driven local storage state`
+
+Validation at this checkpoint:
+- Lint: PASS
+- Build: PASS
+- Working tree: clean
 
 The current browser-based persistence is a Phase 1 development bridge. The Supabase database will become the production source of truth before real business use.
 
