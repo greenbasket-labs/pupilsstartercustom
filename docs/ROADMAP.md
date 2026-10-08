@@ -58,10 +58,13 @@
 - Automatic payment status.
 - Payment records.
 - Verified-payment stock reduction linked to the corresponding order/payment history.
+- Unpaid orders do not consume/reserve stock; verified paid orders reduce available stock and can block later orders when remaining stock is insufficient.
 - Server/database payment foundation schema implemented.
 - Financial amounts represented in NGN kobo (minor units).
 - Payment webhook event idempotency foundation implemented.
 - Paystack runtime integration and production acceptance remain pending.
+- Controlled acceptance test passed for the stock boundary: an unpaid order leaves available stock unchanged; after simulated verified purchase consumption, a subsequent order exceeding remaining stock is rejected.
+- Customer order stock validation is aligned with the purchase-ledger semantics in migration `0012_phase4_order_stock_validation.sql`.
 - Admin phone/OTP authorization foundation implemented; SMS-provider acceptance remains pending.
 - Admin email/OTP authorization foundation added as a second sign-in option; email delivery/acceptance is currently paused because the hosted Supabase email provider is rate-limited.
 - Protected Supabase-backed Admin catalogue/inventory operations are implemented and manually accepted/frozen at the current checkpoint.
