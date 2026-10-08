@@ -37,6 +37,11 @@ export default function SupplyPage() {
 
   useEffect(() => { void load(); }, []);
 
+  function maskedPurchaseReference(reference: string) {
+    if (reference.length <= 9) return "••••";
+    return `${reference.slice(0, 5)}${"•".repeat(reference.length - 9)}${reference.slice(-4)}`;
+  }
+
   async function confirmPurchaseCode(orderId: string) {
     const purchaseCode = purchaseCodes[orderId]?.trim();
     if (!purchaseCode) { setMessage("Enter the purchase code given by the school."); return; }
@@ -105,7 +110,8 @@ export default function SupplyPage() {
                 </div>
                 <div className="mt-4 rounded-lg border border-slate-200 p-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Optional Purchase Code</p>
-                  <p className="mt-1 text-xs text-slate-500">The school already has the purchase code. Ask the school person for it if you want to use this verification option.</p>
+                  <p className="mt-1 text-sm font-semibold tracking-wide">{maskedPurchaseReference(order.reference)}</p>
+                  <p className="mt-1 text-xs text-slate-500">The full purchase code is not shown here. Ask the school person for the actual code if you want to use this verification option.</p>
                   <div className="mt-3 flex gap-2">
                     <input
                       value={purchaseCodes[order.order_id] ?? ""}
