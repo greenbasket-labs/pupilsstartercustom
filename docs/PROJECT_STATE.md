@@ -81,17 +81,21 @@ Admin authentication is now the next controlled Phase 4 boundary before migratin
 
 Implemented:
 - Supabase Phone OTP sign-in endpoints.
+- Supabase Email OTP sign-in endpoints as a second Admin authentication option.
 - Server-controlled authorized-admin phone table: `admin_authorized_phones`.
+- Server-controlled authorized-admin email table: `admin_authorized_emails`.
+- Both authorization tables use RLS and are readable only by the server-side service role.
 - HttpOnly access/refresh cookies after OTP verification.
 - Server-side admin authorization checks.
-- Admin workspace protection for `/`.
+- Admin workspace protection for `/` using either authorized phone or email identity.
 - Admin API namespace protection for future `/api/admin/*` routes.
-- No admin phone number is hard-coded in application source.
+- No admin phone number or email address is hard-coded in application source.
 
 Manual development setup:
-1. Configure Supabase Phone Authentication/SMS or Supabase's supported development test-OTP option.
-2. Add the current test phone in `public.admin_authorized_phones` using E.164 format, for example `+234...`.
-3. Later, deactivate the test phone and add the client's phone without changing application code.
+1. Phone Authentication remains available for later once an SMS provider is configured.
+2. For immediate development testing, add an authorized test email to `public.admin_authorized_emails`.
+3. Email OTP uses the existing Supabase Email Auth configuration; the hosted project's email template must include `{{ .Token }}` if a numeric OTP is desired.
+4. Later, deactivate test identities and add the client's phone/email without changing application code.
 4. Keep all service-role credentials server-only.
 
 The current implementation deliberately does not yet migrate Classes, Products, or Inventory writes from the old browser development screen. That migration remains the next controlled admin-data slice after authentication acceptance.
@@ -116,7 +120,7 @@ The current implementation deliberately does not yet migrate Classes, Products, 
 - Do not reduce stock from order creation or unverified payment.
 
 ## Next Task
-Manually configure and test the Admin phone/OTP authorization flow, including the development test phone. After acceptance, migrate the existing Classes, Products, and Inventory administration from browser storage to protected Supabase-backed admin APIs. Paystack remains after the admin authorization/data foundation is stable.
+Manually test the Admin email OTP authorization flow with an authorized development email, then test the existing phone path after an SMS provider is configured. After acceptance, migrate the existing Classes, Products, and Inventory administration from browser storage to protected Supabase-backed admin APIs. Paystack remains after the admin authorization/data foundation is stable.
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
