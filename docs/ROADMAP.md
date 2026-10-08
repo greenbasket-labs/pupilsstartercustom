@@ -74,9 +74,7 @@
 - Manual acceptance completed.
 
 ## Phase 7 — Admin Dashboard & Business Visibility
-**Status: CURRENT — FIRST SLICE ACCEPTED & FROZEN**
-
-Accepted first slice:
+**Status: COMPLETE FOR ACCEPTED FIRST SLICE & FROZEN**
 - Admin Overview.
 - Existing-data-only metrics.
 - Simple operational links.
@@ -85,20 +83,10 @@ Accepted first slice:
 - No new dependencies.
 - No redesign of the accepted Overview.
 
-Accepted metrics:
-- Total Orders.
-- Paid Orders.
-- Pending Supply.
-- Supplied Orders.
-- Paid Order Value.
-- Available Stock.
-- Incoming Stock.
-- Active Assessment Books.
-
-**Important:** the accepted Overview is frozen. Do not change its metrics, layout, navigation placement, names, or behavior without an explicit order.
+**Protected:** the accepted Overview must not be changed without an explicit order.
 
 ## Phase 8 — Security, Testing & Hardening
-**Status: NOT STARTED**
+**Status: CURRENT — PHASE 8.1 AUTHORIZATION REVIEW IN PROGRESS**
 - Authorization review.
 - Critical workflow tests.
 - Audit logging.
@@ -106,31 +94,32 @@ Accepted metrics:
 - Backup/recovery verification.
 - Performance/security review.
 
+### Phase 8.1 — Authorization Review
+**Implementation in progress; validation pending.**
+
+First finding and minimal fix:
+- The existing proxy protected Admin APIs and some Admin pages.
+- `/overview`, `/orders`, `/schools`, and `/customer-history` were outside the protected page matcher.
+- The existing proxy was extended to protect those four Admin pages without changing the authentication architecture or business logic.
+
+Implementation commit:
+`67e9adaf32be65c4ce75f8253cb6d70fc05ee914`
+
+Automated lint/build validation could not be executed because this environment could not resolve `github.com` while attempting to obtain the branch locally. No validation pass is claimed.
+
 ## Phase 9 — Production Deployment
 **Status: NOT STARTED**
-- Production environment.
-- Domain.
-- Hosting.
-- Database.
-- Production payment configuration.
-- Monitoring.
-- Backup strategy.
 
 ## Phase 10 — Real Business Pilot
 **Status: NOT STARTED**
-- Pilot launch.
-- Business-user testing.
-- Bug fixes.
-- Workflow validation.
-- Final v1 acceptance.
 
 ## Current Position
-Phase 7 is current. Phase 5 and Phase 6 are complete and frozen. The first Phase 7 Admin Overview slice is accepted and frozen.
+Phase 8 is current. Phase 7 and all earlier completed phases remain protected.
 
 ## Next Work Rule
-No additional Phase 7 feature is approved at this checkpoint. The next implementation must be explicitly selected before code changes begin.
+Complete Phase 8.1 validation before marking it complete. Then select the next Phase 8 slice explicitly.
 
-Do not jump to a later phase because it appears useful. Do not reopen a completed phase without an explicit change request and impact review.
+Do not jump to Phase 9 because it appears useful. Do not reopen completed phases without an explicit change request and impact review.
 
 ## Documentation Rule
 Any accepted change must update the relevant project documentation and create a stable Git checkpoint.
