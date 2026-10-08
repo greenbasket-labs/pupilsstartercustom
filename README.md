@@ -108,7 +108,9 @@ Phase 4 has started with a production-oriented payment data foundation:
 - Webhook event idempotency is represented in the database.
 - Payment state remains separate from physical supply state.
 
-The next controlled Phase 4 work is to initialize Paystack transactions server-side, verify transactions server-side, validate Paystack webhook signatures, and atomically apply verified-payment stock reduction. The Supabase-backed Admin Classes/Products/Inventory foundation has already been manually accepted and frozen. Email OTP work remains paused and must not block this sequence.
+The next controlled Phase 4 work is to initialize Paystack transactions server-side, verify transactions server-side, validate Paystack webhook signatures, and atomically apply verified-payment stock reduction.
+
+The payment stock boundary has now been acceptance-tested: an unpaid order does not create a purchase movement or change available stock, while consumed paid stock causes a later order that exceeds remaining availability to be rejected. Customer order validation now uses the same purchase-ledger semantics as verified-payment fulfillment. The Supabase-backed Admin Classes/Products/Inventory foundation has already been manually accepted and frozen. Email OTP work remains paused and must not block this sequence.
 
 No Paystack secret or production credential is stored in the repository.
 
