@@ -66,6 +66,11 @@ export default function OrdersPage() {
 
   useEffect(() => { void load(); }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("filter") === "pending-supply") setFilter("pending-supply");
+  }, []);
+
   const visibleOrders = useMemo(
     () => filter === "pending-supply"
       ? orders.filter((order) => order.payment_status === "Paid" && order.supply_status !== "Supplied")
