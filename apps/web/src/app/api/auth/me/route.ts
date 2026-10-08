@@ -30,6 +30,18 @@ async function getAdmin(field: "phone_e164" | "email", value: string) {
 
 export async function GET(request: Request) {
   try {
+    if (
+      process.env.NODE_ENV === "development" &&
+      request.headers.get("cookie")?.includes("pupils-start-dev-admin=local-development-admin")
+    ) {
+      return NextResponse.json({
+        authenticated: true,
+        userId: "local-development-admin",
+        method: "development",
+        displayName: "Local Development Admin",
+      });
+    }
+
     const cookie = request.headers.get("cookie") ?? "";
     const match = cookie.match(/(?:^|;\s*)pupils-start-access=([^;]+)/);
     if (!match) return NextResponse.json({ authenticated: false }, { status: 401 });
