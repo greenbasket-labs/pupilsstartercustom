@@ -77,7 +77,7 @@ The database/server is now authoritative for:
 - Order persistence.
 
 ## Phase 4 Admin Authentication Foundation
-Admin authentication is now the next controlled Phase 4 boundary before migrating the existing admin catalogue/inventory screen to database-backed writes.
+Admin authentication foundation is implemented. Phone SMS delivery and numeric email OTP delivery are currently deferred and do not block the Phase 4 admin-data/payment work.
 
 Implemented:
 - Supabase Phone OTP sign-in endpoints.
@@ -96,9 +96,9 @@ Manual development setup:
 2. For immediate development testing, add an authorized test email to `public.admin_authorized_emails`.
 3. Email OTP uses the existing Supabase Email Auth configuration; the hosted project's email template must include `{{ .Token }}` if a numeric OTP is desired.
 4. Later, deactivate test identities and add the client's phone/email without changing application code.
-4. Keep all service-role credentials server-only.
+5. Keep all service-role credentials server-only.
 
-The current implementation deliberately does not yet migrate Classes, Products, or Inventory writes from the old browser development screen. That migration remains the next controlled admin-data slice after authentication acceptance.
+The Admin Classes, Products, and Inventory workflow has now been migrated to protected Supabase-backed operations. Manual acceptance is the current checkpoint.
 
 ## Not Yet Implemented
 - Paystack transaction initialization.
@@ -120,7 +120,7 @@ The current implementation deliberately does not yet migrate Classes, Products, 
 - Do not reduce stock from order creation or unverified payment.
 
 ## Next Task
-Manually acceptance-test the new Supabase-backed Classes, Products, and Inventory Admin workflow. Verify create/edit/activate/deactivate/remove rules and inventory safety rules against the database. After that acceptance, continue the Phase 4 Paystack transaction initialization and verification slice. Phone SMS delivery and numeric email OTP delivery remain deferred authentication follow-ups and do not block the admin data migration.
+Manually acceptance-test the new Supabase-backed Classes, Products, and Inventory Admin workflow. Verify create/edit/activate/deactivate/remove rules and inventory safety rules against the database. Email OTP delivery is explicitly paused because the hosted Supabase email provider is rate-limited; do not spend implementation time on email until this admin-data/payment work is accepted. After admin-data acceptance, continue the Phase 4 Paystack transaction initialization and verification slice.
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
