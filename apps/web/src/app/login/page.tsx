@@ -13,6 +13,24 @@ export default function LoginPage() {
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
 
+  async function useDevelopmentAccess() {
+    setBusy(true);
+    setMessage("");
+    try {
+      const response = await fetch("/api/auth/dev-login", { method: "POST" });
+      const result = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        setMessage(result.error ?? "Development access is unavailable.");
+        return;
+      }
+      window.location.href = "/";
+    } catch {
+      setMessage("Unable to start development access.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const identity = method === "email" ? email : phone;
 
   async function requestOtp(event: FormEvent<HTMLFormElement>) {
@@ -181,6 +199,20 @@ export default function LoginPage() {
             </button>
           </form>
         )}
+
+        {process.env.NODE_ENV === "development" ? (
+          <div className="mt-6 border-t border-slate-200 pt-6">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-amber-700">Development only</p>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void useDevelopmentAccess()}
+              className="w-full rounded-lg border border-amber-300 bg-amber-50 px-4 py-2.5 text-sm font-semibold text-amber-900 disabled:opacity-50"
+            >
+              {busy ? "Opening development access…" : "Continue with local development access"}
+            </button>
+          </div>
+        ) : null}
 
         {message ? (
           <p className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">
