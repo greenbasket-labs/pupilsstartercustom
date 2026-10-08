@@ -1,16 +1,17 @@
 import { NextResponse } from "next/server";
 
-function normalizePhone(value: unknown) {
+function normalize(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-async function isAuthorizedPhone(phone: string) {
+async function isAuthorized(field: "phone_e164" | "email", value: string) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) throw new Error("Supabase server configuration is missing.");
 
+  const table = field === "phone_e164" ? "admin_authorized_phones" : "admin_authorized_emails";
   const response = await fetch(
-    `${url}/rest/v1/admin_authorized_phones?select=id&phone_e164=eq.${encodeURIComponent(phone)}&is_active=eq.true&limit=1`,
+    `${url}/rest/v1/${table}?select=id&${field}=eq.${encodeURIComponent(value)}&is_active=eq.true&limit=1`,
     { headers: { apikey: key, Authorization: `Bearer ${key}` }, cache: "no-store" },
   );
   if (!response.ok) throw new Error("Unable to check admin authorization.");
@@ -20,15 +21,27 @@ async function isAuthorizedPhone(phone: string) {
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as { phone?: unknown; token?: unknown };
-    const phone = normalizePhone(body.phone);
-    const token = typeof body.token === "string" ? body.token.trim() : "";
+    const body = (await request.json()) as {
+      method?: unknown;
+      phone?: unknown;
+      email?: unknown;
+      token?: unknown;
+    };
 
-    if (!phone || !token) {
-      return NextResponse.json({ error: "Phone number and OTP are required." }, { status: 400 });
+    const method = body.method === "email" ? "email" : "phone";
+    const value = method === "email" ? normalize(body.email).toLowerCase() : normalize(body.phone);
+    const token = normalize(body.token);
+
+    if (!value || !token) {
+      return NextResponse.json({ error: "Sign-in identity and OTP are required." }, { status: 400 });
     }
-    if (!(await isAuthorizedPhone(phone))) {
-      return NextResponse.json({ error: "This phone number is not authorized for admin access." }, { status: 403 });
+
+    const authorized = await isAuthorized(method === "email" ? "email" : "phone_e164", value);
+    if (!authorized) {
+      return NextResponse.json(
+        { error: "This sign-in identity is not authorized for admin access." },
+        { status: 403 },
+      );
     }
 
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -38,14 +51,16 @@ export async function POST(request: Request) {
     const response = await fetch(`${url}/auth/v1/token?grant_type=otp`, {
       method: "POST",
       headers: { apikey: key, "Content-Type": "application/json" },
-      body: JSON.stringify({ phone, token, type: "sms" }),
+      body: method === "email"
+        ? JSON.stringify({ email: value, token, type: "email" })
+        : JSON.stringify({ phone: value, token, type: "sms" }),
     });
 
     const result = (await response.json().catch(() => null)) as {
       access_token?: string;
       refresh_token?: string;
       expires_in?: number;
-      user?: { id?: string; phone?: string };
+      user?: { id?: string; phone?: string; email?: string };
       msg?: string;
       message?: string;
     } | null;
@@ -57,7 +72,10 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!result.user?.id || result.user.phone !== phone) {
+    const identityMatches =
+      method === "email" ? result.user?.email === value : result.user?.phone === value;
+
+    if (!result.user?.id || !identityMatches) {
       return NextResponse.json({ error: "Admin identity could not be verified." }, { status: 403 });
     }
 
