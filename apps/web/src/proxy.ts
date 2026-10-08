@@ -12,20 +12,38 @@ async function verifyAdmin(accessToken: string) {
   });
   if (!userResponse.ok) return null;
 
-  const user = (await userResponse.json()) as { phone?: string };
-  if (!user.phone) return null;
+  const user = (await userResponse.json()) as { phone?: string; email?: string };
 
-  const adminResponse = await fetch(
-    `${url}/rest/v1/admin_authorized_phones?select=id&phone_e164=eq.${encodeURIComponent(user.phone)}&is_active=eq.true&limit=1`,
-    {
-      headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}` },
-      cache: "no-store",
-    },
-  );
-  if (!adminResponse.ok) return null;
+  if (user.phone) {
+    const phoneResponse = await fetch(
+      `${url}/rest/v1/admin_authorized_phones?select=id&phone_e164=eq.${encodeURIComponent(user.phone)}&is_active=eq.true&limit=1`,
+      {
+        headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}` },
+        cache: "no-store",
+      },
+    );
+    if (phoneResponse.ok) {
+      const rows = (await phoneResponse.json()) as Array<{ id: string }>;
+      if (rows.length > 0) return user.phone;
+    }
+  }
 
-  const rows = (await adminResponse.json()) as Array<{ id: string }>;
-  return rows.length > 0 ? user.phone : null;
+  if (user.email) {
+    const email = user.email.toLowerCase();
+    const emailResponse = await fetch(
+      `${url}/rest/v1/admin_authorized_emails?select=id&email=eq.${encodeURIComponent(email)}&is_active=eq.true&limit=1`,
+      {
+        headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}` },
+        cache: "no-store",
+      },
+    );
+    if (emailResponse.ok) {
+      const rows = (await emailResponse.json()) as Array<{ id: string }>;
+      if (rows.length > 0) return email;
+    }
+  }
+
+  return null;
 }
 
 async function refreshAccessToken(refreshToken: string) {
@@ -56,16 +74,15 @@ export async function proxy(request: NextRequest) {
   }
 
   try {
-    let accessToken = request.cookies.get("pupils-start-access")?.value;
-    let refreshed: { access_token: string; refresh_token: string; expires_in?: number } | null = null;
+    const accessToken = request.cookies.get("pupils-start-access")?.value;
 
-    if (accessToken) {
-      if (await verifyAdmin(accessToken)) return NextResponse.next();
+    if (accessToken && (await verifyAdmin(accessToken))) {
+      return NextResponse.next();
     }
 
     const refreshToken = request.cookies.get("pupils-start-refresh")?.value;
     if (refreshToken) {
-      refreshed = await refreshAccessToken(refreshToken);
+      const refreshed = await refreshAccessToken(refreshToken);
       if (refreshed && (await verifyAdmin(refreshed.access_token))) {
         const response = NextResponse.next();
         response.cookies.set("pupils-start-access", refreshed.access_token, {
