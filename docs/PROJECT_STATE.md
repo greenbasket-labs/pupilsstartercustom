@@ -1,10 +1,10 @@
 # Project State
 
 ## Current Phase
-**Phase 7 — Admin Dashboard & Business Visibility**
+**Phase 8 — Security, Testing & Hardening**
 
 ## Status
-**CURRENT — ADMIN OVERVIEW ACCEPTED & FROZEN**
+**CURRENT — PHASE 8.1 AUTHORIZATION REVIEW IN PROGRESS**
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
@@ -48,77 +48,57 @@ Manually accepted:
 - Unpaid orders do not consume stock.
 - Insufficient remaining stock blocks a later order.
 
-Deferred deployment/authentication follow-ups do not reopen Phase 4:
-- Production Paystack credentials/configuration.
-- Live payment acceptance during production deployment.
-- SMS-provider configuration for phone OTP.
-- Numeric email OTP delivery while the hosted provider/rate limit is unsuitable.
+Deferred deployment/authentication follow-ups do not reopen Phase 4.
 
 ### Phase 5 — Supply Persons & Delivery
 **COMPLETE & FROZEN**
 
-Manually accepted:
-- Supply-person creation and restricted access.
-- Assignment of paid orders.
-- System-generated six-digit delivery code.
-- Assigned-order-only visibility.
-- Purchase/order-code confirmation path.
-- Mark Delivered path.
-- Successful supply completion without duplicate stock reduction.
-
-Supply states remain:
-`Pending Supply → Assigned → Supplied`
-
-No additional supply states were introduced.
+Supply-person creation, restricted assigned-order access, delivery-code confirmation, and delivery completion were manually accepted.
 
 ### Phase 6 — Customer & Order History
 **COMPLETE & FROZEN**
 
-Manually accepted:
-- Read-only Customer History.
-- Read-only Schools view derived from existing orders.
-- Customer-specific order history.
-- Payment/supply history visibility.
+Read-only Customer History, Schools view, customer-specific history, and payment/supply history were manually accepted.
 
-No customer table, CRM, or customer account system was added.
+### Phase 7 — Admin Dashboard & Business Visibility
+**COMPLETE FOR ACCEPTED FIRST SLICE — FROZEN**
 
-## Phase 7 — Admin Dashboard & Business Visibility
-**CURRENT — FIRST SLICE ACCEPTED & FROZEN**
+The accepted Admin Overview remains protected. Its metrics, layout, navigation placement, names, and behavior are not changed by Phase 8.
 
-The approved Admin Overview is complete for its current boundary.
+## Phase 8 — Security, Testing & Hardening
+**CURRENT — PHASE 8.1 AUTHORIZATION REVIEW IN PROGRESS**
 
-It uses existing:
-- Orders.
-- Products.
-- Stock movements.
+Phase 8 scope:
+- Authorization review.
+- Critical workflow tests.
+- Audit logging.
+- Error handling.
+- Backup/recovery verification.
+- Performance/security review.
 
-It introduces:
-- No new database tables.
-- No new business rules.
-- No new dependencies.
-- No changes to accepted payment, inventory, supply, or order logic.
+### Phase 8.1 — Authorization Review
 
-### Accepted Overview metrics
-- Total Orders.
-- Paid Orders.
-- Pending Supply.
-- Supplied Orders.
-- Paid Order Value.
-- Available Stock.
-- Incoming Stock.
-- Active Assessment Books.
+The first review identified a concrete authorization boundary gap:
 
-Manual acceptance snapshot:
-- Total Orders: **1**
-- Paid Orders: **1**
-- Pending Supply: **0**
-- Supplied Orders: **1**
-- Paid Order Value: **₦2,600**
-- Available Stock: **2,546**
-- Incoming Stock: **270**
-- Active Assessment Books: **11**
+- Server proxy authorization already protected the Admin root, `/supply-admin`, and `/api/admin/*`.
+- The Admin pages `/overview`, `/orders`, `/schools`, and `/customer-history` were not included in the protected page matcher.
+- Those pages consume protected Admin APIs and therefore should not be directly reachable without the Admin authorization boundary.
 
-The snapshot above records the test checkpoint only; the Overview calculates live values from the database.
+A minimal fix was implemented on branch `phase8-security-authorization`:
+
+- Expanded the existing proxy protected-page set to include those four Admin pages.
+- Expanded the existing proxy matcher to cover the same four pages.
+- No authentication architecture was changed.
+- No database, payment, inventory, supply, order, or Admin Overview business logic was changed.
+
+Implementation commit:
+`67e9adaf32be65c4ce75f8253cb6d70fc05ee914`
+
+### Validation status
+
+Automated lint/build validation is **PENDING**.
+
+The available execution environment could not resolve `github.com` when attempting to clone the repository for local validation. Therefore this milestone is not marked complete and no test pass is claimed.
 
 ## Protected Dashboard Boundary
 PUPILS START has exactly three dashboards:
@@ -129,25 +109,28 @@ PUPILS START has exactly three dashboards:
 No fourth dashboard is to be introduced without an explicit business decision.
 
 ## Protected Rules
-- The accepted Admin Overview is frozen and must not be changed without an explicit order.
+- The accepted Admin Overview remains frozen.
 - Completed phases remain protected unless explicitly reopened.
-- Do not hard-code business classes or products into application pages.
-- Never expose Supabase service-role or Paystack secret credentials to the browser or Git.
-- Do not reduce stock from order creation or unverified payment.
 - Payment and physical supply remain independent.
+- Stock must only change through traceable movements.
 - Repeated payment-provider events must not create duplicate purchase movements.
-- Preserve orders, payments, stock movements, supply history, and other important business history.
+- Orders, payments, stock movements, supply history, and audit history must be preserved.
+- Service-role and payment secrets must never reach the browser or Git.
+- Server-side authorization remains mandatory.
 
 ## Not Yet Implemented
-- Any additional Phase 7 feature not yet explicitly approved.
-- Phase 8 — Security, Testing & Hardening.
+- Critical workflow automated tests.
+- Audit logging review/implementation.
+- Error-handling hardening.
+- Backup/recovery verification.
+- Performance/security review.
 - Phase 9 — Production Deployment.
 - Phase 10 — Real Business Pilot.
 
 ## Current Next Task
-**No new Phase 7 feature is approved yet.**
+Complete validation of Phase 8.1, then continue with the next explicitly controlled Phase 8 slice.
 
-Preserve the accepted Admin Overview and wait for an explicit scope decision. Do not add dashboards, reports, tables, business logic, or redesigns speculatively.
+Do not modify the accepted Admin Overview or reopen completed phases speculatively.
 
 ## Handover Rule
-Any new AI/developer session must read this file, `README.md`, `docs/ROADMAP.md`, `docs/ENGINEERING_RULES.md`, `docs/BUSINESS_RULES.md`, and `docs/ARCHITECTURE.md` before changing the repository.
+Any new AI/developer session must read `README.md`, `docs/PROJECT_STATE.md`, `docs/ROADMAP.md`, `docs/ENGINEERING_RULES.md`, `docs/BUSINESS_RULES.md`, and `docs/ARCHITECTURE.md` before changing the repository.
