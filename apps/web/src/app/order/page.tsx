@@ -25,6 +25,7 @@ type SubmittedOrder = {
   totalKobo: number;
   paymentStatus: "Pending";
   supplyStatus: "Pending Supply";
+  email: string;
 };
 
 function formatNairaKobo(kobo: number) {
@@ -47,6 +48,7 @@ export default function CustomerOrderPage() {
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submittedOrder, setSubmittedOrder] = useState<SubmittedOrder | null>(null);
+  const [startingPayment, setStartingPayment] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -170,8 +172,13 @@ export default function CustomerOrderPage() {
       return;
     }
 
-    if (!schoolName.trim() || !contactName.trim() || !phone.trim()) {
-      setMessage("Enter the school name, contact name, and phone number.");
+    if (!schoolName.trim() || !contactName.trim() || !phone.trim() || !email.trim()) {
+      setMessage("Enter the school name, contact name, phone number, and email address.");
+      return;
+    }
+
+    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.trim())) {
+      setMessage("Enter a valid email address.");
       return;
     }
 
@@ -223,6 +230,7 @@ export default function CustomerOrderPage() {
         totalKobo: body.totalKobo,
         paymentStatus: body.paymentStatus,
         supplyStatus: body.supplyStatus,
+        email: email.trim().toLowerCase(),
       });
       setItems([]);
       setSelectedProductId("");
@@ -237,6 +245,40 @@ export default function CustomerOrderPage() {
       );
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function startPayment() {
+    if (!submittedOrder) return;
+
+    setStartingPayment(true);
+    setMessage("");
+
+    try {
+      const response = await fetch("/api/payment/initialize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId: submittedOrder.orderId,
+          email: submittedOrder.email,
+        }),
+      });
+
+      const body = (await response.json()) as {
+        authorizationUrl?: string;
+        error?: string;
+      };
+
+      if (!response.ok || !body.authorizationUrl) {
+        throw new Error(body.error ?? "Unable to start payment.");
+      }
+
+      window.location.assign(body.authorizationUrl);
+    } catch (error) {
+      setMessage(
+        error instanceof Error ? error.message : "Unable to start payment.",
+      );
+      setStartingPayment(false);
     }
   }
 
@@ -274,14 +316,22 @@ export default function CustomerOrderPage() {
             </div>
 
             <p className="mt-6 text-xs text-slate-500">
-              Payment is not connected yet. Verified payment will control stock
-              reduction in the next payment-flow step.
+              Payment is now connected through Paystack test mode. Verified payment does not reduce stock in this slice; that protected inventory step comes later.
             </p>
 
             <button
               type="button"
+              onClick={() => void startPayment()}
+              disabled={startingPayment}
+              className="mt-6 w-full rounded-lg bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              {startingPayment ? "Starting payment..." : "Pay Now"}
+            </button>
+
+            <button
+              type="button"
               onClick={() => setSubmittedOrder(null)}
-              className="mt-6 rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+              className="mt-3 w-full rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-800 hover:bg-slate-50"
             >
               Place another order
             </button>
@@ -457,8 +507,9 @@ export default function CustomerOrderPage() {
               <input
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                placeholder="Email address (optional)"
+                placeholder="Email address"
                 type="email"
+                required
                 className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
               />
 
@@ -474,8 +525,7 @@ export default function CustomerOrderPage() {
         </div>
 
         <p className="mt-6 text-xs text-slate-500">
-          Orders are now created server-side in Supabase. Payment is not
-          connected yet, and order creation does not reduce inventory.
+          Orders are created server-side in Supabase. Paystack payment is initialized server-side, and order creation does not reduce inventory.
         </p>
       </div>
     </main>
