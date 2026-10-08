@@ -2,109 +2,100 @@
 
 ## Phase 0 — Foundation & Engineering Rules
 **Status: COMPLETE**
-- Project documentation established.
-- Engineering constitution established.
-- Business rules established.
-- Architecture boundaries established.
-- Safe-change workflow established.
-- Git checkpoint established.
+- Project documentation.
+- Engineering constitution.
+- Business rules.
+- Architecture boundaries.
+- Safe-change workflow.
+- Git checkpoints.
 
 ## Phase 1 — Product, Classes & Pricing
-**Status: COMPLETE**
-- Web application foundation.
+**Status: COMPLETE & FROZEN**
 - Product catalogue.
 - Class/category structure.
-- Product pricing.
-- Product availability states.
+- Product pricing and availability.
 - Admin product management.
-- Tests and documentation.
 - Manual acceptance completed.
 
 ## Phase 2 — Inventory & Incoming Stock
-**Status: COMPLETE**
+**Status: COMPLETE & FROZEN**
 - Available stock.
 - Incoming stock.
-- Stock movements/ledger.
+- Stock movement ledger.
 - Stock history.
 - Safe stock calculations.
-- Inventory ledger foundation implemented in the development browser.
+- Negative-stock protection.
+- Inventory history preservation.
 - Manual acceptance completed.
-- Negative-stock protection verified.
-- Inventory history preservation verified.
-- Verified-purchase stock rules documented for the later order/payment flow.
 
 ## Phase 3 — Customer Ordering
-**Status: COMPLETE**
+**Status: COMPLETE & FROZEN**
 - Public customer catalogue.
-- Product selection.
-- Quantity selection.
-- Customer basic information.
-- Order creation.
-- Order reference.
+- Product/quantity selection.
+- Customer information.
+- Order creation and references.
 - Customer order confirmation.
-- Initial browser-based customer ordering slice implemented.
-- Manual browser acceptance completed.
-- Lint and production build validation completed.
-- Payment deliberately excluded from this phase.
-- Creating an order does not reduce inventory.
-- Phase 3 is frozen at the accepted boundary.
+- Unpaid orders do not consume stock.
+- Manual acceptance completed.
 
 ## Phase 4 — Payment Integration
-**Status: COMPLETE**
-- Payment provider integration.
-- Payment verification.
-- Webhook handling.
+**Status: COMPLETE & FROZEN**
+- Paystack transaction initialization.
+- Server-side verification.
+- Signed webhook handling.
 - Idempotency.
 - Automatic payment status.
 - Payment records.
-- Verified-payment stock reduction linked to the corresponding order/payment history.
-- Unpaid orders do not consume/reserve stock; verified paid orders reduce available stock and can block later orders when remaining stock is insufficient.
-- Server/database payment foundation schema implemented.
-- Financial amounts represented in NGN kobo (minor units).
-- Payment webhook event idempotency foundation implemented.
-- Paystack test checkout, server-side verification, signed webhook fulfillment, idempotency, and payment-linked inventory reduction have been manually acceptance-tested. Production credentials/configuration remain a deployment-phase task.
-- Controlled acceptance test passed for the stock boundary: an unpaid order leaves available stock unchanged; after simulated verified purchase consumption, a subsequent order exceeding remaining stock is rejected.
-- Customer order stock validation is aligned with the purchase-ledger semantics in migration `0012_phase4_order_stock_validation.sql`.
-- Admin phone/OTP authorization foundation implemented; SMS-provider acceptance remains pending.
-- Admin email/OTP authorization foundation added as a second sign-in option; email delivery/acceptance is currently paused because the hosted Supabase email provider is rate-limited.
-- Protected Supabase-backed Admin catalogue/inventory operations are implemented and manually accepted/frozen at the current checkpoint.
-- Phone SMS delivery and numeric email OTP delivery are deferred authentication follow-ups. Email is paused and does not block the current admin-data/payment work.
+- Verified-payment stock reduction.
+- Insufficient-stock protection.
+- Unpaid orders do not reserve/consume stock.
+- Manual acceptance completed.
+- Production credentials/configuration remain a deployment-phase task.
+- SMS and numeric email OTP delivery remain deferred authentication follow-ups.
 
 ## Phase 5 — Supply Persons & Delivery
-**Status: COMPLETE**
+**Status: COMPLETE & FROZEN**
 - Admin creates supply persons.
-- Admin assigns supply person to order.
+- Admin assigns paid orders.
 - Supply person sees assigned orders only.
-- Supply person confirms delivery.
-- Admin supply status updates.
-- Customer can see appropriate supply information.
-- Manual browser acceptance completed.
-- Phase 5 frozen.
+- System-generated six-digit delivery code.
+- Purchase/order-code confirmation.
+- Mark Delivered.
+- Existing supply states remain `Pending Supply → Assigned → Supplied`.
+- Manual acceptance completed.
 
 ## Phase 6 — Customer & Order History
-**Status: COMPLETE**
-- Customer records.
-- Order history.
-- Recent customers.
-- Search.
-- Supply/payment history.
-- Read-only Schools view derived from existing orders.
-- Customer-specific order history derived from existing orders.
-- Manual browser acceptance completed.
-- Phase 6 frozen.
+**Status: COMPLETE & FROZEN**
+- Read-only Customer History derived from orders.
+- Read-only Schools view derived from orders.
+- Customer-specific order history.
+- Payment/supply history.
+- No customer table, CRM, or account system added.
+- Manual acceptance completed.
 
-## Phase 7 — Admin Dashboard & Reports
-**Status: CURRENT**
-- Clean dashboard.
-- Dropdown-based navigation.
-- Stock reports.
-- Sales/order reports.
-- Customer reports.
-- Supply reports.
-- Admin Overview first slice accepted and frozen.
-- Overview uses existing orders, products, and stock movements only.
-- No new tables or business rules were introduced for the accepted Overview.
-- The approved Overview must not be changed without an explicit order.
+## Phase 7 — Admin Dashboard & Business Visibility
+**Status: CURRENT — FIRST SLICE ACCEPTED & FROZEN**
+
+Accepted first slice:
+- Admin Overview.
+- Existing-data-only metrics.
+- Simple operational links.
+- No new database tables.
+- No new business rules.
+- No new dependencies.
+- No redesign of the accepted Overview.
+
+Accepted metrics:
+- Total Orders.
+- Paid Orders.
+- Pending Supply.
+- Supplied Orders.
+- Paid Order Value.
+- Available Stock.
+- Incoming Stock.
+- Active Assessment Books.
+
+**Important:** the accepted Overview is frozen. Do not change its metrics, layout, navigation placement, names, or behavior without an explicit order.
 
 ## Phase 8 — Security, Testing & Hardening
 **Status: NOT STARTED**
@@ -113,7 +104,7 @@
 - Audit logging.
 - Error handling.
 - Backup/recovery verification.
-- Performance and security review.
+- Performance/security review.
 
 ## Phase 9 — Production Deployment
 **Status: NOT STARTED**
@@ -121,7 +112,7 @@
 - Domain.
 - Hosting.
 - Database.
-- Payment production configuration.
+- Production payment configuration.
 - Monitoring.
 - Backup strategy.
 
@@ -134,9 +125,12 @@
 - Final v1 acceptance.
 
 ## Current Position
-Phase 5 Supply Persons & Delivery is complete and frozen. Phase 6 Customer & Order History is complete and frozen. Phase 7 is current; the approved Admin Overview slice is accepted and frozen.
+Phase 7 is current. Phase 5 and Phase 6 are complete and frozen. The first Phase 7 Admin Overview slice is accepted and frozen.
 
-## Roadmap Rule
-Do not jump to a later phase because it appears useful. Record new ideas for later and remain in the current phase until its acceptance criteria are satisfied.
+## Next Work Rule
+No additional Phase 7 feature is approved at this checkpoint. The next implementation must be explicitly selected before code changes begin.
 
-Completed phases are protected. Reopening one requires an explicit change request and impact review.
+Do not jump to a later phase because it appears useful. Do not reopen a completed phase without an explicit change request and impact review.
+
+## Documentation Rule
+Any accepted change must update the relevant project documentation and create a stable Git checkpoint.
