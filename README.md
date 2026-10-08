@@ -16,7 +16,7 @@ The system is designed around the real supply workflow: schools/customers can di
 
 ## Current Status
 
-**Phase 7 — Admin Overview — CURRENT / ACCEPTED & FROZEN**
+**Phase 8 — Security, Testing & Hardening — CURRENT**
 
 The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
 
@@ -327,6 +327,20 @@ The Git repository and project documentation are the source of truth. Chat conve
 
 Important business decisions made during development must be reflected in the appropriate project documentation so the project can continue safely across future sessions.
 
+
+## Phase 8 Security, Testing & Hardening
+
+Phase 8 has started with a controlled authorization review.
+
+The first review found that the existing server proxy protected the Admin root, `/supply-admin`, and `/api/admin/*`, but did not include the Admin pages `/overview`, `/orders`, `/schools`, and `/customer-history` in the protected page matcher.
+
+A minimal Phase 8.1 fix now extends the existing authorization boundary to those four Admin pages. No authentication architecture, database architecture, payment logic, inventory logic, supply logic, or accepted Admin Overview behavior was changed.
+
+Implementation commit on the Phase 8 branch:
+
+`67e9adaf32be65c4ce75f8253cb6d70fc05ee914`
+
+Automated lint/build validation is pending because the available execution environment could not resolve `github.com` while obtaining the branch locally. No validation pass is claimed.
 
 ## Phase 5 Supply Persons & Delivery
 
