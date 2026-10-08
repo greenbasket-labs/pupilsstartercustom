@@ -78,8 +78,24 @@ Admin authentication now supports two server-authorized methods:
 - Both authorization lists are server-controlled, protected by RLS, and checked before an OTP request or authenticated Admin session is accepted.
 - Either an active authorized phone identity or an active authorized email identity can enter the Admin workspace.
 - No service-role credential is exposed to the browser.
+- Phone SMS delivery requires an external SMS provider and is deferred.
+- The hosted Supabase email template currently uses its default sign-in-link behavior; numeric email OTP delivery is deferred.
 
 For numeric email OTPs, the Supabase hosted email template must include the `{{ .Token }}` variable as documented by Supabase. Until an SMS provider is configured, email is the immediate development sign-in path.
+
+## Phase 4 Admin Data Foundation
+
+The first production Admin data migration is now implemented:
+
+- Classes, assessment books, and stock movements load from Supabase rather than browser localStorage.
+- Protected `/api/admin/catalogue` operations use server-side service-role access behind the Admin proxy boundary.
+- Catalogue mutations are implemented as server-side database functions.
+- Class/product activation and removal rules are enforced in the database.
+- Inventory movement validation is enforced in the database, including negative-stock protection, incoming-receipt validation, and required reasons for manual adjustments.
+- Inventory changes lock the affected product row before validation and insertion.
+- No direct client CRUD policies are added to the exposed catalogue/inventory tables.
+
+Manual browser acceptance of this slice is still required before it is considered stable.
 
 ## Phase 4 Payment Integration Foundation
 
