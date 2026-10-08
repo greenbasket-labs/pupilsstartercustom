@@ -103,6 +103,7 @@ export default function Home() {
   const [productClassId, setProductClassId] = useState("");
   const [price, setPrice] = useState("");
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
+  const productNameInputRef = useRef<HTMLInputElement>(null);
 
   const [stockProductId, setStockProductId] = useState("");
   const [stockKind, setStockKind] =
@@ -154,6 +155,14 @@ export default function Home() {
     classInputRef.current?.focus();
     classInputRef.current?.select();
   }, [editingClassId]);
+
+  useEffect(() => {
+    if (!editingProductId) return;
+
+    productNameInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    productNameInputRef.current?.focus();
+    productNameInputRef.current?.select();
+  }, [editingProductId]);
 
   async function saveClass(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -540,6 +549,7 @@ export default function Home() {
 
                 <form onSubmit={saveProduct} className="space-y-3">
                   <input
+                    ref={productNameInputRef}
                     value={productName}
                     onChange={(event) => setProductName(event.target.value)}
                     placeholder="Assessment book name"
