@@ -1,28 +1,13 @@
 "use client";
 
-import { FormEvent, useMemo, useState, useSyncExternalStore } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 
-type ClassItem = {
+type CatalogueProduct = {
   id: string;
   name: string;
-  active: boolean;
-};
-
-type Product = {
-  id: string;
-  name: string;
-  classId: string;
-  price: number;
-  active: boolean;
-};
-
-type StockMovement = {
-  id: string;
-  productId: string;
-  kind: "received" | "incoming" | "incoming_received" | "adjustment";
-  quantity: number;
-  note: string;
-  createdAt: string;
+  className: string;
+  priceKobo: number;
+  available: number;
 };
 
 type OrderItem = {
@@ -30,114 +15,28 @@ type OrderItem = {
   productName: string;
   className: string;
   quantity: number;
-  unitPrice: number;
-  lineTotal: number;
+  unitPriceKobo: number;
+  lineTotalKobo: number;
 };
 
-type CustomerOrder = {
-  id: string;
+type SubmittedOrder = {
+  orderId: string;
   reference: string;
-  schoolName: string;
-  contactName: string;
-  phone: string;
-  email: string;
-  items: OrderItem[];
-  total: number;
+  totalKobo: number;
   paymentStatus: "Pending";
   supplyStatus: "Pending Supply";
-  createdAt: string;
 };
 
-const CLASSES_KEY = "pupils-start:classes";
-const PRODUCTS_KEY = "pupils-start:products";
-const STOCK_MOVEMENTS_KEY = "pupils-start:stock-movements";
-const ORDERS_KEY = "pupils-start:orders";
-
-function readStorage<T>(key: string, fallback: T): T {
-  try {
-    const raw = window.localStorage.getItem(key);
-    return raw ? (JSON.parse(raw) as T) : fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function subscribeToStorage(callback: () => void) {
-  const handleStorage = () => callback();
-  window.addEventListener("storage", handleStorage);
-  window.addEventListener("pupils-start-local-change", handleStorage);
-  return () => {
-    window.removeEventListener("storage", handleStorage);
-    window.removeEventListener("pupils-start-local-change", handleStorage);
-  };
-}
-
-function makeId(prefix: string) {
-  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-}
-
-function makeOrderReference() {
-  const stamp = Date.now().toString().slice(-7);
-  const random = Math.floor(100 + Math.random() * 900);
-  return `PS-${stamp}-${random}`;
-}
-
-function formatNaira(value: number) {
-  return `₦${value.toLocaleString("en-NG")}`;
-}
-
-function stockTotals(productId: string, movements: StockMovement[]) {
-  return movements.reduce(
-    (totals, movement) => {
-      if (movement.productId !== productId) return totals;
-
-      if (movement.kind === "received") {
-        totals.available += movement.quantity;
-      } else if (movement.kind === "incoming") {
-        totals.incoming += movement.quantity;
-      } else if (movement.kind === "incoming_received") {
-        totals.incoming -= movement.quantity;
-        totals.available += movement.quantity;
-      } else {
-        totals.available += movement.quantity;
-      }
-
-      return totals;
-    },
-    { available: 0, incoming: 0 },
-  );
+function formatNairaKobo(kobo: number) {
+  return `₦${(kobo / 100).toLocaleString("en-NG", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
 }
 
 export default function CustomerOrderPage() {
-  const classesJson = useSyncExternalStore(
-    subscribeToStorage,
-    () => window.localStorage.getItem(CLASSES_KEY) ?? "[]",
-    () => "[]",
-  );
-  const productsJson = useSyncExternalStore(
-    subscribeToStorage,
-    () => window.localStorage.getItem(PRODUCTS_KEY) ?? "[]",
-    () => "[]",
-  );
-  const stockMovementsJson = useSyncExternalStore(
-    subscribeToStorage,
-    () => window.localStorage.getItem(STOCK_MOVEMENTS_KEY) ?? "[]",
-    () => "[]",
-  );
-
-  const classes = useMemo(
-    () => JSON.parse(classesJson) as ClassItem[],
-    [classesJson],
-  );
-  const products = useMemo(
-    () => JSON.parse(productsJson) as Product[],
-    [productsJson],
-  );
-  const stockMovements = useMemo(
-    () => JSON.parse(stockMovementsJson) as StockMovement[],
-    [stockMovementsJson],
-  );
-
+  const [catalogue, setCatalogue] = useState<CatalogueProduct[]>([]);
+  const [loadingCatalogue, setLoadingCatalogue] = useState(true);
   const [selectedProductId, setSelectedProductId] = useState("");
   const [quantity, setQuantity] = useState("1");
   const [items, setItems] = useState<OrderItem[]>([]);
@@ -146,22 +45,57 @@ export default function CustomerOrderPage() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [submittedOrder, setSubmittedOrder] = useState<CustomerOrder | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submittedOrder, setSubmittedOrder] = useState<SubmittedOrder | null>(null);
 
-  const activeProducts = useMemo(
-    () =>
-      products.filter((product) => {
-        const classItem = classes.find((item) => item.id === product.classId);
-        return product.active && classItem?.active;
-      }),
-    [classes, products],
-  );
+  useEffect(() => {
+    let cancelled = false;
 
-  const selectedProduct = activeProducts.find(
+    async function loadCatalogue() {
+      try {
+        const response = await fetch("/api/order", { cache: "no-store" });
+        const body = (await response.json()) as {
+          products?: CatalogueProduct[];
+          error?: string;
+        };
+
+        if (!response.ok) {
+          throw new Error(body.error ?? "Unable to load the catalogue.");
+        }
+
+        if (!cancelled) {
+          setCatalogue(body.products ?? []);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setMessage(
+            error instanceof Error
+              ? error.message
+              : "Unable to load the catalogue.",
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingCatalogue(false);
+        }
+      }
+    }
+
+    void loadCatalogue();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const selectedProduct = catalogue.find(
     (product) => product.id === selectedProductId,
   );
 
-  const cartTotal = items.reduce((sum, item) => sum + item.lineTotal, 0);
+  const cartTotalKobo = useMemo(
+    () => items.reduce((sum, item) => sum + item.lineTotalKobo, 0),
+    [items],
+  );
 
   function addItem(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -172,27 +106,21 @@ export default function CustomerOrderPage() {
     }
 
     const requestedQuantity = Number(quantity);
-    const available = stockTotals(selectedProduct.id, stockMovements).available;
 
     if (!Number.isInteger(requestedQuantity) || requestedQuantity <= 0) {
       setMessage("Enter a valid quantity.");
       return;
     }
 
-    const existingQuantity = items.find(
-      (item) => item.productId === selectedProduct.id,
-    )?.quantity ?? 0;
+    const existingQuantity =
+      items.find((item) => item.productId === selectedProduct.id)?.quantity ?? 0;
 
-    if (existingQuantity + requestedQuantity > available) {
+    if (existingQuantity + requestedQuantity > selectedProduct.available) {
       setMessage(
-        `Only ${available.toLocaleString("en-NG")} unit(s) are currently available for this book.`,
+        `Only ${selectedProduct.available.toLocaleString("en-NG")} unit(s) are currently available for this book.`,
       );
       return;
     }
-
-    const className =
-      classes.find((item) => item.id === selectedProduct.classId)?.name ??
-      "Unknown class";
 
     setItems((current) => {
       const existing = current.find(
@@ -205,10 +133,10 @@ export default function CustomerOrderPage() {
           {
             productId: selectedProduct.id,
             productName: selectedProduct.name,
-            className,
+            className: selectedProduct.className,
             quantity: requestedQuantity,
-            unitPrice: selectedProduct.price,
-            lineTotal: requestedQuantity * selectedProduct.price,
+            unitPriceKobo: selectedProduct.priceKobo,
+            lineTotalKobo: requestedQuantity * selectedProduct.priceKobo,
           },
         ];
       }
@@ -218,7 +146,8 @@ export default function CustomerOrderPage() {
           ? {
               ...item,
               quantity: item.quantity + requestedQuantity,
-              lineTotal: (item.quantity + requestedQuantity) * item.unitPrice,
+              lineTotalKobo:
+                (item.quantity + requestedQuantity) * item.unitPriceKobo,
             }
           : item,
       );
@@ -233,7 +162,7 @@ export default function CustomerOrderPage() {
     setMessage("Book removed from order.");
   }
 
-  function submitOrder(event: FormEvent<HTMLFormElement>) {
+  async function submitOrder(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (items.length === 0) {
@@ -246,38 +175,69 @@ export default function CustomerOrderPage() {
       return;
     }
 
-    const order: CustomerOrder = {
-      id: makeId("order"),
-      reference: makeOrderReference(),
-      schoolName: schoolName.trim(),
-      contactName: contactName.trim(),
-      phone: phone.trim(),
-      email: email.trim(),
-      items,
-      total: cartTotal,
-      paymentStatus: "Pending",
-      supplyStatus: "Pending Supply",
-      createdAt: new Date().toISOString(),
-    };
-
-    const currentOrders = readStorage<CustomerOrder[]>(ORDERS_KEY, []);
-    window.localStorage.setItem(
-      ORDERS_KEY,
-      JSON.stringify([...currentOrders, order]),
-    );
-    window.dispatchEvent(
-      new CustomEvent("pupils-start-local-change", { detail: ORDERS_KEY }),
-    );
-
-    setSubmittedOrder(order);
-    setItems([]);
-    setSelectedProductId("");
-    setQuantity("1");
-    setSchoolName("");
-    setContactName("");
-    setPhone("");
-    setEmail("");
+    setSubmitting(true);
     setMessage("");
+
+    try {
+      const response = await fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          schoolName,
+          contactName,
+          phone,
+          email,
+          items: items.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+        }),
+      });
+
+      const body = (await response.json()) as {
+        orderId?: string;
+        reference?: string;
+        totalKobo?: number;
+        paymentStatus?: "Pending";
+        supplyStatus?: "Pending Supply";
+        error?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(body.error ?? "Unable to create the order.");
+      }
+
+      if (
+        !body.orderId ||
+        !body.reference ||
+        !body.totalKobo ||
+        body.paymentStatus !== "Pending" ||
+        body.supplyStatus !== "Pending Supply"
+      ) {
+        throw new Error("The server returned an invalid order confirmation.");
+      }
+
+      setSubmittedOrder({
+        orderId: body.orderId,
+        reference: body.reference,
+        totalKobo: body.totalKobo,
+        paymentStatus: body.paymentStatus,
+        supplyStatus: body.supplyStatus,
+      });
+      setItems([]);
+      setSelectedProductId("");
+      setQuantity("1");
+      setSchoolName("");
+      setContactName("");
+      setPhone("");
+      setEmail("");
+    } catch (error) {
+      setMessage(
+        error instanceof Error ? error.message : "Unable to create the order.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (submittedOrder) {
@@ -303,37 +263,19 @@ export default function CustomerOrderPage() {
                 {submittedOrder.reference}
               </p>
               <p className="mt-4 text-sm text-slate-600">
-                Payment: <strong>Pending</strong>
+                Payment: <strong>{submittedOrder.paymentStatus}</strong>
               </p>
               <p className="text-sm text-slate-600">
-                Supply: <strong>Pending Supply</strong>
+                Supply: <strong>{submittedOrder.supplyStatus}</strong>
               </p>
               <p className="mt-4 text-lg font-semibold">
-                {formatNaira(submittedOrder.total)}
+                {formatNairaKobo(submittedOrder.totalKobo)}
               </p>
-            </div>
-
-            <div className="mt-6 space-y-3">
-              {submittedOrder.items.map((item) => (
-                <div
-                  key={item.productId}
-                  className="flex items-center justify-between gap-4 border-b border-slate-100 pb-3 text-sm"
-                >
-                  <div>
-                    <p className="font-medium">{item.productName}</p>
-                    <p className="text-slate-500">
-                      {item.className} · Qty {item.quantity}
-                    </p>
-                  </div>
-                  <p className="font-medium">{formatNaira(item.lineTotal)}</p>
-                </div>
-              ))}
             </div>
 
             <p className="mt-6 text-xs text-slate-500">
-              This development ordering screen does not process payment or
-              reduce stock. Verified payment will control stock reduction in
-              the later payment flow.
+              Payment is not connected yet. Verified payment will control stock
+              reduction in the next payment-flow step.
             </p>
 
             <button
@@ -375,90 +317,83 @@ export default function CustomerOrderPage() {
           <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold">Select Books</h2>
             <p className="mt-1 text-sm text-slate-500">
-              Only active classes and assessment books are available for ordering.
+              Catalogue, prices, and available stock now come from the server.
             </p>
 
-            {activeProducts.length === 0 ? (
+            {loadingCatalogue ? (
+              <p className="mt-6 text-sm text-slate-500">Loading catalogue...</p>
+            ) : catalogue.length === 0 ? (
               <p className="mt-6 rounded-xl border border-dashed border-slate-300 px-4 py-8 text-center text-sm text-slate-500">
                 No assessment books are currently available for ordering.
               </p>
             ) : (
-              <form onSubmit={addItem} className="mt-5 grid gap-3 sm:grid-cols-[1fr_150px_auto]">
-                <select
-                  value={selectedProductId}
-                  onChange={(event) => setSelectedProductId(event.target.value)}
-                  className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
+              <>
+                <form
+                  onSubmit={addItem}
+                  className="mt-5 grid gap-3 sm:grid-cols-[1fr_150px_auto]"
                 >
-                  <option value="">Select assessment book</option>
-                  {activeProducts.map((product) => {
-                    const className =
-                      classes.find((item) => item.id === product.classId)?.name ??
-                      "Unknown class";
-                    const available = stockTotals(product.id, stockMovements).available;
-
-                    return (
-                      <option key={product.id} value={product.id}>
-                        {product.name} · {className} · {formatNaira(product.price)} · Stock {available}
-                      </option>
-                    );
-                  })}
-                </select>
-
-                <input
-                  value={quantity}
-                  onChange={(event) => setQuantity(event.target.value)}
-                  type="number"
-                  min="1"
-                  step="1"
-                  placeholder="Quantity"
-                  className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
-                />
-
-                <button
-                  type="submit"
-                  className="rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
-                >
-                  Add
-                </button>
-              </form>
-            )}
-
-            <div className="mt-6 space-y-3">
-              {activeProducts.map((product) => {
-                const className =
-                  classes.find((item) => item.id === product.classId)?.name ??
-                  "Unknown class";
-                const available = stockTotals(product.id, stockMovements).available;
-
-                return (
-                  <div
-                    key={product.id}
-                    className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 p-4"
+                  <select
+                    value={selectedProductId}
+                    onChange={(event) => setSelectedProductId(event.target.value)}
+                    className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
                   >
-                    <div>
-                      <p className="font-medium">{product.name}</p>
-                      <p className="text-sm text-slate-500">
-                        {className} · {formatNaira(product.price)}
+                    <option value="">Select assessment book</option>
+                    {catalogue.map((product) => (
+                      <option key={product.id} value={product.id}>
+                        {product.name} · {product.className} ·{" "}
+                        {formatNairaKobo(product.priceKobo)} · Stock{" "}
+                        {product.available}
+                      </option>
+                    ))}
+                  </select>
+
+                  <input
+                    value={quantity}
+                    onChange={(event) => setQuantity(event.target.value)}
+                    type="number"
+                    min="1"
+                    step="1"
+                    placeholder="Quantity"
+                    className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm outline-none focus:border-slate-500"
+                  />
+
+                  <button
+                    type="submit"
+                    className="rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+                  >
+                    Add
+                  </button>
+                </form>
+
+                <div className="mt-6 space-y-3">
+                  {catalogue.map((product) => (
+                    <div
+                      key={product.id}
+                      className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 p-4"
+                    >
+                      <div>
+                        <p className="font-medium">{product.name}</p>
+                        <p className="text-sm text-slate-500">
+                          {product.className} · {formatNairaKobo(product.priceKobo)}
+                        </p>
+                      </div>
+                      <p className="text-sm font-medium">
+                        {product.available > 0
+                          ? `${product.available.toLocaleString("en-NG")} available`
+                          : "Currently unavailable"}
                       </p>
                     </div>
-                    <p className="text-sm font-medium">
-                      {available > 0
-                        ? `${available.toLocaleString("en-NG")} available`
-                        : "Currently unavailable"}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
+                  ))}
+                </div>
+              </>
+            )}
           </section>
 
           <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold">Your Order</h2>
 
             {items.length === 0 ? (
-              <p className="mt-5 text-sm text-slate-500">
-                No books added yet.
-              </p>
+              <p className="mt-5 text-sm text-slate-500">No books added yet.</p>
             ) : (
               <div className="mt-5 space-y-3">
                 {items.map((item) => (
@@ -469,12 +404,13 @@ export default function CustomerOrderPage() {
                     <div>
                       <p className="text-sm font-medium">{item.productName}</p>
                       <p className="text-xs text-slate-500">
-                        Qty {item.quantity} · {formatNaira(item.unitPrice)} each
+                        Qty {item.quantity} ·{" "}
+                        {formatNairaKobo(item.unitPriceKobo)} each
                       </p>
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-medium">
-                        {formatNaira(item.lineTotal)}
+                        {formatNairaKobo(item.lineTotalKobo)}
                       </p>
                       <button
                         type="button"
@@ -486,10 +422,11 @@ export default function CustomerOrderPage() {
                     </div>
                   </div>
                 ))}
+
                 <div className="flex items-center justify-between pt-2">
                   <span className="font-semibold">Total</span>
                   <span className="text-xl font-semibold">
-                    {formatNaira(cartTotal)}
+                    {formatNairaKobo(cartTotalKobo)}
                   </span>
                 </div>
               </div>
@@ -527,19 +464,18 @@ export default function CustomerOrderPage() {
 
               <button
                 type="submit"
-                disabled={items.length === 0}
+                disabled={items.length === 0 || submitting}
                 className="w-full rounded-lg bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Submit Order
+                {submitting ? "Submitting..." : "Submit Order"}
               </button>
             </form>
           </section>
         </div>
 
         <p className="mt-6 text-xs text-slate-500">
-          Phase 3 development screen: orders persist in the current browser as
-          a temporary bridge. Payment is not processed here, and creating an
-          order does not reduce inventory.
+          Orders are now created server-side in Supabase. Payment is not
+          connected yet, and order creation does not reduce inventory.
         </p>
       </div>
     </main>
