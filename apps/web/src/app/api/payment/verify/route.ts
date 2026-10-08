@@ -123,7 +123,8 @@ export async function POST(request: Request) {
     }
 
     const verified = transaction.status === "success";
-    const paymentStatus = verified ? "Paid" : "Failed";
+    const failed = ["failed", "abandoned", "reversed"].includes(transaction.status ?? "");
+    const paymentStatus = verified ? "Paid" : failed ? "Failed" : "Pending";
 
     await supabaseFetch(
       `payments?id=eq.${encodeURIComponent(payment.id)}`,
