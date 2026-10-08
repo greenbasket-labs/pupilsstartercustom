@@ -495,7 +495,7 @@ export default function Home() {
               </button>
               {openSection === "customers" ? (
                 <div className="ml-3 border-l border-slate-200 pl-3">
-                  <span className="block rounded-md px-3 py-2 text-sm text-slate-400">Schools</span>
+                  <a href="/schools" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Schools</a>
                   <a href="/customer-history" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Customer History</a>
                 </div>
               ) : null}
