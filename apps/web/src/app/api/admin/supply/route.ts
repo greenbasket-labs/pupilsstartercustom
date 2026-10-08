@@ -66,6 +66,7 @@ export async function POST(request: Request) {
       phone?: string;
       personId?: string;
       orderId?: string;
+      isActive?: boolean;
     };
 
     if (body.action === "create_person") {
