@@ -1,10 +1,10 @@
 # Project State
 
 ## Current Phase
-**Phase 5 — Supply Persons & Delivery**
+**Phase 7 — Admin Dashboard & Business Visibility**
 
 ## Status
-**NEXT IMPLEMENTATION PHASE**
+**CURRENT — OVERVIEW ACCEPTED & FROZEN**
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
@@ -121,15 +121,33 @@ Deferred follow-ups that do not reopen Phase 4:
 - SMS-provider configuration for phone OTP.
 - Numeric email OTP delivery once the hosted provider/rate limit is suitable.
 
+## Phase 5 Result
+Phase 5 — Supply Persons & Delivery is **COMPLETE** and frozen.
+
+Manually accepted: supply-person creation/access, paid-order assignment, delivery-code workflow, restricted assigned-order access, and delivery completion without duplicate stock reduction.
+
+## Phase 6 Result
+Phase 6 — Customer & Order History is **COMPLETE** and frozen.
+
+Manually accepted: read-only Customer History, Schools, and customer-specific order history derived from existing orders. No customer table, CRM, or account system was added.
+
+## Phase 7 Result
+Phase 7 is **CURRENT**. The first controlled slice, Admin Overview, is **COMPLETE for its approved boundary and frozen**.
+
+The Overview uses existing orders, products, and stock movements only. No new business tables or business rules were introduced. The approved Overview must not be changed unless explicitly ordered.
+
 ## Not Yet Implemented
-- Phase 5 Supply Persons & Delivery.
-- Phase 6 Customer & Order History.
-- Phase 7 Admin Dashboard & Reports.
+- Remaining Phase 7 work, if explicitly approved.
+- Phase 8 Security, Testing & Hardening.
+- Phase 9 Production Deployment.
+- Phase 10 Real Business Pilot.
 - Phase 8 Security, Testing & Hardening.
 - Phase 9 Production Deployment.
 - Phase 10 Real Business Pilot.
 
 ## Protected Rules
+- PUPILS START has exactly three user dashboards: Admin, Client, and Supply Person.
+- The accepted Admin Overview is frozen and must not be changed without an explicit order.
 - Preserve completed Phase 0 documentation unless an explicit change request reopens it.
 - Preserve completed Phase 1 catalogue functionality unless an explicit change request reopens it.
 - Preserve completed Phase 2 inventory functionality unless an explicit change request reopens it.
@@ -225,7 +243,7 @@ Before treating payment-linked inventory fulfillment as fully accepted, the next
 Do not move to Supply Persons/Delivery or later phases until this protected payment fulfillment slice is manually accepted.
 
 ## Current Next Task
-Implement Phase 5 — Supply Persons & Delivery in small controlled slices. Preserve the accepted payment/inventory boundary and do not add unrelated workflow states.
+No new Phase 7 feature is approved yet. Preserve the accepted Overview and wait for an explicit next scope decision. Do not add dashboards, reports, tables, or business logic speculatively.
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
