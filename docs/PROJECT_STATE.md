@@ -76,6 +76,26 @@ The database/server is now authoritative for:
 - Order total.
 - Order persistence.
 
+## Phase 4 Admin Authentication Foundation
+Admin authentication is now the next controlled Phase 4 boundary before migrating the existing admin catalogue/inventory screen to database-backed writes.
+
+Implemented:
+- Supabase Phone OTP sign-in endpoints.
+- Server-controlled authorized-admin phone table: `admin_authorized_phones`.
+- HttpOnly access/refresh cookies after OTP verification.
+- Server-side admin authorization checks.
+- Admin workspace protection for `/`.
+- Admin API namespace protection for future `/api/admin/*` routes.
+- No admin phone number is hard-coded in application source.
+
+Manual development setup:
+1. Configure Supabase Phone Authentication/SMS or Supabase's supported development test-OTP option.
+2. Add the current test phone in `public.admin_authorized_phones` using E.164 format, for example `+234...`.
+3. Later, deactivate the test phone and add the client's phone without changing application code.
+4. Keep all service-role credentials server-only.
+
+The current implementation deliberately does not yet migrate Classes, Products, or Inventory writes from the old browser development screen. That migration remains the next controlled admin-data slice after authentication acceptance.
+
 ## Not Yet Implemented
 - Paystack transaction initialization.
 - Paystack test-mode credentials/runtime configuration.
@@ -96,7 +116,7 @@ The database/server is now authoritative for:
 - Do not reduce stock from order creation or unverified payment.
 
 ## Next Task
-Continue Phase 4 with the controlled Paystack test-mode integration after local/runtime Supabase configuration is supplied and the server-side ordering slice is manually validated.
+Manually configure and test the Admin phone/OTP authorization flow, including the development test phone. After acceptance, migrate the existing Classes, Products, and Inventory administration from browser storage to protected Supabase-backed admin APIs. Paystack remains after the admin authorization/data foundation is stable.
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
