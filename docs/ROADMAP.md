@@ -63,9 +63,9 @@
 - Payment webhook event idempotency foundation implemented.
 - Paystack runtime integration and production acceptance remain pending.
 - Admin phone/OTP authorization foundation implemented; SMS-provider acceptance remains pending.
-- Admin email/OTP authorization foundation added as a second sign-in option; manual email acceptance is pending.
+- Admin email/OTP authorization foundation added as a second sign-in option; email delivery/acceptance is currently paused because the hosted Supabase email provider is rate-limited.
 - Protected Supabase-backed Admin catalogue/inventory operations are implemented; manual acceptance is pending.
-- Phone SMS delivery and numeric email OTP delivery are deferred authentication follow-ups and do not block the current admin-data migration.
+- Phone SMS delivery and numeric email OTP delivery are deferred authentication follow-ups. Email is paused and does not block the current admin-data/payment work.
 
 ## Phase 5 — Supply Persons & Delivery
 **Status: NOT STARTED**
