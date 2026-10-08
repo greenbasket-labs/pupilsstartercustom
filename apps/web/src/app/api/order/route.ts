@@ -73,11 +73,10 @@ export async function GET() {
 
       if (movement.kind === "received" || movement.kind === "incoming_received") {
         delta = movement.quantity;
-      } else if (
-        movement.kind === "adjustment" ||
-        movement.kind === "purchase"
-      ) {
+      } else if (movement.kind === "adjustment") {
         delta = movement.quantity;
+      } else if (movement.kind === "purchase") {
+        delta = -movement.quantity;
       }
 
       totals.set(

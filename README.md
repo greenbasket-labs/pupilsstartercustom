@@ -178,7 +178,7 @@ The administration side will allow the business to:
 - Track physical supply separately from payment.
 - Maintain business history and audit records.
 
-Supply persons will have restricted access to orders explicitly assigned by an administrator and may confirm delivery. Their delivery confirmation updates the corresponding supply status for the administrator.
+Supply persons have restricted access to orders explicitly assigned by an administrator and may confirm physical delivery. The main handover action is **Mark Delivered**. As optional confirmation paths, the school may provide the existing purchase/order code to the supply person, or the supply person may show a system-generated six-digit Delivery Code for the school to enter. All paths update the existing supply status to **Supplied**.
 
 ## Admin Workspace Navigation
 
@@ -324,3 +324,19 @@ Phase 1 is now closed. Phase 2 is now closed. Phase 3 is now closed. Phase 4 —
 The Git repository and project documentation are the source of truth. Chat conversations are working context only. A new development session must read the project documentation before modifying the codebase.
 
 Important business decisions made during development must be reflected in the appropriate project documentation so the project can continue safely across future sessions.
+
+
+## Phase 5 Supply Persons & Delivery
+
+The controlled Phase 5 implementation now includes:
+
+- Admin supply-person records with name and phone.
+- Admin assignment of paid orders to active supply persons.
+- Server-generated six-digit delivery codes.
+- Restricted supply-person access to assigned orders only.
+- Main handover action: **Mark Delivered**.
+- Optional school delivery-code confirmation.
+- Existing purchase/order references remain unchanged.
+- Existing supply states remain **Pending Supply → Assigned → Supplied**; no extra delivery states were introduced.
+
+Manual browser acceptance is still required before Phase 5 is closed and frozen.

@@ -69,7 +69,7 @@ async function refreshAccessToken(refreshToken: string) {
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  if (pathname !== "/" && !pathname.startsWith("/api/admin/")) {
+  if (pathname !== "/" && pathname !== "/supply-admin" && !pathname.startsWith("/api/admin/")) {
     return NextResponse.next();
   }
 
@@ -126,5 +126,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/api/admin/:path*"],
+  matcher: ["/", "/supply-admin", "/api/admin/:path*"],
 };
