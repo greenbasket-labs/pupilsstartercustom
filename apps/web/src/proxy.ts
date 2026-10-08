@@ -69,7 +69,7 @@ async function refreshAccessToken(refreshToken: string) {
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  if (pathname !== "/" && pathname !== "/supply-admin" && !pathname.startsWith("/api/admin/")) {
+  const protectedAdminPages = new Set(["/", "/overview", "/orders", "/schools", "/customer-history", "/supply-admin"]);\n\n  if (!protectedAdminPages.has(pathname) && !pathname.startsWith("/api/admin/")) {
     return NextResponse.next();
   }
 
@@ -126,5 +126,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/supply-admin", "/api/admin/:path*"],
+  matcher: ["/", "/overview", "/orders", "/schools", "/customer-history", "/supply-admin", "/api/admin/:path*"],
 };
