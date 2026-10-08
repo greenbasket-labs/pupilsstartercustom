@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 type ClassItem = {
   id: string;
@@ -97,6 +97,7 @@ export default function Home() {
 
   const [className, setClassName] = useState("");
   const [editingClassId, setEditingClassId] = useState<string | null>(null);
+  const classInputRef = useRef<HTMLInputElement>(null);
 
   const [productName, setProductName] = useState("");
   const [productClassId, setProductClassId] = useState("");
@@ -145,6 +146,14 @@ export default function Home() {
   useEffect(() => {
     void loadData();
   }, []);
+
+  useEffect(() => {
+    if (!editingClassId) return;
+
+    classInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    classInputRef.current?.focus();
+    classInputRef.current?.select();
+  }, [editingClassId]);
 
   async function saveClass(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -450,6 +459,7 @@ export default function Home() {
 
                 <form onSubmit={saveClass} className="flex gap-3">
                   <input
+                    ref={classInputRef}
                     value={className}
                     onChange={(event) => setClassName(event.target.value)}
                     placeholder="e.g. Primary 1"
