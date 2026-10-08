@@ -53,6 +53,20 @@ The first Phase 2 slice introduces a development inventory ledger tied to saved 
 
 Phase 2 is now closed at its stable acceptance checkpoint.
 
+## Phase 4 Admin Authentication Foundation
+
+The first Admin security slice is now implemented before moving the existing browser-only catalogue/inventory screen into production database writes:
+
+- Admin sign-in uses phone number + OTP through Supabase Auth.
+- Authorized admin phone numbers are stored in a server-controlled database table, not hard-coded in source code.
+- Authentication tokens are kept in HttpOnly cookies.
+- The Admin workspace is protected server-side.
+- Future `/api/admin/*` endpoints are protected by the same authorization boundary.
+- A development test phone can be added manually, then deactivated/replaced with the client's phone later without changing application code.
+- No service-role key is exposed to the browser.
+
+Manual development configuration is intentionally kept outside Git. The current test phone must be added to `public.admin_authorized_phones` in the Supabase project before OTP login can be tested.
+
 ## Phase 4 Payment Integration Foundation
 
 Phase 4 has started with a production-oriented payment data foundation:
