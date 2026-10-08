@@ -156,5 +156,54 @@ The customer order page now starts Paystack checkout through the server-side ini
 ## Next Task
 Configure a Paystack test secret locally, create a test order, initialize the transaction, complete a Paystack test payment, and verify the transaction through the server-side endpoint. Do not implement webhook handling or payment-linked stock reduction until this initialization/verification slice is accepted.
 
+
+## Paystack Verified-Payment Fulfillment Slice
+
+The Paystack test checkout and server-side verification slice was manually accepted.
+
+Manual acceptance result:
+- Customer order was created successfully.
+- Paystack Test Checkout opened successfully.
+- Test payment completed successfully.
+- /payment/callback returned to the application.
+- Server-side verification returned Payment: Paid.
+- Paystack status returned success.
+- Inventory remained unchanged during verification, as required for the pre-fulfillment boundary.
+
+The next protected fulfillment boundary is now implemented:
+- POST /api/payment/webhook validates the Paystack x-paystack-signature HMAC-SHA512 signature before processing.
+- Only successful charge.success events are fulfillment candidates.
+- Supabase function fulfill_paystack_charge_success records webhook events idempotently.
+- Stored payment reference, amount, and currency are checked before fulfillment.
+- The affected order and product rows are locked during the fulfillment transaction.
+- Available stock is calculated from the inventory ledger with purchase movements reducing available stock.
+- Purchase movements are linked to the order and are protected by the existing unique purchase index.
+- Verified payment fulfillment marks the payment/order Paid and records provider transaction/payment metadata.
+- A repeated webhook is treated as already processed and must not create a second purchase movement.
+- If stock is insufficient, the fulfillment transaction fails rather than creating negative stock.
+- The existing admin stock calculation was aligned so purchase movements reduce available stock.
+
+Migration applied to Supabase development project:
+phase4_paystack_webhook_fulfillment
+
+Repository checkpoints:
+- ba7410408cfdfaf5491b2d4d7e17561ccf749e83 — feat: add atomic Paystack webhook fulfillment
+- fdc7caef9a0e3ed892be855307aa4faf0305fb3b — feat: add Paystack webhook endpoint
+- 02c678aad4d43d40bc7d394c6ac0775254cbaf7c — fix: preserve Paystack fulfillment idempotency
+
+## Current Boundary
+
+The Paystack initialization/verification flow is accepted. The webhook fulfillment implementation exists in the repository and the database migration is applied to the development Supabase project.
+
+Before treating payment-linked inventory fulfillment as fully accepted, the next controlled task is local/manual webhook acceptance testing:
+1. Send a valid signed charge.success payload to the local webhook endpoint or expose a secure test endpoint as appropriate.
+2. Confirm exactly one purchase movement is created per order/product.
+3. Confirm available stock decreases by the purchased quantity.
+4. Replay the same webhook and confirm stock does not decrease again.
+5. Send an invalid signature and confirm HTTP 401 with no database change.
+6. Test insufficient stock and confirm the transaction fails without partial purchase movements.
+
+Do not move to Supply Persons/Delivery or later phases until this protected payment fulfillment slice is manually accepted.
+
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
