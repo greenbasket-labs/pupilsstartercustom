@@ -151,7 +151,7 @@ Implemented:
 - Pending/in-progress provider states remain Pending; failed/abandoned/reversed states become Failed.
 - No inventory is reduced by initialization or verification. Verified-payment inventory reduction remains a later atomic webhook/fulfillment slice.
 
-The current slice is ready for local Paystack test-mode configuration and manual API/browser acceptance. Email OTP delivery remains paused and must not block payment work.
+The customer order page now starts Paystack checkout through the server-side initialization endpoint, and `/payment/callback` returns to the server-side verification endpoint. The current slice is ready for local Paystack test-mode configuration and manual API/browser acceptance. Email OTP delivery remains paused and must not block payment work.
 
 ## Next Task
 Configure a Paystack test secret locally, create a test order, initialize the transaction, complete a Paystack test payment, and verify the transaction through the server-side endpoint. Do not implement webhook handling or payment-linked stock reduction until this initialization/verification slice is accepted.
