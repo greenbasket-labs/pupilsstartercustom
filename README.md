@@ -63,7 +63,7 @@ Phase 4 has started with a production-oriented payment data foundation:
 - Webhook event idempotency is represented in the database.
 - Payment state remains separate from physical supply state.
 
-The next controlled Phase 4 work is to connect Supabase, move order creation to the server/database source of truth, initialize Paystack transactions server-side, verify transactions server-side, validate Paystack webhook signatures, and atomically apply verified-payment stock reduction.
+The next controlled Phase 4 work is to manually validate the Supabase-backed `/order` flow, then initialize Paystack transactions server-side, verify transactions server-side, validate Paystack webhook signatures, and atomically apply verified-payment stock reduction.
 
 No Paystack secret or production credential is stored in the repository.
 
@@ -83,7 +83,7 @@ The first Phase 3 slice introduces a public customer ordering page at `/order`:
 - Payment is not processed in Phase 3.
 - Creating an order does not reduce stock. Automatic stock reduction remains tied to verified payment in the later payment flow.
 
-Phase 3 browser acceptance, lint/build validation, and documentation are complete. The phase is now frozen at its accepted boundary.
+Phase 3 browser acceptance, lint/build validation, and documentation are complete. The phase is now frozen at its accepted boundary. The production-oriented Phase 4 ordering slice now reads catalogue, prices, stock, and order creation from Supabase/server APIs.
 
 ## Phase 2 Acceptance
 
