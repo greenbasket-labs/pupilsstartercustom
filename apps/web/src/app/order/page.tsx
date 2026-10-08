@@ -177,7 +177,7 @@ export default function CustomerOrderPage() {
       return;
     }
 
-    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email.trim())) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       setMessage("Enter a valid email address.");
       return;
     }
