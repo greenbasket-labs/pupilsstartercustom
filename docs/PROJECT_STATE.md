@@ -98,7 +98,7 @@ Manual development setup:
 4. Later, deactivate test identities and add the client's phone/email without changing application code.
 5. Keep all service-role credentials server-only.
 
-The Admin Classes, Products, and Inventory workflow has now been migrated to protected Supabase-backed operations. Manual acceptance is the current checkpoint.
+The Admin Classes, Products, and Inventory workflow has now been migrated to protected Supabase-backed operations. Manual acceptance is complete and the admin-data foundation is accepted and frozen at this checkpoint.
 
 ## Not Yet Implemented
 - Paystack transaction initialization.
@@ -119,8 +119,27 @@ The Admin Classes, Products, and Inventory workflow has now been migrated to pro
 - Never expose a Supabase service-role key or Paystack secret key to the browser or Git.
 - Do not reduce stock from order creation or unverified payment.
 
+## Admin Data Acceptance Checkpoint
+The Supabase-backed Admin Classes, Products, and Inventory workflow was manually accepted in the development browser.
+
+Verified:
+- Class create, edit, activate, deactivate, and removal rules.
+- Class Edit automatically scrolls to and focuses the edit field.
+- Assessment-book create, edit, activate, deactivate, and pricing rules.
+- Existing assessment books remain editable against inactive saved classes.
+- Assessment-book Edit automatically scrolls to and focuses the edit field.
+- Stock Received increases available stock.
+- Incoming Stock increases incoming stock without changing available stock.
+- Receive Incoming moves incoming quantity into available stock.
+- Negative stock movements are rejected.
+- Receiving more incoming stock than recorded is rejected.
+- Products with stock history cannot be removed.
+- Stock history remains preserved.
+
+This checkpoint is accepted and frozen. The service-role grants required by the protected server-side catalogue/inventory API are recorded in `supabase/migrations/0007_phase4_admin_catalogue_service_role_grants.sql`.
+
 ## Next Task
-Manually acceptance-test the new Supabase-backed Classes, Products, and Inventory Admin workflow. Verify create/edit/activate/deactivate/remove rules and inventory safety rules against the database. Email OTP delivery is explicitly paused because the hosted Supabase email provider is rate-limited; do not spend implementation time on email until this admin-data/payment work is accepted. After admin-data acceptance, continue the Phase 4 Paystack transaction initialization and verification slice.
+Continue Phase 4 with the Paystack transaction initialization and verification slice. Email OTP delivery is explicitly paused because the hosted Supabase email provider is rate-limited; it must not block the payment work.
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
