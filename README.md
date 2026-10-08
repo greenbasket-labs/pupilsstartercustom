@@ -79,9 +79,10 @@ Admin authentication now supports two server-authorized methods:
 - Either an active authorized phone identity or an active authorized email identity can enter the Admin workspace.
 - No service-role credential is exposed to the browser.
 - Phone SMS delivery requires an external SMS provider and is deferred.
-- The hosted Supabase email template currently uses its default sign-in-link behavior; numeric email OTP delivery is deferred.
+- Numeric email OTP delivery is paused because the hosted Supabase email provider is rate-limited.
+- Email authentication is not a blocker for the current Phase 4 admin-data/payment work.
 
-For numeric email OTPs, the Supabase hosted email template must include the `{{ .Token }}` variable as documented by Supabase. Until an SMS provider is configured, email is the immediate development sign-in path.
+The email template/SMTP configuration and numeric OTP acceptance will be resumed later as a dedicated authentication follow-up.
 
 ## Phase 4 Admin Data Foundation
 
@@ -107,7 +108,7 @@ Phase 4 has started with a production-oriented payment data foundation:
 - Webhook event idempotency is represented in the database.
 - Payment state remains separate from physical supply state.
 
-The next controlled Phase 4 work is to manually validate the Supabase-backed `/order` flow, then initialize Paystack transactions server-side, verify transactions server-side, validate Paystack webhook signatures, and atomically apply verified-payment stock reduction.
+The next controlled Phase 4 work is to manually accept the Supabase-backed Admin Classes/Products/Inventory workflow, then initialize Paystack transactions server-side, verify transactions server-side, validate Paystack webhook signatures, and atomically apply verified-payment stock reduction. Email OTP work remains paused and must not block this sequence.
 
 No Paystack secret or production credential is stored in the repository.
 
