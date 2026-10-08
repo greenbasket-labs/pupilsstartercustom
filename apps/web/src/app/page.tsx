@@ -478,8 +478,8 @@ export default function Home() {
               </button>
               {openSection === "orders" ? (
                 <div className="ml-3 border-l border-slate-200 pl-3">
-                  <span className="block rounded-md px-3 py-2 text-sm text-slate-400">Orders</span>
-                  <span className="block rounded-md px-3 py-2 text-sm text-slate-400">Pending Supply</span>
+                  <a href="/orders" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Orders</a>
+                  <a href="/orders?filter=pending-supply" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Pending Supply</a>
                 </div>
               ) : null}
             </div>
