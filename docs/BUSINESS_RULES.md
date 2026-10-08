@@ -48,6 +48,8 @@ This product is an independent assessment-book supply application. Other busines
 ## Inventory and Verified Purchases
 Stock is controlled through a traceable movement ledger.
 
+**Order-book rule:** creating an unpaid/unverified order does not reserve or consume stock. This means an unpaid order must not block another customer from ordering the same available stock. Only a successfully verified/paid order creates a purchase movement and reduces available stock. A later order is blocked when the remaining available stock is insufficient.
+
 - Admin may add available stock through stock-received movements.
 - Admin may record incoming stock and receive it into available stock.
 - A verified customer purchase will automatically reduce available stock as part of the order/payment flow.
