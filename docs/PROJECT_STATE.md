@@ -37,107 +37,66 @@ The controlled inventory foundation was implemented and manually accepted in the
 Verified-payment stock reduction remains part of the later order/payment workflow.
 
 ## Phase 3 Customer Ordering Foundation
-The first controlled customer-ordering slice was implemented at `/order`:
+The first controlled customer-ordering slice was implemented at `/order`.
 
-- Public customer ordering page.
-- Active classes/products only.
-- Configured available stock displayed from the inventory ledger.
-- Product and quantity selection.
-- Multi-item order building.
-- School name, contact name, phone number, and optional email.
-- Customer-facing order reference.
-- Order snapshot preserves product name, class, unit price, quantity, line total, and order total.
-- Initial payment state is **Pending**.
-- Initial supply state is **Pending Supply**.
-- Customer confirmation screen shows order reference and total.
-- Browser storage is the current temporary development persistence bridge.
+Phase 3 browser acceptance is complete and frozen. The original browser-local persistence is now treated only as the historical development bridge.
+
+## Phase 4 Payment Integration Foundation
+Phase 4 has started with the production database and server-order foundation.
+
+Implemented:
+- Supabase project `pupils-start` is connected for development.
+- Payment tables: `orders`, `order_items`, `payments`, `payment_webhook_events`.
+- Catalogue tables: `classes`, `products`.
+- Inventory ledger: `stock_movements`.
+- RLS enabled on exposed public tables.
+- No direct public CRUD policies for financial/catalogue/inventory tables.
+- Server-side `create_customer_order` database function.
+- Server-side catalogue endpoint at `/api/order`.
+- Server-side order creation endpoint at `/api/order`.
+- Order totals and prices are calculated from database-controlled product prices.
+- Available stock is checked server-side before order creation.
 - Creating an order does **not** reduce inventory.
-- Payment is deliberately excluded from Phase 3.
-- Verified-payment stock reduction remains a later payment-flow requirement.
+- Purchase inventory movements remain reserved for verified payment.
+- Service-role credentials are server-only and are represented only by environment variables; no secret is stored in Git.
 
-## Phase 3 Acceptance Result
-Phase 3 customer ordering was manually accepted in the development browser.
+Current Supabase development project URL:
+`https://fftduaexpeeflpletzcl.supabase.co`
 
-Acceptance completed:
-- Customer ordering page loads: **PASS**
-- Active assessment book/class shown: **PASS**
-- Available stock shown correctly: **PASS**
-- Quantity selection and add-to-order: **PASS**
-- Multi-item order structure: **PASS**
-- Order total calculation: **PASS**
-- Required school/contact/phone validation: **PASS**
-- Order reference generation: **PASS**
-- Payment remains Pending: **PASS**
-- Supply remains Pending Supply: **PASS**
-- Customer confirmation screen: **PASS**
-- Order creation does not reduce stock: **PASS**
-- Returning to the order flow works: **PASS**
-- Lint: **PASS**
-- Production build: **PASS**
-- TypeScript/build generation: **PASS**
+Required local/runtime environment variables are documented in `apps/web/.env.example`.
 
-Browser acceptance example:
-- Product: `book`
-- Class: `nursery 2`
-- Unit price: ₦850
-- Quantity: 15
-- Order total: ₦12,750
-- Order reference: `PS-5004014-951`
-- Stock remained at 3,520 after order creation.
+## Important Boundary
+The public ordering page no longer treats browser localStorage as the production source of truth for catalogue, prices, stock, or order creation.
 
-The order reference above is a development-browser acceptance example, not production data.
+The database/server is now authoritative for:
+- Product price.
+- Product/class availability.
+- Available stock.
+- Order reference.
+- Order total.
+- Order persistence.
 
-## Stable Phase 3 Checkpoint
-Phase 3 acceptance is complete and the phase is now frozen.
-
-The stable implementation checkpoint is the Git commit recorded by this final Phase 3 documentation checkpoint.
+## Not Yet Implemented
+- Paystack transaction initialization.
+- Paystack test-mode credentials/runtime configuration.
+- Paystack transaction verification.
+- Paystack webhook endpoint and signature validation.
+- Idempotent verified-payment processing.
+- Atomic verified-payment inventory reduction.
+- Admin production data-entry migration from the browser catalogue to Supabase.
+- Production payment acceptance testing.
 
 ## Protected Rules
 - Preserve completed Phase 0 documentation unless an explicit change request reopens it.
 - Preserve completed Phase 1 catalogue functionality unless an explicit change request reopens it.
 - Preserve completed Phase 2 inventory functionality unless an explicit change request reopens it.
 - Preserve completed Phase 3 customer-ordering functionality unless an explicit change request reopens it.
-- Do not build payment, supply, or later workflows ahead of the roadmap.
 - Do not hard-code business classes or products into application pages.
+- Never expose a Supabase service-role key or Paystack secret key to the browser or Git.
+- Do not reduce stock from order creation or unverified payment.
 
 ## Next Task
-Proceed to Phase 4 — Payment Integration only after this Phase 3 checkpoint is recorded.
-
-Phase 4 scope:
-- Payment provider integration.
-- Payment verification.
-- Webhook handling.
-- Idempotency.
-- Automatic payment status.
-- Payment records.
-
-Automatic stock reduction must be tied to verified payment and must not occur from checkout or unverified payment attempts.
-
-## Last Known Stable State
-Phase 3 customer ordering acceptance checkpoint is the latest stable state.
+Continue Phase 4 with the controlled Paystack test-mode integration after local/runtime Supabase configuration is supplied and the server-side ordering slice is manually validated.
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
-
-
-## Phase 4 Payment Integration Foundation
-Phase 4 has started with the server/database payment foundation.
-
-Implemented:
-- Production-oriented order, order-item, payment, and payment-webhook-event schema migration under `supabase/migrations/`.
-- Financial amounts are stored in NGN kobo (minor units).
-- Payment records are separate from orders and supply status.
-- Paystack provider references are unique.
-- Webhook events have an idempotency constraint for provider transaction/event combinations.
-- Payment and order statuses are constrained to the documented business states.
-
-Not yet implemented:
-- Supabase project connection/runtime configuration.
-- Server-side order creation from the public ordering flow.
-- Paystack transaction initialization.
-- Paystack transaction verification.
-- Paystack webhook endpoint and signature validation.
-- Verified-payment inventory reduction.
-- Production payment acceptance testing.
-
-The browser-local order implementation remains the Phase 3 development bridge and must not be treated as the production financial source of truth.
