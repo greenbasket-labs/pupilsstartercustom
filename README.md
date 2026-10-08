@@ -16,7 +16,7 @@ The system is designed around the real supply workflow: schools/customers can di
 
 ## Current Status
 
-**Phase 7 — Admin Overview — CURRENT**
+**Phase 7 — Admin Overview — CURRENT / ACCEPTED & FROZEN**
 
 The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
 
@@ -34,7 +34,7 @@ Validation at this checkpoint:
 - Working tree: clean
 - Local validation completed after pulling the latest `main`
 
-The current browser-based persistence is a Phase 1 development bridge. The Supabase database will become the production source of truth before real business use.
+The browser-based persistence is historical development-bridge context. The active Admin Classes, Products, Inventory, Orders, Payments, Supply, and History workflows use the approved Supabase/server architecture. Supabase/PostgreSQL is the production source of truth before real business use.
 
 ## Phase 2 Inventory Foundation
 
@@ -108,7 +108,7 @@ Phase 4 has started with a production-oriented payment data foundation:
 - Webhook event idempotency is represented in the database.
 - Payment state remains separate from physical supply state.
 
-The next controlled Phase 4 work is to initialize Paystack transactions server-side, verify transactions server-side, validate Paystack webhook signatures, and atomically apply verified-payment stock reduction.
+The Paystack payment flow is now implemented and manually accepted at the current development checkpoint: server-side initialization and verification, signed webhook fulfillment, idempotency, and verified-payment stock reduction. Production credentials/configuration remain deployment-phase work.
 
 The payment stock boundary has now been acceptance-tested: an unpaid order does not create a purchase movement or change available stock, while consumed paid stock causes a later order that exceeds remaining availability to be rejected. Customer order validation now uses the same purchase-ledger semantics as verified-payment fulfillment. The Supabase-backed Admin Classes/Products/Inventory foundation has already been manually accepted and frozen. Email OTP work remains paused and must not block this sequence.
 
@@ -280,23 +280,15 @@ The admin remains able to add additional classes without a code change.
 
 ## Authentication Direction
 
-The initial administrator login will support **phone number + OTP** because the business owner currently has a phone number as the available login/contact method.
+The Admin workspace supports the approved server-authorized authentication foundation:
 
-Initial direction:
+- Phone number + OTP remains the primary intended login path and requires an SMS provider for live delivery.
+- Email + OTP exists as a development/testing path through Supabase Auth.
+- Authorized phone/email identities are stored server-side, not hard-coded.
+- The hosted numeric-email-OTP path is currently paused because of provider/rate-limit constraints and does not block the current project checkpoint.
+- Server-side authorization protects the Admin workspace and Admin API boundary.
 
-```text
-Admin enters phone number
-        ↓
-OTP verification
-        ↓
-Authenticated user
-        ↓
-Server-side authorization confirms Admin role
-        ↓
-Admin workspace
-```
-
-No admin email/password requirement is being introduced unless the business requirements later change.
+Customers/schools will not be forced to create accounts in the initial version.
 
 Customers/schools will not be forced to create accounts in the initial version.
 
@@ -319,7 +311,7 @@ The Phase 1 catalogue workflow was manually tested in the development browser an
 - Confirm business classes and products are data-driven rather than hard-coded.
 - Confirm browser persistence for the current development bridge.
 
-Phase 1 is now closed. Phase 2 is now closed. Phase 3 is now closed. Phase 4 is now closed. Phase 5 is now closed. Phase 6 is now closed. Phase 7 is the current controlled phase; the approved Admin Overview slice is accepted and frozen.
+Phase 1 is closed. Phase 2 is closed. Phase 3 is closed. Phase 4 is closed. Phase 5 is closed. Phase 6 is closed. Phase 7 is the current controlled phase; the approved Admin Overview slice is accepted and frozen.
 
 ## Project Documentation
 
@@ -350,3 +342,18 @@ The controlled Phase 5 implementation now includes:
 - Existing supply states remain **Pending Supply → Assigned → Supplied**; no extra delivery states were introduced.
 
 Phase 5 supply/delivery is manually accepted and frozen. Phase 6 customer/order history is manually accepted and frozen. Phase 7 Admin Overview is manually accepted and frozen at its current boundary.
+
+### Current Phase 7 acceptance snapshot
+
+The accepted Overview is read-only and derives from existing orders, products, and stock movements. At the manual acceptance checkpoint it showed:
+
+- Total Orders: **1**
+- Paid Orders: **1**
+- Pending Supply: **0**
+- Supplied Orders: **1**
+- Paid Order Value: **₦2,600**
+- Available Stock: **2,546**
+- Incoming Stock: **270**
+- Active Assessment Books: **11**
+
+These values are a development acceptance snapshot, not hard-coded dashboard values.
