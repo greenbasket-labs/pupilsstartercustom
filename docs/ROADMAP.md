@@ -71,30 +71,40 @@
 - Phone SMS delivery and numeric email OTP delivery are deferred authentication follow-ups. Email is paused and does not block the current admin-data/payment work.
 
 ## Phase 5 — Supply Persons & Delivery
-**Status: CURRENT — NEXT**
+**Status: COMPLETE**
 - Admin creates supply persons.
 - Admin assigns supply person to order.
 - Supply person sees assigned orders only.
 - Supply person confirms delivery.
 - Admin supply status updates.
 - Customer can see appropriate supply information.
+- Manual browser acceptance completed.
+- Phase 5 frozen.
 
 ## Phase 6 — Customer & Order History
-**Status: NOT STARTED**
+**Status: COMPLETE**
 - Customer records.
 - Order history.
 - Recent customers.
 - Search.
 - Supply/payment history.
+- Read-only Schools view derived from existing orders.
+- Customer-specific order history derived from existing orders.
+- Manual browser acceptance completed.
+- Phase 6 frozen.
 
 ## Phase 7 — Admin Dashboard & Reports
-**Status: NOT STARTED**
+**Status: CURRENT**
 - Clean dashboard.
 - Dropdown-based navigation.
 - Stock reports.
 - Sales/order reports.
 - Customer reports.
 - Supply reports.
+- Admin Overview first slice accepted and frozen.
+- Overview uses existing orders, products, and stock movements only.
+- No new tables or business rules were introduced for the accepted Overview.
+- The approved Overview must not be changed without an explicit order.
 
 ## Phase 8 — Security, Testing & Hardening
 **Status: NOT STARTED**
@@ -124,7 +134,7 @@
 - Final v1 acceptance.
 
 ## Current Position
-Phase 4 payment integration is accepted and frozen. The next implementation phase is Phase 5 — Supply Persons & Delivery.
+Phase 5 Supply Persons & Delivery is complete and frozen. Phase 6 Customer & Order History is complete and frozen. Phase 7 is current; the approved Admin Overview slice is accepted and frozen.
 
 ## Roadmap Rule
 Do not jump to a later phase because it appears useful. Record new ideas for later and remain in the current phase until its acceptance criteria are satisfied.
