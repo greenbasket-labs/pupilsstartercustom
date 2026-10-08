@@ -43,7 +43,14 @@ export async function POST(request: NextRequest) {
   try {
     const token = getToken(request);
     if (!token) return NextResponse.json({ error: "Supply access required." }, { status: 401 });
-    const body = (await request.json()) as { orderId?: string };
+    const body = (await request.json()) as { orderId?: string; purchaseCode?: string };
+    if (body.purchaseCode?.trim()) {
+      const order = await rpc("supply_person_confirm_purchase_code", {
+        p_access_token_hash: hashToken(token),
+        p_reference: body.purchaseCode,
+      });
+      return NextResponse.json({ order: Array.isArray(order) ? order[0] : order });
+    }
     const order = await rpc("supply_person_mark_delivered", {
       p_access_token_hash: hashToken(token),
       p_order_id: body.orderId,
