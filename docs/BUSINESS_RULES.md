@@ -26,16 +26,33 @@ The system distinguishes available stock and incoming stock. Projected stock may
 Payment status is automatic and must come from verified payment-provider events. The administrator does not manually mark an order as paid. Payment status is separate from physical supply status.
 
 ## Supply
-The administrator creates supply-person records and assigns supply persons to orders. A supply person cannot assign orders to themselves. A supply person sees only assigned orders and can confirm physical delivery.
+The administrator creates supply-person records and assigns paid orders to supply persons. A supply person cannot assign orders to themselves. A supply person sees only assigned orders.
+
+For delivery confirmation, the supply workflow supports:
+- **Mark Delivered** as the main handover action.
+- Customer/purchase-code confirmation where applicable.
+- A system-generated six-digit Delivery Code tied to the specific order.
+
+All successful paths update the existing supply status to **Supplied**. No additional supply states are introduced.
 
 ## Supply Contact
 When appropriate, the assigned supply person's name and phone number may be shown to the customer. Supply-person information is associated with the specific order so historical records remain accurate.
 
 ## Order Status
 Payment and supply are independent.
-- Payment: **Paid**
-- Supply: **Pending Supply**
-- Later: **Supplied**
+
+Payment states:
+- **Pending**
+- **Paid**
+- **Failed**
+- **Refunded**
+
+Supply states:
+- **Pending Supply**
+- **Assigned**
+- **Supplied**
+
+A paid order is not automatically a supplied order.
 
 ## Customer History
 Orders automatically become part of business history. The administrator can search customers and view recent/customer order history.
