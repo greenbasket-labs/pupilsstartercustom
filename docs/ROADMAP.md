@@ -50,7 +50,7 @@
 - Phase 3 is frozen at the accepted boundary.
 
 ## Phase 4 — Payment Integration
-**Status: CURRENT — IN PROGRESS**
+**Status: COMPLETE**
 - Payment provider integration.
 - Payment verification.
 - Webhook handling.
@@ -62,7 +62,7 @@
 - Server/database payment foundation schema implemented.
 - Financial amounts represented in NGN kobo (minor units).
 - Payment webhook event idempotency foundation implemented.
-- Paystack runtime integration and production acceptance remain pending.
+- Paystack test checkout, server-side verification, signed webhook fulfillment, idempotency, and payment-linked inventory reduction have been manually acceptance-tested. Production credentials/configuration remain a deployment-phase task.
 - Controlled acceptance test passed for the stock boundary: an unpaid order leaves available stock unchanged; after simulated verified purchase consumption, a subsequent order exceeding remaining stock is rejected.
 - Customer order stock validation is aligned with the purchase-ledger semantics in migration `0012_phase4_order_stock_validation.sql`.
 - Admin phone/OTP authorization foundation implemented; SMS-provider acceptance remains pending.
@@ -71,7 +71,7 @@
 - Phone SMS delivery and numeric email OTP delivery are deferred authentication follow-ups. Email is paused and does not block the current admin-data/payment work.
 
 ## Phase 5 — Supply Persons & Delivery
-**Status: NOT STARTED**
+**Status: CURRENT — NEXT**
 - Admin creates supply persons.
 - Admin assigns supply person to order.
 - Supply person sees assigned orders only.
@@ -122,6 +122,9 @@
 - Bug fixes.
 - Workflow validation.
 - Final v1 acceptance.
+
+## Current Position
+Phase 4 payment integration is accepted and frozen. The next implementation phase is Phase 5 — Supply Persons & Delivery.
 
 ## Roadmap Rule
 Do not jump to a later phase because it appears useful. Record new ideas for later and remain in the current phase until its acceptance criteria are satisfied.
