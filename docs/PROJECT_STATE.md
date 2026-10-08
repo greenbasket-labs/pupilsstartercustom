@@ -1,10 +1,10 @@
 # Project State
 
 ## Current Phase
-**Phase 4 — Payment Integration**
+**Phase 5 — Supply Persons & Delivery**
 
 ## Status
-**IN PROGRESS**
+**NEXT IMPLEMENTATION PHASE**
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
@@ -100,15 +100,34 @@ Manual development setup:
 
 The Admin Classes, Products, and Inventory workflow has now been migrated to protected Supabase-backed operations. Manual acceptance is complete and the admin-data foundation is accepted and frozen at this checkpoint.
 
-## Not Yet Implemented
+## Phase 4 Payment Acceptance Result
+Phase 4 payment integration is accepted and frozen at the current development checkpoint.
+
+Verified:
 - Paystack transaction initialization.
-- Paystack test-mode credentials/runtime configuration.
-- Paystack transaction verification.
-- Paystack webhook endpoint and signature validation.
-- Idempotent verified-payment processing.
-- Atomic verified-payment inventory reduction.
-- Admin production data-entry migration from the browser catalogue to Supabase.
-- Production payment acceptance testing.
+- Server-side transaction verification.
+- Successful test checkout and callback.
+- Signed `charge.success` webhook handling.
+- Invalid-signature rejection.
+- Idempotent webhook replay handling.
+- Exactly-once purchase movement creation for the accepted test order.
+- Verified-payment stock reduction.
+- Unpaid orders do not consume stock.
+- Insufficient remaining stock blocks a later order.
+
+Deferred follow-ups that do not reopen Phase 4:
+- Production Paystack credentials/configuration.
+- Live payment acceptance during production deployment.
+- SMS-provider configuration for phone OTP.
+- Numeric email OTP delivery once the hosted provider/rate limit is suitable.
+
+## Not Yet Implemented
+- Phase 5 Supply Persons & Delivery.
+- Phase 6 Customer & Order History.
+- Phase 7 Admin Dashboard & Reports.
+- Phase 8 Security, Testing & Hardening.
+- Phase 9 Production Deployment.
+- Phase 10 Real Business Pilot.
 
 ## Protected Rules
 - Preserve completed Phase 0 documentation unless an explicit change request reopens it.
@@ -204,6 +223,9 @@ Before treating payment-linked inventory fulfillment as fully accepted, the next
 6. Test insufficient stock and confirm the transaction fails without partial purchase movements.
 
 Do not move to Supply Persons/Delivery or later phases until this protected payment fulfillment slice is manually accepted.
+
+## Current Next Task
+Implement Phase 5 — Supply Persons & Delivery in small controlled slices. Preserve the accepted payment/inventory boundary and do not add unrelated workflow states.
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
