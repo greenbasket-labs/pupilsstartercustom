@@ -120,7 +120,7 @@ The current implementation deliberately does not yet migrate Classes, Products, 
 - Do not reduce stock from order creation or unverified payment.
 
 ## Next Task
-Manually test the Admin email OTP authorization flow with an authorized development email, then test the existing phone path after an SMS provider is configured. After acceptance, migrate the existing Classes, Products, and Inventory administration from browser storage to protected Supabase-backed admin APIs. Paystack remains after the admin authorization/data foundation is stable.
+Manually acceptance-test the new Supabase-backed Classes, Products, and Inventory Admin workflow. Verify create/edit/activate/deactivate/remove rules and inventory safety rules against the database. After that acceptance, continue the Phase 4 Paystack transaction initialization and verification slice. Phone SMS delivery and numeric email OTP delivery remain deferred authentication follow-ups and do not block the admin data migration.
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
