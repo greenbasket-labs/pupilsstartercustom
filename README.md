@@ -16,7 +16,7 @@ The system is designed around the real supply workflow: schools/customers can di
 
 ## Current Status
 
-**Phase 5 — Supply Persons & Delivery — NEXT**
+**Phase 7 — Admin Overview — CURRENT**
 
 The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
 
@@ -26,7 +26,7 @@ Stable Phase 1 acceptance checkpoint:
 
 `b6ef077 — fix: preserve class access while editing products`
 
-Phase 1 catalogue acceptance is complete. Phase 2 inventory work has been manually accepted, closed, and frozen. Phase 3 customer ordering has been manually accepted, closed, and frozen. Phase 4 payment integration has now started.
+Phase 1 catalogue acceptance is complete. Phase 2 inventory work has been manually accepted, closed, and frozen. Phase 3 customer ordering has been manually accepted, closed, and frozen. Phase 4 payment integration has been manually accepted, closed, and frozen. Phase 5 supply/delivery and Phase 6 customer/order history slices have also been manually accepted.
 
 Validation at this checkpoint:
 - Lint: PASS
@@ -180,6 +180,16 @@ The administration side will allow the business to:
 
 Supply persons have restricted access to orders explicitly assigned by an administrator and may confirm physical delivery. The main handover action is **Mark Delivered**. As optional confirmation paths, the school may provide the existing purchase/order code to the supply person, or the supply person may show a system-generated six-digit Delivery Code for the school to enter. All paths update the existing supply status to **Supplied**.
 
+## User Dashboard Boundary
+
+PUPILS START has exactly three user dashboards:
+
+1. **Admin dashboard** — manages the business operation.
+2. **Client dashboard** — serves the school/customer's ordering and history needs.
+3. **Supply Person dashboard** — shows only assigned supply work and delivery actions.
+
+No fourth dashboard should be introduced without an explicit business decision.
+
 ## Admin Workspace Navigation
 
 The administration workspace will use a grouped sidebar rather than placing every feature directly on the page:
@@ -214,7 +224,7 @@ PUPILS START
 └── Reports ▾
 ```
 
-This navigation structure is the current approved direction. New navigation items should not be added casually; changes should follow the project's controlled-change rules.
+This navigation structure is the current approved direction. New navigation items should not be added casually; changes should follow the project's controlled-change rules. The approved Admin Overview must not be changed unless explicitly ordered.
 
 ## Main Content and School Table Design
 
@@ -309,7 +319,7 @@ The Phase 1 catalogue workflow was manually tested in the development browser an
 - Confirm business classes and products are data-driven rather than hard-coded.
 - Confirm browser persistence for the current development bridge.
 
-Phase 1 is now closed. Phase 2 is now closed. Phase 3 is now closed. Phase 4 — Payment Integration is now the current controlled implementation phase.
+Phase 1 is now closed. Phase 2 is now closed. Phase 3 is now closed. Phase 4 is now closed. Phase 5 is now closed. Phase 6 is now closed. Phase 7 is the current controlled phase; the approved Admin Overview slice is accepted and frozen.
 
 ## Project Documentation
 
@@ -339,4 +349,4 @@ The controlled Phase 5 implementation now includes:
 - Existing purchase/order references remain unchanged.
 - Existing supply states remain **Pending Supply → Assigned → Supplied**; no extra delivery states were introduced.
 
-Manual browser acceptance is still required before Phase 5 is closed and frozen.
+Phase 5 supply/delivery is manually accepted and frozen. Phase 6 customer/order history is manually accepted and frozen. Phase 7 Admin Overview is manually accepted and frozen at its current boundary.
