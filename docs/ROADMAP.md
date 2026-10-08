@@ -62,6 +62,8 @@
 - Financial amounts represented in NGN kobo (minor units).
 - Payment webhook event idempotency foundation implemented.
 - Paystack runtime integration and production acceptance remain pending.
+- Admin phone/OTP authorization foundation implemented; manual acceptance is pending.
+- Existing admin catalogue/inventory persistence remains a browser development bridge until protected Supabase admin APIs are accepted.
 
 ## Phase 5 — Supply Persons & Delivery
 **Status: NOT STARTED**
