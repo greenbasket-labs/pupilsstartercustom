@@ -138,8 +138,23 @@ Verified:
 
 This checkpoint is accepted and frozen. The service-role grants required by the protected server-side catalogue/inventory API are recorded in `supabase/migrations/0007_phase4_admin_catalogue_service_role_grants.sql`.
 
+## Paystack Transaction Initialization and Verification Slice
+Implemented server-side Paystack transaction initialization and verification foundations.
+
+Implemented:
+- `PAYSTACK_SECRET_KEY` is server-only and documented in `apps/web/.env.example`.
+- `POST /api/payment/initialize` loads the authoritative order total from Supabase and initializes Paystack server-side.
+- Payment initialization requires a valid customer email because Paystack requires an email for transaction initialization.
+- The Paystack authorization URL/access code are stored with the pending payment record and returned to the browser without exposing the secret key.
+- `POST /api/payment/verify` verifies the provider reference server-side and checks reference, amount, and currency against the stored payment record.
+- Successful verification marks the payment and order as Paid.
+- Pending/in-progress provider states remain Pending; failed/abandoned/reversed states become Failed.
+- No inventory is reduced by initialization or verification. Verified-payment inventory reduction remains a later atomic webhook/fulfillment slice.
+
+The current slice is ready for local Paystack test-mode configuration and manual API/browser acceptance. Email OTP delivery remains paused and must not block payment work.
+
 ## Next Task
-Continue Phase 4 with the Paystack transaction initialization and verification slice. Email OTP delivery is explicitly paused because the hosted Supabase email provider is rate-limited; it must not block the payment work.
+Configure a Paystack test secret locally, create a test order, initialize the transaction, complete a Paystack test payment, and verify the transaction through the server-side endpoint. Do not implement webhook handling or payment-linked stock reduction until this initialization/verification slice is accepted.
 
 ## Handover Rule
 Any new AI/developer session must read this file and the other project documentation before changing the repository.
