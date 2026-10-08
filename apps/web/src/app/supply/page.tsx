@@ -16,6 +16,7 @@ type SupplyOrder = {
 };
 
 export default function SupplyPage() {
+  const [purchaseCodes, setPurchaseCodes] = useState<Record<string, string>>({});
   const [orders, setOrders] = useState<SupplyOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -35,6 +36,24 @@ export default function SupplyPage() {
   }
 
   useEffect(() => { void load(); }, []);
+
+  async function confirmPurchaseCode(orderId: string) {
+    const purchaseCode = purchaseCodes[orderId]?.trim();
+    if (!purchaseCode) { setMessage("Enter the purchase code given by the school."); return; }
+    try {
+      const response = await fetch("/api/supply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId, purchaseCode }),
+      });
+      const body = (await response.json()) as { error?: string };
+      if (!response.ok) throw new Error(body.error ?? "Unable to verify purchase code.");
+      setMessage("Purchase code confirmed. Order supplied.");
+      await load();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Unable to verify purchase code.");
+    }
+  }
 
   async function markDelivered(orderId: string) {
     try {
@@ -82,6 +101,19 @@ export default function SupplyPage() {
                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Delivery Code</p>
                     <p className="mt-1 text-2xl font-bold tracking-[0.2em]">{order.delivery_code}</p>
                     <p className="mt-1 text-xs text-slate-500">Show this code to the school.</p>
+                  </div>
+                </div>
+                <div className="mt-4 rounded-lg border border-slate-200 p-4">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Optional Purchase Code</p>
+                  <p className="mt-1 text-xs text-slate-500">The school already has the purchase code. Ask the school person for it if you want to use this verification option.</p>
+                  <div className="mt-3 flex gap-2">
+                    <input
+                      value={purchaseCodes[order.order_id] ?? ""}
+                      onChange={(e) => setPurchaseCodes((current) => ({ ...current, [order.order_id]: e.target.value }))}
+                      placeholder="PS-..."
+                      className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                    />
+                    <button type="button" onClick={() => void confirmPurchaseCode(order.order_id)} className="rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold">Verify</button>
                   </div>
                 </div>
                 <button
