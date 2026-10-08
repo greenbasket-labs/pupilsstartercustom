@@ -96,7 +96,7 @@ The first production Admin data migration is now implemented:
 - Inventory changes lock the affected product row before validation and insertion.
 - No direct client CRUD policies are added to the exposed catalogue/inventory tables.
 
-Manual browser acceptance of this slice is still required before it is considered stable.
+Manual browser acceptance of this slice is complete. The Admin Classes/Products/Inventory foundation is accepted and frozen at this checkpoint.
 
 ## Phase 4 Payment Integration Foundation
 
@@ -108,7 +108,7 @@ Phase 4 has started with a production-oriented payment data foundation:
 - Webhook event idempotency is represented in the database.
 - Payment state remains separate from physical supply state.
 
-The next controlled Phase 4 work is to manually accept the Supabase-backed Admin Classes/Products/Inventory workflow, then initialize Paystack transactions server-side, verify transactions server-side, validate Paystack webhook signatures, and atomically apply verified-payment stock reduction. Email OTP work remains paused and must not block this sequence.
+The next controlled Phase 4 work is to initialize Paystack transactions server-side, verify transactions server-side, validate Paystack webhook signatures, and atomically apply verified-payment stock reduction. The Supabase-backed Admin Classes/Products/Inventory foundation has already been manually accepted and frozen. Email OTP work remains paused and must not block this sequence.
 
 No Paystack secret or production credential is stored in the repository.
 
