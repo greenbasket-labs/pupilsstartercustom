@@ -949,8 +949,7 @@ export default function Home() {
             </section>
 
             <p className="mt-6 text-xs text-slate-500">
-              Catalogue and inventory writes are now database-backed. Verified
-              purchases remain reserved for the later payment workflow.
+              Catalogue, inventory, and verified payment purchases are now database-backed.
             </p>
           </>
         )}
