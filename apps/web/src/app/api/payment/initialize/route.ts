@@ -110,6 +110,7 @@ export async function POST(request: Request) {
     });
 
     const providerReference = order.reference;
+    const callbackUrl = new URL("/payment/callback", request.url).toString();
 
     const paystackResponse = await fetch(
       "https://api.paystack.co/transaction/initialize",
@@ -124,6 +125,7 @@ export async function POST(request: Request) {
           amount: order.total_kobo,
           currency: "NGN",
           reference: providerReference,
+          callback_url: callbackUrl,
         }),
         cache: "no-store",
       },
