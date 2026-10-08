@@ -851,7 +851,7 @@ export default function Home() {
                     />
                   </form>
 
-                  <div id="inventory-history" className="mt-6 overflow-x-auto rounded-xl border border-slate-200">
+                  <div id="inventory-incoming" className="mt-6 overflow-x-auto rounded-xl border border-slate-200">
                     <table className="w-full min-w-[720px] text-left text-sm">
                       <thead className="border-b border-slate-200 bg-slate-50">
                         <tr>
@@ -884,7 +884,7 @@ export default function Home() {
                     </table>
                   </div>
 
-                  <div id="inventory-incoming" className="mt-6 overflow-x-auto rounded-xl border border-slate-200">
+                  <div id="inventory-history" className="mt-6 overflow-x-auto rounded-xl border border-slate-200">
                     <table className="w-full min-w-[900px] text-left text-sm">
                       <thead className="border-b border-slate-200 bg-slate-50">
                         <tr>
