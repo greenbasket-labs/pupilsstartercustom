@@ -47,12 +47,15 @@ The development Phase 2 foundation distinguishes:
 - Projected stock (available + incoming).
 - Stock movement history.
 
-Movement types currently supported by the development bridge:
+Movement types currently used by the system include:
 
 - Stock Received: increases available stock.
 - Incoming Stock: increases incoming stock.
 - Receive Incoming: moves recorded incoming stock into available stock.
 - Stock Adjustment: applies a signed adjustment to available stock.
+- Purchase: reduces available stock for a verified paid order.
+
+Purchase movements are linked to the corresponding order/payment history and must be idempotent so repeated payment-provider events cannot reduce stock twice.
 
 Inventory validation must prevent available or incoming stock from becoming negative through an invalid movement. Product removal is blocked once inventory history exists so stock history is preserved.
 
