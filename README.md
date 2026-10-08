@@ -67,6 +67,20 @@ The first Admin security slice is now implemented before moving the existing bro
 
 Manual development configuration is intentionally kept outside Git. The current test phone must be added to `public.admin_authorized_phones` in the Supabase project before OTP login can be tested.
 
+## Phase 4 Admin Authentication Options
+
+Admin authentication now supports two server-authorized methods:
+
+- **Phone + OTP** remains available and is not removed. It requires a configured SMS provider before live OTP delivery can be used.
+- **Email + OTP** is now available as a second development/testing path through Supabase Email Auth.
+- Authorized email addresses are stored in `public.admin_authorized_emails`; they are not hard-coded in the application.
+- The existing `public.admin_authorized_phones` authorization table remains in place.
+- Both authorization lists are server-controlled, protected by RLS, and checked before an OTP request or authenticated Admin session is accepted.
+- Either an active authorized phone identity or an active authorized email identity can enter the Admin workspace.
+- No service-role credential is exposed to the browser.
+
+For numeric email OTPs, the Supabase hosted email template must include the `{{ .Token }}` variable as documented by Supabase. Until an SMS provider is configured, email is the immediate development sign-in path.
+
 ## Phase 4 Payment Integration Foundation
 
 Phase 4 has started with a production-oriented payment data foundation:
