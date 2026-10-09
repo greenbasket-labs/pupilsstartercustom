@@ -60,9 +60,8 @@ export default function SchoolsPage() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <div className="mx-auto max-w-6xl px-6 py-8 lg:px-10">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPILS START · Customers</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPIL'S STARTER ASSESSMENT BOOKS</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">Schools</h1>
-        <p className="mt-2 text-sm text-slate-600">Read-only school list derived from existing orders.</p>
         <input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search school, contact, or phone" className="mt-6 w-full max-w-xl rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm" />
         {message ? <div className="mt-5 rounded-lg border border-red-200 bg-white px-4 py-3 text-sm text-red-700">{message}</div> : null}
         {loading ? (
