@@ -315,10 +315,6 @@ export default function CustomerOrderPage() {
               </p>
             </div>
 
-            <p className="mt-6 text-xs text-slate-500">
-              Payment is now connected through Paystack test mode. Verified payment does not reduce stock in this slice; that protected inventory step comes later.
-            </p>
-
             <button
               type="button"
               onClick={() => void startPayment()}
