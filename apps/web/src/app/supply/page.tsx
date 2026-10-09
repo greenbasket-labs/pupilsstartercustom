@@ -32,10 +32,10 @@ export default function SupplyPage() {
     setLoading(true);
     try {
       const response = await fetch("/api/supply", { cache: "no-store" });
-      const body = (await response.json()) as { orders?: SupplyOrder[]; error?: string };
+      const body = (await response.json()) as { orders?: SupplyOrder[]; supplyPersonName?: string; error?: string };
       if (!response.ok) throw new Error(body.error ?? "Supply access required.");
       setOrders(body.orders ?? []);
-      setSupplyPersonName(body.orders?.[0]?.supply_person_name ?? "");
+      setSupplyPersonName(body.supplyPersonName ?? "");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unable to load assigned orders.");
     } finally {
