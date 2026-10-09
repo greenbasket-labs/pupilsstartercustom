@@ -288,7 +288,7 @@ export default function CustomerOrderPage() {
         <div className="mx-auto max-w-3xl px-6 py-12">
           <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-              PUPILS START
+              PUPIL'S STARTER ASSESSMENT BOOKS
             </p>
             <h1 className="mt-2 text-3xl font-semibold tracking-tight">
               Order received
@@ -346,14 +346,12 @@ export default function CustomerOrderPage() {
       <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10">
         <header className="border-b border-slate-200 pb-6">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-            PUPILS START
+            PUPIL'S STARTER ASSESSMENT BOOKS
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
             Assessment Books
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-slate-600">
-            Select the assessment books your school needs and submit an order.
-            No customer account is required.
           </p>
         </header>
 
@@ -367,7 +365,6 @@ export default function CustomerOrderPage() {
           <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold">Select Books</h2>
             <p className="mt-1 text-sm text-slate-500">
-              Catalogue, prices, and available stock now come from the server.
             </p>
 
             {loadingCatalogue ? (
@@ -525,7 +522,6 @@ export default function CustomerOrderPage() {
         </div>
 
         <p className="mt-6 text-xs text-slate-500">
-          Orders are created server-side in Supabase. Paystack payment is initialized server-side, and order creation does not reduce inventory.
         </p>
       </div>
     </main>
