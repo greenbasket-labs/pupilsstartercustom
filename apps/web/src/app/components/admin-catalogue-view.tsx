@@ -86,7 +86,9 @@ function calculateStock(movements: StockMovement[], productId: string) {
   );
 }
 
-export default function AdminCatalogueView() {
+type CatalogueView = "inventory" | "products";
+
+export default function AdminCatalogueView({ view }: { view: CatalogueView }) {
   const [data, setData] = useState<AdminData>({
     classes: [],
     products: [],
@@ -456,7 +458,7 @@ export default function AdminCatalogueView() {
           </div>
         ) : (
           <>
-            {(
+            {view === "products" ? (
             <section id="products" className="grid gap-6 lg:grid-cols-2">
               <div id="classes" className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="mb-5">
@@ -651,9 +653,9 @@ export default function AdminCatalogueView() {
               </div>
             </section>
 
-            )}
+            ) : null}
 
-            {(
+            {view === "inventory" ? (
             <section id="inventory" className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-5">
                 <h2 id="inventory-stock" className="text-lg font-semibold">Inventory</h2>
@@ -830,7 +832,7 @@ export default function AdminCatalogueView() {
                 </>
               )}
             </section>
-            )}
+            ) : null}
 
             <p className="mt-6 text-xs text-slate-500">
               Catalogue, inventory, and verified payment purchases are now database-backed.
