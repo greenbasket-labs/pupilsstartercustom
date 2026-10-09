@@ -835,7 +835,6 @@ export default function AdminCatalogueView({ view }: { view: CatalogueView }) {
             ) : null}
 
             <p className="mt-6 text-xs text-slate-500">
-              Catalogue, inventory, and verified payment purchases are now database-backed.
             </p>
           </>
         )}
