@@ -4,7 +4,7 @@
 **Phase 8 — Security, Testing & Hardening**
 
 ## Status
-**CURRENT — PHASE 8.1 AUTHORIZATION REVIEW IN PROGRESS**
+**CURRENT — PHASE 8.1 AUTHORIZATION REVIEW + ADMIN WORKSPACE ACCEPTANCE**
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
@@ -96,9 +96,14 @@ Implementation commit:
 
 ### Validation status
 
-Automated lint/build validation is **PENDING**.
+The latest Admin workspace branch was pulled and production-built locally after the workspace changes.
 
-The available execution environment could not resolve `github.com` when attempting to clone the repository for local validation. Therefore this milestone is not marked complete and no test pass is claimed.
+- TypeScript: **PASS**
+- Static page generation: **34/34 PASS**
+- Final optimization: **PASS**
+- Admin sidebar/manual workspace navigation: **PASS**
+
+The only remaining build message is a non-blocking Turbopack warning about a package-lock file outside the repository root. No build failure is present.
 
 ## Protected Dashboard Boundary
 PUPILS START has exactly three dashboards:
@@ -127,8 +132,25 @@ No fourth dashboard is to be introduced without an explicit business decision.
 - Phase 9 — Production Deployment.
 - Phase 10 — Real Business Pilot.
 
+## Admin Workspace Acceptance
+
+The Admin workspace now has one persistent sidebar and one main content area. Overview is the default view. The accepted sidebar items are:
+
+- Overview
+- Inventory
+- Orders
+- Customers
+- Products
+- Payments
+- Supply
+- Reports
+
+Inventory opens the inventory main view. Products opens Classes & Assessment Books. Payments and Reports reuse existing order/payment/supply data and do not introduce a new dashboard or duplicate payment-processing logic.
+
+The workspace was manually tested after the latest build and all eight sidebar items opened correctly.
+
 ## Current Next Task
-Complete validation of Phase 8.1, then continue with the next explicitly controlled Phase 8 slice.
+Continue the remaining controlled Phase 8 hardening work, then move to the explicitly requested wording cleanup one item at a time across Admin, Customer, and Supply Person surfaces.
 
 Do not modify the accepted Admin Overview or reopen completed phases speculatively.
 
