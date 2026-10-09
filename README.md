@@ -18,7 +18,7 @@ The system is designed around the real supply workflow: schools/customers can di
 
 **Phase 8 — Security, Testing & Hardening — CURRENT**
 
-The Next.js web application foundation is in place. The first Phase 1 administration screen supports adding, editing, saving, activating/deactivating, and removing classes and assessment books with prices without hard-coding the business catalogue into the application.
+The Next.js web application foundation is in place. The Admin workspace now opens with Overview as the default main view and uses a simple flat sidebar for Overview, Inventory, Orders, Customers, Products, Payments, Supply, and Reports. Each sidebar item replaces the main content view without adding another dashboard.
 
 Catalogue editing has now been manually acceptance-tested locally with the latest Phase 1 code, including reachable Edit and Cancel controls, safe editing of products linked to inactive classes, activation/deactivation, removal rules, and price persistence.
 
@@ -192,39 +192,32 @@ No fourth dashboard should be introduced without an explicit business decision.
 
 ## Admin Workspace Navigation
 
-The administration workspace will use a grouped sidebar rather than placing every feature directly on the page:
+The accepted Admin workspace uses a simple flat sidebar. Each item opens its own main view and replaces the current main content without opening a separate dashboard:
 
 ```text
 PUPILS START
 │
 ├── Overview
-│
-├── Inventory ▾
-│   ├── Stock
-│   ├── Incoming Stock
-│   └── Stock History
-│
-├── Orders ▾
-│   ├── Orders
-│   └── Pending Supply
-│
-├── Customers ▾
-│   ├── Schools
-│   └── Customer History
-│
-├── Products ▾
-│   ├── Classes
-│   └── Assessment Books
-│
-├── Payments ▾
-│
-├── Supply ▾
-│   └── Supply Persons
-│
-└── Reports ▾
+├── Inventory
+├── Orders
+├── Customers
+├── Products
+├── Payments
+├── Supply
+└── Reports
 ```
 
-This navigation structure is the current approved direction. New navigation items should not be added casually; changes should follow the project's controlled-change rules. The approved Admin Overview must not be changed unless explicitly ordered.
+Current view behavior:
+- **Overview** opens the accepted Admin Overview.
+- **Inventory** opens the inventory main view.
+- **Products** opens Classes & Assessment Books.
+- **Orders** opens the existing Orders view.
+- **Customers** opens the existing Schools/customer view.
+- **Payments** opens the payment-status view derived from existing order data.
+- **Supply** opens the existing Supply workspace.
+- **Reports** opens the report view derived from existing order, payment, and supply data.
+
+The sidebar is intentionally simple for phone use. New navigation items should not be added casually; changes should follow the project's controlled-change rules. The approved Admin Overview must not be changed unless explicitly ordered.
 
 ## Main Content and School Table Design
 
@@ -290,8 +283,6 @@ The Admin workspace supports the approved server-authorized authentication found
 
 Customers/schools will not be forced to create accounts in the initial version.
 
-Customers/schools will not be forced to create accounts in the initial version.
-
 ## Engineering Principle
 
 Build small, build correctly, keep business rules explicit, protect existing functionality, preserve history, test critical workflows, and keep a clean path for future products.
@@ -330,7 +321,7 @@ Important business decisions made during development must be reflected in the ap
 
 ## Phase 8 Security, Testing & Hardening
 
-Phase 8 has started with a controlled authorization review.
+Phase 8 has started with a controlled authorization review and Admin workspace hardening.
 
 The first review found that the existing server proxy protected the Admin root, `/supply-admin`, and `/api/admin/*`, but did not include the Admin pages `/overview`, `/orders`, `/schools`, and `/customer-history` in the protected page matcher.
 
@@ -340,7 +331,7 @@ Implementation commit on the Phase 8 branch:
 
 `67e9adaf32be65c4ce75f8253cb6d70fc05ee914`
 
-Automated lint/build validation is pending because the available execution environment could not resolve `github.com` while obtaining the branch locally. No validation pass is claimed.
+The latest Admin workspace branch was pulled and production-built locally after the workspace changes. Build validation passed: TypeScript passed and all **34/34** static pages were generated successfully. The only remaining message is a non-blocking Turbopack warning about a package-lock file outside the repository root.
 
 ## Phase 5 Supply Persons & Delivery
 
