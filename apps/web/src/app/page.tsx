@@ -8,7 +8,7 @@ import SchoolsPage from "./schools/page";
 import CustomerHistoryPage from "./customer-history/page";
 import SupplyAdminPage from "./supply-admin/page";
 
-type View = "overview" | "catalogue" | "orders" | "schools" | "customer-history" | "supply" | "payments" | "reports";
+type View = "overview" | "inventory" | "products" | "orders" | "schools" | "customer-history" | "supply" | "payments" | "reports";
 function Placeholder({ title }: { title: string }) {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -52,24 +52,25 @@ export default function AdminWorkspace() {
 
           <nav className="flex-1 overflow-y-auto p-3" aria-label="Admin navigation">
             <div className="mb-1">{itemButton("Overview", "overview")}</div>
-            <div className="mb-1">{itemButton("Inventory", "catalogue")}</div>
+            <div className="mb-1">{itemButton("Inventory", "inventory")}</div>
             <div className="mb-1">{itemButton("Orders", "orders")}</div>
             <div className="mb-1">{itemButton("Customers", "schools")}</div>
-            <div className="mb-1">{itemButton("Products", "catalogue")}</div>
+            <div className="mb-1">{itemButton("Products", "products")}</div>
             <div className="mb-1">{itemButton("Payments", "payments")}</div>
             <div className="mb-1">{itemButton("Supply", "supply")}</div>
             <div className="mb-1">{itemButton("Reports", "reports")}</div>
           </nav>
 
           <div className="border-t border-slate-200 px-5 py-4 text-xs text-slate-400">
-            Current view: {activeView === "customer-history" ? "Customers" : activeView === "catalogue" ? "Inventory / Products" : activeView.charAt(0).toUpperCase() + activeView.slice(1)}
+            Current view: {activeView === "customer-history" ? "Customers" : activeView.charAt(0).toUpperCase() + activeView.slice(1)}
           </div>
         </div>
       </aside>
 
       <main className="min-w-0 flex-1">
         {activeView === "overview" ? <OverviewPage /> : null}
-        {activeView === "catalogue" ? <AdminCatalogueView /> : null}
+        {activeView === "inventory" ? <AdminCatalogueView view="inventory" /> : null}
+        {activeView === "products" ? <AdminCatalogueView view="products" /> : null}
         {activeView === "orders" ? <OrdersPage /> : null}
         {activeView === "schools" ? <SchoolsPage /> : null}
         {activeView === "customer-history" ? <CustomerHistoryPage /> : null}
