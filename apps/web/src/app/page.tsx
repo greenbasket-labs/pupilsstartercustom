@@ -7,6 +7,8 @@ import OrdersPage from "./orders/page";
 import SchoolsPage from "./schools/page";
 import CustomerHistoryPage from "./customer-history/page";
 import SupplyAdminPage from "./supply-admin/page";
+import PaymentsPage from "./payments/page";
+import ReportsPage from "./reports/page";
 
 type View = "overview" | "inventory" | "products" | "orders" | "schools" | "customer-history" | "supply" | "payments" | "reports";
 function Placeholder({ title }: { title: string }) {
@@ -75,8 +77,8 @@ export default function AdminWorkspace() {
         {activeView === "schools" ? <SchoolsPage /> : null}
         {activeView === "customer-history" ? <CustomerHistoryPage /> : null}
         {activeView === "supply" ? <SupplyAdminPage /> : null}
-        {activeView === "payments" ? <Placeholder title="Payments" /> : null}
-        {activeView === "reports" ? <Placeholder title="Reports" /> : null}
+        {activeView === "payments" ? <PaymentsPage /> : null}
+        {activeView === "reports" ? <ReportsPage /> : null}
       </main>
     </div>
   );
