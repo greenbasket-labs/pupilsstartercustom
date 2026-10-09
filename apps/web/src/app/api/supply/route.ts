@@ -20,7 +20,7 @@ async function rpc(name: string, args: Record<string, unknown>) {
   const text = await response.text();
   let body: unknown = null;
   try { body = text ? JSON.parse(text) : null; } catch { body = text; }
-  if (!response.ok) throw new Error(typeof body === "string" ? body : JSON.stringify(body));
+  if (!response.ok) throw new Error("Supply service request failed.");
   return body;
 }
 
@@ -38,8 +38,8 @@ export async function GET(request: NextRequest) {
       rpc("supply_person_identity", { p_access_token_hash: tokenHash }),
     ]);
     return NextResponse.json({ supplyPersonName, orders });
-  } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : "Unable to load assigned orders." }, { status: 401 });
+  } catch {
+    return NextResponse.json({ error: "Unable to load assigned orders." }, { status: 500 });
   }
 }
 
@@ -60,8 +60,8 @@ export async function POST(request: NextRequest) {
       p_order_id: body.orderId,
     });
     return NextResponse.json({ order: Array.isArray(order) ? order[0] : order });
-  } catch (error) {
-    return NextResponse.json({ error: error instanceof Error ? error.message : "Unable to mark delivery." }, { status: 400 });
+  } catch {
+    return NextResponse.json({ error: "Unable to complete the supply action." }, { status: 400 });
   }
 }
 
