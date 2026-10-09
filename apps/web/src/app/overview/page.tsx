@@ -39,7 +39,7 @@ export default function OverviewPage() {
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPIL'S STARTER ASSESSMENT BOOKS</p>
             <h1 className="mt-1 text-3xl font-semibold tracking-tight">Overview</h1>
-            <p className="mt-2 text-sm text-slate-600">A simple view of the current business position.</p>
+            
           </div>
           <button type="button" onClick={() => void load()} className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">Refresh</button>
         </header>
