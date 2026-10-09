@@ -304,7 +304,7 @@ The Phase 1 catalogue workflow was manually tested in the development browser an
 - Confirm business classes and products are data-driven rather than hard-coded.
 - Confirm browser persistence for the current development bridge.
 
-Phase 1 is closed. Phase 2 is closed. Phase 3 is closed. Phase 4 is closed. Phase 5 is closed. Phase 6 is closed. Phase 7 is the current controlled phase; the approved Admin Overview slice is accepted and frozen.
+Phase 1 is closed. Phase 2 is closed. Phase 3 is closed. Phase 4 is closed. Phase 5 is closed. Phase 6 is closed. Phase 8 is the current controlled phase; the approved Admin Overview slice is accepted and frozen. Security, testing, and hardening work is the only active scope.
 
 ## Project Documentation
 
@@ -322,6 +322,8 @@ Important business decisions made during development must be reflected in the ap
 
 
 ## Phase 8 Security, Testing & Hardening
+
+Performance review: added the missing `order_items(order_id)` index. The Performance Advisor was rerun and the unindexed-foreign-key finding is cleared. Remaining unused-index notices are INFO-level and are intentionally retained pending real query usage; no speculative index removals were made.
 
 Phase 8 has started with a controlled authorization review and Admin workspace hardening.
 
