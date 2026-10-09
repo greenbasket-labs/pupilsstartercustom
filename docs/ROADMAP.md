@@ -86,7 +86,7 @@
 **Protected:** the accepted Overview must not be changed without an explicit order.
 
 ## Phase 8 — Security, Testing & Hardening
-**Status: CURRENT — PHASE 8.1 AUTHORIZATION REVIEW + ADMIN WORKSPACE ACCEPTANCE**
+**Status: CURRENT — PHASE 8 SECURITY / HARDENING**
 - Authorization review.
 - Critical workflow tests.
 - Audit logging.
@@ -106,6 +106,10 @@ Implementation commit:
 `67e9adaf32be65c4ce75f8253cb6d70fc05ee914`
 
 The latest branch was pulled and production-built locally. TypeScript, static generation (**34/34 pages**), and final optimization passed. The Admin workspace was also manually tested and all eight sidebar items opened correctly. A non-blocking Turbopack warning remains about a package-lock file outside the repository root.
+
+### Performance / Security Review — COMPLETED
+
+Added and verified `order_items(order_id)`. Performance Advisor no longer reports the unindexed foreign key. Remaining unused-index INFO findings were reviewed and intentionally left unchanged.
 
 ## Phase 9 — Production Deployment
 **Status: NOT STARTED**
@@ -128,7 +132,7 @@ The Admin workspace uses one persistent sidebar and one main content area. Overv
 Inventory opens the inventory main view. Products opens Classes & Assessment Books. Payments and Reports reuse existing order/payment/supply data without introducing a new dashboard or payment-processing logic.
 
 ## Current Position
-Phase 8 is current and the remaining work is security/testing/hardening only. The Admin, Customer, and Supply Person product slice is accepted at the agreed boundary. Phase 7 and all earlier completed phases remain protected.
+Phase 8 is current and the remaining work is security/testing/hardening only. The performance/security advisor review and the missing `order_items(order_id)` index fix are completed. The Admin, Customer, and Supply Person product slice is accepted at the agreed boundary. Phase 7 and all earlier completed phases remain protected.
 
 ## Next Work Rule
 Continue the remaining Phase 8 security/testing/hardening slices explicitly. Do not add product features while this hardening checkpoint remains open.
