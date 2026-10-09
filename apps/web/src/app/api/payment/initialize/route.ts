@@ -176,12 +176,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Paystack initialization failed:", error);
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unable to initialize payment.",
-      },
+      { error: "Unable to initialize payment. Please try again." },
       { status: 500 },
     );
   }
