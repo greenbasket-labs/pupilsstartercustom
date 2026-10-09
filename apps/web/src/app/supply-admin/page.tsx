@@ -77,9 +77,8 @@ export default function SupplyAdminPage() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <div className="mx-auto max-w-6xl px-6 py-10 lg:px-10">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPILS START · Supply</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPIL'S STARTER ASSESSMENT BOOKS</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">Supply Persons & Delivery</h1>
-        <p className="mt-2 text-sm text-slate-600">Assign paid orders, generate delivery codes, and monitor handover.</p>
 
         {message ? <div className="mt-5 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm">{message}</div> : null}
         {accessUrl ? (
