@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 type SupplyOrder = {
+  supply_person_name: string;
   order_id: string;
   reference: string;
   school_name: string;
@@ -25,6 +26,7 @@ export default function SupplyPage() {
   const [orders, setOrders] = useState<SupplyOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
+  const [supplyPersonName, setSupplyPersonName] = useState("");
 
   async function load() {
     setLoading(true);
@@ -33,6 +35,7 @@ export default function SupplyPage() {
       const body = (await response.json()) as { orders?: SupplyOrder[]; error?: string };
       if (!response.ok) throw new Error(body.error ?? "Supply access required.");
       setOrders(body.orders ?? []);
+      setSupplyPersonName(body.orders?.[0]?.supply_person_name ?? "");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unable to load assigned orders.");
     } finally {
@@ -79,9 +82,9 @@ export default function SupplyPage() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <div className="mx-auto max-w-4xl px-6 py-10">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPILS START</p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight">My Supply Orders</h1>
-        <p className="mt-2 text-sm text-slate-600">Only orders assigned to this supply account are shown.</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPIL'S STARTER ASSESSMENT BOOKS</p>
+        {supplyPersonName ? <h1 className="mt-2 text-3xl font-semibold tracking-tight">{supplyPersonName}</h1> : null}
+        <h2 className="mt-2 text-xl font-semibold">My Supply Orders</h2>
 
         {message ? <div className="mt-5 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm">{message}</div> : null}
 
