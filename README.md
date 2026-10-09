@@ -18,6 +18,8 @@ The system is designed around the real supply workflow: schools/customers can di
 
 **Phase 8 — Security, Testing & Hardening — CURRENT**
 
+The Admin, Customer, and Supply Person product surfaces have now been manually acceptance-tested for the agreed current business slice. The remaining work is security/testing/hardening only; no new product features are being added in this checkpoint.
+
 The Next.js web application foundation is in place. The Admin workspace now opens with Overview as the default main view and uses a simple flat sidebar for Overview, Inventory, Orders, Customers, Products, Payments, Supply, and Reports. Each sidebar item replaces the main content view without adding another dashboard.
 
 Catalogue editing has now been manually acceptance-tested locally with the latest Phase 1 code, including reachable Edit and Cancel controls, safe editing of products linked to inactive classes, activation/deactivation, removal rules, and price persistence.
@@ -26,7 +28,7 @@ Stable Phase 1 acceptance checkpoint:
 
 `b6ef077 — fix: preserve class access while editing products`
 
-Phase 1 catalogue acceptance is complete. Phase 2 inventory work has been manually accepted, closed, and frozen. Phase 3 customer ordering has been manually accepted, closed, and frozen. Phase 4 payment integration has been manually accepted, closed, and frozen. Phase 5 supply/delivery and Phase 6 customer/order history slices have also been manually accepted.
+Phase 1 catalogue acceptance is complete. Phase 2 inventory work has been manually accepted, closed, and frozen. Phase 3 customer ordering has been manually accepted, closed, and frozen. Phase 4 payment integration has been manually accepted, closed, and frozen. Phase 5 supply/delivery and Phase 6 customer/order history slices have also been manually accepted. The current Admin, Customer, and Supply Person surfaces are accepted at their agreed product boundary.
 
 Validation at this checkpoint:
 - Lint: PASS
