@@ -11,7 +11,7 @@ async function supabaseFetch(path: string) {
   const text = await response.text();
   let body: unknown = null;
   try { body = text ? JSON.parse(text) : null; } catch { body = text; }
-  if (!response.ok) throw new Error(typeof body === "string" ? body : JSON.stringify(body));
+  if (!response.ok) throw new Error("Supabase request failed.");
   return body;
 }
 
