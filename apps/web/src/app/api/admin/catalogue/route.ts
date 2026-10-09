@@ -171,9 +171,6 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.error("Admin catalogue action failed:", error);
-    const message =
-      error instanceof Error ? error.message : "Unable to save admin data.";
-
-    return NextResponse.json({ error: message }, { status: 400 });
+    return NextResponse.json({ error: "Unable to save admin data." }, { status: 400 });
   }
 }
