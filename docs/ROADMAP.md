@@ -86,7 +86,7 @@
 **Protected:** the accepted Overview must not be changed without an explicit order.
 
 ## Phase 8 — Security, Testing & Hardening
-**Status: CURRENT — PHASE 8.1 AUTHORIZATION REVIEW IN PROGRESS**
+**Status: CURRENT — PHASE 8.1 AUTHORIZATION REVIEW + ADMIN WORKSPACE ACCEPTANCE**
 - Authorization review.
 - Critical workflow tests.
 - Audit logging.
@@ -94,8 +94,8 @@
 - Backup/recovery verification.
 - Performance/security review.
 
-### Phase 8.1 — Authorization Review
-**Implementation in progress; validation pending.**
+### Phase 8.1 — Authorization Review + Admin Workspace
+**Current accepted implementation slice.**
 
 First finding and minimal fix:
 - The existing proxy protected Admin APIs and some Admin pages.
@@ -105,13 +105,27 @@ First finding and minimal fix:
 Implementation commit:
 `67e9adaf32be65c4ce75f8253cb6d70fc05ee914`
 
-Automated lint/build validation could not be executed because this environment could not resolve `github.com` while attempting to obtain the branch locally. No validation pass is claimed.
+The latest branch was pulled and production-built locally. TypeScript, static generation (**34/34 pages**), and final optimization passed. The Admin workspace was also manually tested and all eight sidebar items opened correctly. A non-blocking Turbopack warning remains about a package-lock file outside the repository root.
 
 ## Phase 9 — Production Deployment
 **Status: NOT STARTED**
 
 ## Phase 10 — Real Business Pilot
 **Status: NOT STARTED**
+
+## Admin Workspace Acceptance
+The Admin workspace uses one persistent sidebar and one main content area. Overview is the default view. The accepted top-level navigation is:
+
+- Overview
+- Inventory
+- Orders
+- Customers
+- Products
+- Payments
+- Supply
+- Reports
+
+Inventory opens the inventory main view. Products opens Classes & Assessment Books. Payments and Reports reuse existing order/payment/supply data without introducing a new dashboard or payment-processing logic.
 
 ## Current Position
 Phase 8 is current. Phase 7 and all earlier completed phases remain protected.
