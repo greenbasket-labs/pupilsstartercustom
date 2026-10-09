@@ -52,10 +52,9 @@ export default function PaymentsPage() {
       <div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
         <header className="flex flex-wrap items-end justify-between gap-4 border-b border-slate-200 pb-6">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPILS START</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPIL'S STARTER ASSESSMENT BOOKS</p>
             <h1 className="mt-1 text-3xl font-semibold tracking-tight">Payments</h1>
-            <p className="mt-2 text-sm text-slate-600">View payment status and paid order value.</p>
-          </div>
+            </div>
           <button type="button" onClick={() => void load()} className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold">Refresh</button>
         </header>
 
