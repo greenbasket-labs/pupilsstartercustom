@@ -435,13 +435,12 @@ export default function AdminCatalogueView({ view }: { view: CatalogueView }) {
         <header className="mb-8 flex flex-col gap-3 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-              PUPILS START
+              PUPIL'S STARTER ASSESSMENT BOOKS
             </p>
             <h1 className="mt-1 text-3xl font-semibold tracking-tight">
               Classes & Assessment Books
             </h1>
             <p className="mt-2 max-w-2xl text-sm text-slate-600">
-              Admin catalogue and inventory data is now stored in the Supabase database.
             </p>
           </div>
 
