@@ -117,7 +117,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Admin supply action failed:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Unable to save supply data." },
+      { error: "Unable to save supply data." },
       { status: 400 },
     );
   }
