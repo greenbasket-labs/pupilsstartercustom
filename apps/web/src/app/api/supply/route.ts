@@ -32,8 +32,12 @@ export async function GET(request: NextRequest) {
   try {
     const token = getToken(request);
     if (!token) return NextResponse.json({ error: "Supply access required." }, { status: 401 });
-    const orders = await rpc("supply_person_orders_with_identity", { p_access_token_hash: hashToken(token) });
-    return NextResponse.json({ orders });
+    const tokenHash = hashToken(token);
+    const [orders, supplyPersonName] = await Promise.all([
+      rpc("supply_person_orders_with_identity", { p_access_token_hash: tokenHash }),
+      rpc("supply_person_identity", { p_access_token_hash: tokenHash }),
+    ]);
+    return NextResponse.json({ supplyPersonName, orders });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Unable to load assigned orders." }, { status: 401 });
   }
