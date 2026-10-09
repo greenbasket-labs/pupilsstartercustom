@@ -659,9 +659,6 @@ export default function AdminCatalogueView({ view }: { view: CatalogueView }) {
             <section id="inventory" className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-5">
                 <h2 id="inventory-stock" className="text-lg font-semibold">Inventory</h2>
-                <p className="text-sm text-slate-500">
-                  Record stock movements against database-backed assessment books.
-                </p>
               </div>
 
               {data.products.length === 0 ? (
