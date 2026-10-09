@@ -58,10 +58,10 @@ export default function PaymentCallbackPage() {
       <div className="mx-auto max-w-xl px-6 py-16">
         <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-            PUPILS START
+            PUPIL'S STARTER ASSESSMENT BOOKS
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">
-            Payment result
+            Payment successful
           </h1>
 
           {loading ? (
@@ -71,6 +71,12 @@ export default function PaymentCallbackPage() {
           ) : result?.error ? (
             <>
               <p className="mt-6 text-red-700">{result.error}</p>
+              {result?.reference ? (
+                <p className="mt-2 text-sm text-slate-600">
+                  Order: <strong>{result.reference}</strong>
+                </p>
+              ) : null}
+
               <a
                 href="/order"
                 className="mt-6 inline-block rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white"
@@ -89,16 +95,7 @@ export default function PaymentCallbackPage() {
                   Paystack status:{" "}
                   <strong>{result?.status ?? "Unknown"}</strong>
                 </p>
-                <p className="mt-2 text-sm text-slate-600">
-                  Stock reduction: <strong>No</strong>
-                </p>
               </div>
-
-              <p className="mt-5 text-sm text-slate-500">
-                This payment verification step does not change inventory.
-                Inventory reduction will only happen in the later protected
-                verified-payment fulfillment step.
-              </p>
 
               <a
                 href="/order"
