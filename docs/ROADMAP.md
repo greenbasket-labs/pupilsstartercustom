@@ -94,7 +94,7 @@
 - Backup/recovery verification.
 - Performance/security review.
 
-### Phase 8.1 — Authorization Review + Admin Workspace
+### Phase 8.1 — Authorization Review + Admin Workspace — ACCEPTED PRODUCT SLICE
 **Current accepted implementation slice.**
 
 First finding and minimal fix:
@@ -128,10 +128,10 @@ The Admin workspace uses one persistent sidebar and one main content area. Overv
 Inventory opens the inventory main view. Products opens Classes & Assessment Books. Payments and Reports reuse existing order/payment/supply data without introducing a new dashboard or payment-processing logic.
 
 ## Current Position
-Phase 8 is current. Phase 7 and all earlier completed phases remain protected.
+Phase 8 is current and the remaining work is security/testing/hardening only. The Admin, Customer, and Supply Person product slice is accepted at the agreed boundary. Phase 7 and all earlier completed phases remain protected.
 
 ## Next Work Rule
-Complete Phase 8.1 validation before marking it complete. Then select the next Phase 8 slice explicitly.
+Continue the remaining Phase 8 security/testing/hardening slices explicitly. Do not add product features while this hardening checkpoint remains open.
 
 Do not jump to Phase 9 because it appears useful. Do not reopen completed phases without an explicit change request and impact review.
 
