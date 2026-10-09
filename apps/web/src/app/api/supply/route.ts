@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
   try {
     const token = getToken(request);
     if (!token) return NextResponse.json({ error: "Supply access required." }, { status: 401 });
-    const orders = await rpc("supply_person_orders", { p_access_token_hash: hashToken(token) });
+    const orders = await rpc("supply_person_orders_with_identity", { p_access_token_hash: hashToken(token) });
     return NextResponse.json({ orders });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Unable to load assigned orders." }, { status: 401 });
