@@ -15,7 +15,7 @@ function Placeholder({ title }: { title: string }) {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
       <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPILS START</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPIL'S STARTER ASSESSMENT BOOKS</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">{title}</h1>
         <p className="mt-2 text-sm text-slate-600">This module is not part of the current accepted workspace yet.</p>
       </div>
@@ -48,7 +48,7 @@ export default function AdminWorkspace() {
       <aside className="w-full shrink-0 border-b border-slate-200 bg-white lg:sticky lg:top-0 lg:h-screen lg:w-64 lg:border-b-0 lg:border-r">
         <div className="flex h-full flex-col">
           <div className="border-b border-slate-200 px-5 py-5">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPILS START</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPIL'S STARTER ASSESSMENT BOOKS</p>
             <p className="mt-1 text-xs text-slate-500">Admin Workspace</p>
           </div>
 
