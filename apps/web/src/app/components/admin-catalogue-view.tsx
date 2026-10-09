@@ -86,9 +86,7 @@ function calculateStock(movements: StockMovement[], productId: string) {
   );
 }
 
-type CatalogueSection = "classes" | "assessment-books" | "stock" | "incoming-stock" | "stock-history";
-
-export default function AdminCatalogueView({ section }: { section: CatalogueSection }) {
+export default function AdminCatalogueView() {
   const [data, setData] = useState<AdminData>({
     classes: [],
     products: [],
@@ -458,7 +456,7 @@ export default function AdminCatalogueView({ section }: { section: CatalogueSect
           </div>
         ) : (
           <>
-            {(section === "classes" || section === "assessment-books") ? (
+            {(
             <section id="products" className="grid gap-6 lg:grid-cols-2">
               <div id="classes" className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="mb-5">
@@ -653,9 +651,9 @@ export default function AdminCatalogueView({ section }: { section: CatalogueSect
               </div>
             </section>
 
-            ) : null}
+            )}
 
-            {section === "stock" || section === "incoming-stock" || section === "stock-history" ? (
+            {(
             <section id="inventory" className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-5">
                 <h2 id="inventory-stock" className="text-lg font-semibold">Inventory</h2>
@@ -832,7 +830,7 @@ export default function AdminCatalogueView({ section }: { section: CatalogueSect
                 </>
               )}
             </section>
-            ) : null}
+            )}
 
             <p className="mt-6 text-xs text-slate-500">
               Catalogue, inventory, and verified payment purchases are now database-backed.
