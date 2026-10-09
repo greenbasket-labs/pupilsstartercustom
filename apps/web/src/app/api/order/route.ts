@@ -33,9 +33,7 @@ async function supabaseFetch(path: string, init?: RequestInit) {
   }
 
   if (!response.ok) {
-    throw new Error(
-      typeof body === "string" ? body : JSON.stringify(body),
-    );
+    throw new Error("Supabase request failed.");
   }
 
   return body;
@@ -166,11 +164,8 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Order creation failed:", error);
-    const message =
-      error instanceof Error ? error.message : "Unable to create order.";
-
     return NextResponse.json(
-      { error: message },
+      { error: "Unable to create order. Please try again." },
       { status: 500 },
     );
   }
