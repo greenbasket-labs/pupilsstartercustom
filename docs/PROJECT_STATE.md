@@ -4,7 +4,7 @@
 **Phase 8 — Security, Testing & Hardening**
 
 ## Status
-**CURRENT — PHASE 8.1 AUTHORIZATION REVIEW + ADMIN WORKSPACE ACCEPTANCE**
+**CURRENT — PHASE 8 SECURITY / HARDENING ONLY**
 
 ## Repository
 - GitHub: `greenbasket-labs/pupilsstartercustom`
@@ -76,7 +76,20 @@ Phase 8 scope:
 - Backup/recovery verification.
 - Performance/security review.
 
-### Phase 8.1 — Authorization Review
+### Phase 8 Security / Hardening Status
+
+The agreed Admin, Customer, and Supply Person product slice is now manually acceptance-tested and considered complete for this checkpoint. No new product functionality is being added while Phase 8 security/hardening is completed.
+
+Remaining controlled security/hardening work:
+- Critical workflow automated tests.
+- Audit logging review/implementation.
+- Error-handling hardening.
+- Backup/recovery verification.
+- Supabase security/advisor review, including RLS access boundaries and Auth security settings.
+- Performance/security review.
+- Supply Person 4–6 digit PIN and approved-device binding, when explicitly taken as the next security slice.
+
+### Authorization Review
 
 The first review identified a concrete authorization boundary gap:
 
@@ -150,7 +163,7 @@ Inventory opens the inventory main view. Products opens Classes & Assessment Boo
 The workspace was manually tested after the latest build and all eight sidebar items opened correctly.
 
 ## Current Next Task
-Continue the remaining controlled Phase 8 hardening work, then move to the explicitly requested wording cleanup one item at a time across Admin, Customer, and Supply Person surfaces.
+Continue the remaining controlled Phase 8 security/testing/hardening work only. The Admin, Customer, and Supply Person product-surface cleanup is accepted for this checkpoint.
 
 Do not modify the accepted Admin Overview or reopen completed phases speculatively.
 
