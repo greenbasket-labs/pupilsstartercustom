@@ -124,12 +124,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Paystack webhook processing failed:", error);
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unable to process Paystack webhook.",
-      },
+      { error: "Unable to process Paystack webhook." },
       { status: 500 },
     );
   }
