@@ -9,8 +9,6 @@ import CustomerHistoryPage from "./customer-history/page";
 import SupplyAdminPage from "./supply-admin/page";
 
 type View = "overview" | "catalogue" | "orders" | "schools" | "customer-history" | "supply" | "payments" | "reports";
-type CatalogueSection = "classes" | "assessment-books" | "stock" | "incoming-stock" | "stock-history";
-
 function Placeholder({ title }: { title: string }) {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950">
@@ -25,37 +23,18 @@ function Placeholder({ title }: { title: string }) {
 
 export default function AdminWorkspace() {
   const [activeView, setActiveView] = useState<View>("overview");
-  const [openSection, setOpenSection] = useState<string | null>("inventory");
-  const [catalogueSection, setCatalogueSection] = useState<CatalogueSection>("stock");
 
-  function show(view: View, catalogue?: CatalogueSection) {
+  function show(view: View) {
     setActiveView(view);
-    if (catalogue) setCatalogueSection(catalogue);
   }
 
-  function sectionButton(name: string, label: string) {
-    const open = openSection === name;
+  function itemButton(label: string, view: View) {
+    const active = activeView === view;
     return (
       <button
         type="button"
-        onClick={() => setOpenSection(open ? null : name)}
-        className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-800 hover:bg-slate-50"
-      >
-        <span>{label}</span>
-        <span aria-hidden="true">{open ? "−" : "+"}</span>
-      </button>
-    );
-  }
-
-  function itemButton(label: string, view: View, catalogue?: CatalogueSection) {
-    const active =
-      activeView === view &&
-      (view !== "catalogue" || catalogueSection === catalogue);
-    return (
-      <button
-        type="button"
-        onClick={() => show(view, catalogue)}
-        className={`block w-full rounded-md px-3 py-2 text-left text-sm ${active ? "bg-slate-100 font-semibold text-slate-950" : "text-slate-600 hover:bg-slate-50"}`}
+        onClick={() => show(view)}
+        className={`block w-full rounded-lg px-3 py-2.5 text-left text-sm ${active ? "bg-slate-100 font-semibold text-slate-950" : "text-slate-700 hover:bg-slate-50"}`}
       >
         {label}
       </button>
@@ -72,78 +51,25 @@ export default function AdminWorkspace() {
           </div>
 
           <nav className="flex-1 overflow-y-auto p-3" aria-label="Admin navigation">
-            <div className="mb-1">
-              {itemButton("Overview", "overview")}
-            </div>
-
-            <div className="mb-1">
-              {sectionButton("inventory", "Inventory")}
-              {openSection === "inventory" ? (
-                <div className="ml-3 border-l border-slate-200 pl-3">
-                  {itemButton("Stock", "catalogue", "stock")}
-                  {itemButton("Incoming Stock", "catalogue", "incoming-stock")}
-                  {itemButton("Stock History", "catalogue", "stock-history")}
-                </div>
-              ) : null}
-            </div>
-
-            <div className="mb-1">
-              {sectionButton("orders", "Orders")}
-              {openSection === "orders" ? (
-                <div className="ml-3 border-l border-slate-200 pl-3">
-                  {itemButton("Orders", "orders")}
-                  {itemButton("Pending Supply", "orders")}
-                </div>
-              ) : null}
-            </div>
-
-            <div className="mb-1">
-              {sectionButton("customers", "Customers")}
-              {openSection === "customers" ? (
-                <div className="ml-3 border-l border-slate-200 pl-3">
-                  {itemButton("Schools", "schools")}
-                  {itemButton("Customer History", "customer-history")}
-                </div>
-              ) : null}
-            </div>
-
-            <div className="mb-1">
-              {sectionButton("products", "Products")}
-              {openSection === "products" ? (
-                <div className="ml-3 border-l border-slate-200 pl-3">
-                  {itemButton("Classes", "catalogue", "classes")}
-                  {itemButton("Assessment Books", "catalogue", "assessment-books")}
-                </div>
-              ) : null}
-            </div>
-
+            <div className="mb-1">{itemButton("Overview", "overview")}</div>
+            <div className="mb-1">{itemButton("Inventory", "catalogue")}</div>
+            <div className="mb-1">{itemButton("Orders", "orders")}</div>
+            <div className="mb-1">{itemButton("Customers", "schools")}</div>
+            <div className="mb-1">{itemButton("Products", "catalogue")}</div>
             <div className="mb-1">{itemButton("Payments", "payments")}</div>
-
-            <div className="mb-1">
-              {sectionButton("supply", "Supply")}
-              {openSection === "supply" ? (
-                <div className="ml-3 border-l border-slate-200 pl-3">
-                  {itemButton("Supply Persons", "supply")}
-                </div>
-              ) : null}
-            </div>
-
+            <div className="mb-1">{itemButton("Supply", "supply")}</div>
             <div className="mb-1">{itemButton("Reports", "reports")}</div>
           </nav>
 
           <div className="border-t border-slate-200 px-5 py-4 text-xs text-slate-400">
-            Current view: {activeView === "customer-history"
-              ? "Customer History"
-              : activeView === "catalogue"
-                ? ({ "classes": "Classes", "assessment-books": "Assessment Books", "stock": "Stock", "incoming-stock": "Incoming Stock", "stock-history": "Stock History" } as Record<CatalogueSection, string>)[catalogueSection]
-                : activeView.charAt(0).toUpperCase() + activeView.slice(1)}
+            Current view: {activeView === "customer-history" ? "Customers" : activeView === "catalogue" ? "Inventory / Products" : activeView.charAt(0).toUpperCase() + activeView.slice(1)}
           </div>
         </div>
       </aside>
 
       <main className="min-w-0 flex-1">
         {activeView === "overview" ? <OverviewPage /> : null}
-        {activeView === "catalogue" ? <AdminCatalogueView section={catalogueSection} /> : null}
+        {activeView === "catalogue" ? <AdminCatalogueView /> : null}
         {activeView === "orders" ? <OrdersPage /> : null}
         {activeView === "schools" ? <SchoolsPage /> : null}
         {activeView === "customer-history" ? <CustomerHistoryPage /> : null}
