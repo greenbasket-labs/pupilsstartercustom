@@ -66,7 +66,7 @@ Read-only Customer History, Schools view, customer-specific history, and payment
 The accepted Admin Overview remains protected. Its metrics, layout, navigation placement, names, and behavior are not changed by Phase 8.
 
 ## Phase 8 — Security, Testing & Hardening
-**CURRENT — PHASE 8.1 AUTHORIZATION REVIEW IN PROGRESS**
+**CURRENT — PHASE 8 SECURITY / HARDENING**
 
 Phase 8 scope:
 - Authorization review.
@@ -86,8 +86,12 @@ Remaining controlled security/hardening work:
 - Error-handling hardening.
 - Backup/recovery verification.
 - Supabase security/advisor review, including RLS access boundaries and Auth security settings.
-- Performance/security review.
+- Performance/security review — advisor review completed; the `order_items(order_id)` foreign-key index was added and verified.
 - Supply Person 4–6 digit PIN and approved-device binding, when explicitly taken as the next security slice.
+
+### Performance / Security Review
+
+The missing `order_items(order_id)` foreign-key index was added and verified. Performance Advisor was rerun and the unindexed-foreign-key finding is cleared. Remaining unused-index findings are INFO-level and were reviewed without speculative removals.
 
 ### Authorization Review
 
@@ -141,7 +145,7 @@ No fourth dashboard is to be introduced without an explicit business decision.
 - Audit logging review/implementation.
 - Error-handling hardening.
 - Backup/recovery verification.
-- Performance/security review.
+- Remaining security/hardening follow-ups after the completed performance/security advisor review.
 - Phase 9 — Production Deployment.
 - Phase 10 — Real Business Pilot.
 
