@@ -94,8 +94,6 @@ export default function AdminCatalogueView() {
   });
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
-  const [openSection, setOpenSection] = useState<string | null>("inventory");
-
   const [className, setClassName] = useState("");
   const [editingClassId, setEditingClassId] = useState<string | null>(null);
   const classInputRef = useRef<HTMLInputElement>(null);
@@ -430,127 +428,8 @@ export default function AdminCatalogueView() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-950 lg:flex">
+    <div id="catalogue" className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
 
-      <aside className="w-full shrink-0 border-b border-slate-200 bg-white lg:sticky lg:top-0 lg:h-screen lg:w-64 lg:border-b-0 lg:border-r">
-        <div className="flex h-full flex-col">
-          <div className="border-b border-slate-200 px-5 py-5">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-              PUPILS START
-            </p>
-            <p className="mt-1 text-xs text-slate-500">Admin Workspace</p>
-          </div>
-
-          <nav className="flex-1 overflow-y-auto p-3" aria-label="Admin navigation">
-            <a
-              href="/overview"
-              className="mb-1 block rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50"
-            >
-              Overview
-            </a>
-
-            <div className="mb-1">
-              <button
-                type="button"
-                onClick={() => setOpenSection(openSection === "inventory" ? null : "inventory")}
-                className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-800 hover:bg-slate-50"
-              >
-                <span>Inventory</span>
-                <span aria-hidden="true">{openSection === "inventory" ? "−" : "+"}</span>
-              </button>
-              {openSection === "inventory" ? (
-                <div className="ml-3 border-l border-slate-200 pl-3">
-                  <a href="#inventory-stock" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Stock</a>
-                  <a href="#inventory-incoming" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Incoming Stock</a>
-                  <a href="#inventory-history" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Stock History</a>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="mb-1">
-              <button
-                type="button"
-                onClick={() => setOpenSection(openSection === "orders" ? null : "orders")}
-                className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-800 hover:bg-slate-50"
-              >
-                <span>Orders</span>
-                <span aria-hidden="true">{openSection === "orders" ? "−" : "+"}</span>
-              </button>
-              {openSection === "orders" ? (
-                <div className="ml-3 border-l border-slate-200 pl-3">
-                  <a href="/orders" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Orders</a>
-                  <a href="/orders?filter=pending-supply" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Pending Supply</a>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="mb-1">
-              <button
-                type="button"
-                onClick={() => setOpenSection(openSection === "customers" ? null : "customers")}
-                className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-800 hover:bg-slate-50"
-              >
-                <span>Customers</span>
-                <span aria-hidden="true">{openSection === "customers" ? "−" : "+"}</span>
-              </button>
-              {openSection === "customers" ? (
-                <div className="ml-3 border-l border-slate-200 pl-3">
-                  <a href="/schools" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Schools</a>
-                  <a href="/customer-history" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Customer History</a>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="mb-1">
-              <button
-                type="button"
-                onClick={() => setOpenSection(openSection === "products" ? null : "products")}
-                className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-800 hover:bg-slate-50"
-              >
-                <span>Products</span>
-                <span aria-hidden="true">{openSection === "products" ? "−" : "+"}</span>
-              </button>
-              {openSection === "products" ? (
-                <div className="ml-3 border-l border-slate-200 pl-3">
-                  <a href="#classes" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Classes</a>
-                  <a href="#assessment-books" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Assessment Books</a>
-                </div>
-              ) : null}
-            </div>
-
-            <button type="button" className="mb-1 flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-800 hover:bg-slate-50">
-              <span>Payments</span>
-            </button>
-
-            <div className="mb-1">
-              <button
-                type="button"
-                onClick={() => setOpenSection(openSection === "supply" ? null : "supply")}
-                className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-800 hover:bg-slate-50"
-              >
-                <span>Supply</span>
-                <span aria-hidden="true">{openSection === "supply" ? "−" : "+"}</span>
-              </button>
-              {openSection === "supply" ? (
-                <div className="ml-3 border-l border-slate-200 pl-3">
-                  <a href="/supply-admin" className="block rounded-md px-3 py-2 text-sm text-slate-600 hover:bg-slate-50">Supply Persons</a>
-                </div>
-              ) : null}
-            </div>
-
-            <button type="button" className="mb-1 flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-sm font-medium text-slate-800 hover:bg-slate-50">
-              <span>Reports</span>
-            </button>
-          </nav>
-
-          <div className="border-t border-slate-200 px-5 py-4 text-xs text-slate-400">
-            Current module: Catalogue & Inventory
-          </div>
-        </div>
-      </aside>
-
-      <main className="min-w-0 flex-1">
-        <div id="overview" className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
         <header className="mb-8 flex flex-col gap-3 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
@@ -953,8 +832,6 @@ export default function AdminCatalogueView() {
             </p>
           </>
         )}
-        </div>
-      </main>
     </div>
   );
 }
