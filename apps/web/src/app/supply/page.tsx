@@ -15,6 +15,11 @@ type SupplyOrder = {
   created_at: string;
 };
 
+function maskOrderReference(reference: string) {
+  if (reference.length <= 8) return reference;
+  return `${reference.slice(0, 5)}******${reference.slice(-4)}`;
+}
+
 export default function SupplyPage() {
   const [purchaseCodes, setPurchaseCodes] = useState<Record<string, string>>({});
   const [orders, setOrders] = useState<SupplyOrder[]>([]);
@@ -93,7 +98,7 @@ export default function SupplyPage() {
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Purchase</p>
-                    <p className="mt-1 text-xl font-semibold">{order.reference}</p>
+                    <p className="mt-1 text-xl font-semibold">{maskOrderReference(order.reference)}</p>
                     <p className="mt-3 text-sm font-medium">{order.school_name}</p>
                     <p className="text-sm text-slate-500">{order.contact_name} · {order.phone}</p>
                   </div>
