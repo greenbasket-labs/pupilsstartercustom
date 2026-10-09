@@ -37,7 +37,7 @@ export default function OverviewPage() {
       <div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
         <header className="flex flex-wrap items-end justify-between gap-4 border-b border-slate-200 pb-6">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPILS START</p>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPIL'S STARTER ASSESSMENT BOOKS</p>
             <h1 className="mt-1 text-3xl font-semibold tracking-tight">Overview</h1>
             <p className="mt-2 text-sm text-slate-600">A simple view of the current business position.</p>
           </div>
