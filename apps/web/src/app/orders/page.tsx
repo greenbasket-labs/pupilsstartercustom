@@ -47,7 +47,7 @@ export default function OrdersPage() {
   return (
     <main className="min-h-screen bg-slate-50 text-slate-950"><div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">
       <header className="border-b border-slate-200 pb-6">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPILS START</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">PUPIL'S STARTER ASSESSMENT BOOKS</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">Orders</h1>
         <p className="mt-2 text-sm text-slate-600">{customerView ? "Read-only order history for this customer." : "View customer orders, payment status, and supply status."}</p>
       </header>
