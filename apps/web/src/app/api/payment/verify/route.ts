@@ -165,12 +165,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Paystack verification failed:", error);
     return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unable to verify payment.",
-      },
+      { error: "Unable to verify payment. Please try again." },
       { status: 500 },
     );
   }
